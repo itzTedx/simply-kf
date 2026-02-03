@@ -30,7 +30,7 @@ export function ProductView({ product }: ProductViewProps) {
 		<div className="grid grid-cols-1 gap-x-12 gap-y-12 lg:grid-cols-2 lg:gap-x-24">
 			{/* Left Column: Image Gallery */}
 			<div className="flex flex-col gap-4">
-				<div className="relative aspect-[3/4] w-full overflow-hidden rounded-sm bg-zinc-50">
+				<div className="relative aspect-3/4 w-full overflow-hidden rounded-sm bg-zinc-50">
 					{isImageLoading && (
 						<Skeleton className="absolute inset-0 size-full" />
 					)}
@@ -51,12 +51,12 @@ export function ProductView({ product }: ProductViewProps) {
 					{product.images.map((img, idx) => (
 						<button
 							className={cn(
-								"relative aspect-[3/4] w-full overflow-hidden rounded-sm bg-zinc-50 transition-all",
+								"relative aspect-3/4 w-full overflow-hidden rounded-sm bg-zinc-50 transition-all",
 								mainImage === img
 									? "ring-1 ring-zinc-900"
 									: "opacity-60 hover:opacity-80"
 							)}
-							key={idx}
+							key={`${product.name}-${idx}`}
 							onClick={() => setMainImage(img)}
 						>
 							<Image
@@ -163,7 +163,7 @@ export function ProductView({ product }: ProductViewProps) {
 
 					{/* Details Accordion */}
 					<div className="pt-8">
-						<Accordion className="w-full" collapsible type="single">
+						<Accordion className="w-full">
 							<AccordionItem value="details">
 								<AccordionTrigger className="font-display font-normal text-lg text-zinc-900">
 									Description

@@ -263,7 +263,7 @@ export default function ShopPage() {
 							{PRODUCTS.map((product) => (
 								<Link
 									className="group block space-y-4"
-									href={`/shop/${product.id}`}
+									href={`/shop/${product.slug}`}
 									key={product.id}
 								>
 									{/* Image Placeholder */}

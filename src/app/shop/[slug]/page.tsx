@@ -85,13 +85,13 @@ export default async function ProductPage({ params }: PageProps) {
 									href={`/shop/${item.slug}`}
 									key={item.id}
 								>
-									<div className="relative mb-4 aspect-[3/4] overflow-hidden rounded-sm bg-zinc-50">
+									<div className="relative mb-4 aspect-3/4 overflow-hidden rounded-sm bg-zinc-50">
 										<Image
 											alt={item.name} // Fallback to singular image if needed, though we updated types
 											className="object-cover transition-transform duration-700 group-hover:scale-105"
 											fill
 											sizes="(max-width: 768px) 50vw, 25vw"
-											src={item.images[0] || item.image}
+											src={item.images[0]}
 										/>
 										<div className="absolute inset-x-0 bottom-0 translate-y-full p-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
 											<Button className="h-10 w-full bg-white/90 text-xs text-zinc-900 uppercase tracking-wider shadow-sm backdrop-blur-sm hover:bg-white">
