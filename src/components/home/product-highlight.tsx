@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { Button } from "@/components/ui/button";
 
 export function ProductHighlight() {
@@ -6,11 +8,12 @@ export function ProductHighlight() {
 			<div className="grid grid-cols-1 md:grid-cols-2">
 				{/* Image Side */}
 				<div className="relative aspect-square w-full bg-muted md:aspect-auto md:h-full md:min-h-[600px]">
-					<div className="flex h-full w-full items-center justify-center bg-stone-200 text-stone-400">
-						<span className="font-mono text-sm uppercase tracking-widest">
-							[Product Highlight Img]
-						</span>
-					</div>
+					<Image
+						alt="Hero Image"
+						className="object-cover"
+						fill
+						src="/images/featured.webp"
+					/>
 				</div>
 
 				{/* Content Side */}

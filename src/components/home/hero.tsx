@@ -16,12 +16,12 @@ export function Hero() {
 				<div className="absolute inset-0 bg-black/10" />
 			</div>
 
-			<div className="container relative z-10 mx-auto">
-				<h1 className="font-display font-semibold text-4xl text-white leading-tight drop-shadow-sm md:text-6xl lg:text-7xl">
+			<div className="container relative z-10 mx-auto space-y-3">
+				<h1 className="font-display font-semibold text-4xl text-primary leading-tight drop-shadow-sm md:text-6xl lg:text-7xl">
 					Timeless Abayas,
 					<br className="hidden md:block" /> Thoughtfully Made
 				</h1>
-				<p className="font-body text-lg text-white/90 drop-shadow-sm md:text-xl">
+				<p className="font-body text-lg text-muted-foreground md:text-xl">
 					Elevated modest wear, designed in Dubai. Exclusively for the UK.
 				</p>
 

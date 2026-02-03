@@ -1,3 +1,4 @@
+import { Route } from "next";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -26,7 +27,7 @@ export default function AboutPage() {
 			</section>
 
 			{/* 2. Brand Story Section */}
-			<section className="mx-auto max-w-screen-xl px-6 py-24 md:px-12 lg:px-24">
+			<section className="mx-auto max-w-7xl px-6 py-24 md:px-12 lg:px-24">
 				<div className="mx-auto max-w-2xl space-y-8 text-center">
 					<span className="font-semibold text-taupe text-xs uppercase tracking-[0.2em]">
 						Our Philosophy
@@ -51,7 +52,7 @@ export default function AboutPage() {
 			<section className="w-full px-0 py-16 md:px-12 lg:px-24">
 				<div className="grid grid-cols-1 items-center gap-0 md:grid-cols-2 md:gap-12 lg:gap-24">
 					{/* Image */}
-					<div className="group relative flex aspect-[4/5] items-center justify-center overflow-hidden bg-neutral-100 text-sm text-taupe/20 uppercase tracking-widest">
+					<div className="group relative flex aspect-4/5 items-center justify-center overflow-hidden bg-neutral-100 text-sm text-taupe/20 uppercase tracking-widest">
 						<div className="absolute inset-0 bg-stone-100 transition-transform duration-1000 group-hover:scale-105" />
 						<span className="relative z-10">[Design Studio Image]</span>
 					</div>
@@ -102,7 +103,7 @@ export default function AboutPage() {
 					</div>
 
 					{/* Image (Order 1 on mobile, Order 2 on desktop) */}
-					<div className="group relative order-1 flex aspect-[4/5] items-center justify-center overflow-hidden bg-neutral-100 text-sm text-taupe/20 uppercase tracking-widest md:order-2">
+					<div className="group relative order-1 flex aspect-4/5 items-center justify-center overflow-hidden bg-neutral-100 text-sm text-taupe/20 uppercase tracking-widest md:order-2">
 						<div className="absolute inset-0 bg-stone-100 transition-transform duration-1000 group-hover:scale-105" />
 						<span className="relative z-10">[UK Lifestyle Image]</span>
 					</div>
@@ -121,7 +122,7 @@ export default function AboutPage() {
 						].map((item, i) => (
 							<div
 								className="flex items-center justify-center pt-8 first:pl-0 last:pr-0 sm:block sm:px-8 sm:pt-0"
-								key={i}
+								key={item}
 							>
 								<span className="mb-2 block font-display text-charcoal text-xl">
 									0{i + 1}
@@ -151,14 +152,14 @@ export default function AboutPage() {
 					<Button
 						className="rounded-none bg-charcoal px-10 py-6 text-ivory text-sm uppercase tracking-widest transition-all duration-300 hover:bg-charcoal/90"
 						nativeButton={false}
-						render={<Link href="/shop" />}
+						render={<Link href={"/shop" as Route} />}
 					>
 						Explore the Collection
 					</Button>
 					<Button
 						className="rounded-none border-charcoal px-10 py-6 text-charcoal text-sm uppercase tracking-widest transition-all duration-300 hover:bg-charcoal/5"
 						nativeButton={false}
-						render={<Link href="/shop/essentials" />}
+						render={<Link href={"/shop/essentials" as Route} />}
 						variant="outline"
 					>
 						Shop Essentials

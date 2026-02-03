@@ -7,9 +7,18 @@ import { Button } from "@/components/ui/button";
 
 import { Logo } from "@/assets/logo";
 
+const NAV_LINKS = [
+	{ name: "Home", href: "/" },
+	{ name: "Shop", href: "/collections" },
+	{ name: "Collections", href: "/collections" },
+	{ name: "About", href: "/about" },
+	{ name: "Journal", href: "/journal" },
+	{ name: "Contact", href: "/contact" },
+] as const;
+
 export function Header() {
 	return (
-		<header className="sticky top-0 z-50 w-full border-border/40 border-b bg-white/80 backdrop-blur-md supports-backdrop-filter:bg-white/60">
+		<header className="sticky top-0 z-50 w-full border-border/40 border-b bg-white/80 backdrop-blur-lg supports-backdrop-filter:bg-white/60">
 			<div className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6">
 				{/* Mobile Menu (Hidden on Desktop) */}
 				<Button className="md:hidden" size="icon" variant="ghost">
@@ -24,14 +33,7 @@ export function Header() {
 
 				{/* Desktop Navigation */}
 				<nav className="hidden gap-8 md:flex">
-					{[
-						{ name: "Home", href: "/" },
-						{ name: "Shop", href: "#" },
-						{ name: "Collections", href: "#" },
-						{ name: "About", href: "#" },
-						{ name: "Journal", href: "#" },
-						{ name: "Contact", href: "#" },
-					].map((link) => (
+					{NAV_LINKS.map((link) => (
 						<Link
 							className="font-body font-medium text-charcoal/80 text-sm transition-colors hover:text-charcoal"
 							href={link.href as Route}
