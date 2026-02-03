@@ -9,7 +9,7 @@ import { Logo } from "@/assets/logo";
 
 const NAV_LINKS = [
 	{ name: "Home", href: "/" },
-	{ name: "Shop", href: "/collections" },
+	{ name: "Shop", href: "/shop" },
 	{ name: "Collections", href: "/collections" },
 	{ name: "About", href: "/about" },
 	{ name: "Journal", href: "/journal" },
