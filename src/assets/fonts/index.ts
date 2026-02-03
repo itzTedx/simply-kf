@@ -67,16 +67,20 @@ export const amandine = localFont({
 			path: "./amandine/amandine_light.otf",
 		},
 		{
+			weight: "300",
+			path: "./amandine/amandine_light.otf",
+		},
+		{
 			weight: "400",
 			path: "./amandine/amandine_regular.otf",
 		},
 		{
 			weight: "500",
-			path: "./amandine/amandine_medium.woff2",
+			path: "./amandine/amandine_medium.otf",
 		},
 		{
 			weight: "700",
-			path: "./amandine/amandine_bold.woff2",
+			path: "./amandine/amandine_bold.otf",
 		},
 	],
 	fallback: [

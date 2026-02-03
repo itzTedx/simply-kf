@@ -1,7 +1,5 @@
-import Image from 'next/image'
+import Image from "next/image";
 
 export const Logo = () => {
-  return (
-    <Image src="/logo.svg" alt="Simply KF Logo" width={100} height={100} />
-  )
-}
+	return <Image alt="Simply KF Logo" height={60} src="/logo.svg" width={40} />;
+};

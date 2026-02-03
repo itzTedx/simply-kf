@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
 
+import { Footer } from "@/components/layout/footer";
+import { Header } from "@/components/layout/header";
+
 import { amandine, inter } from "@/assets/fonts";
 
 import { cn } from "@/lib/utils";
@@ -17,8 +20,16 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className={cn("antialiased", inter.className, amandine.variable)}>
+			<body
+				className={cn(
+					"min-h-screen font-body antialiased",
+					inter.className,
+					amandine.variable
+				)}
+			>
+				<Header />
 				{children}
+				<Footer />
 			</body>
 		</html>
 	);
