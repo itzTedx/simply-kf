@@ -1,7 +1,9 @@
 import { Route } from "next";
 import Link from "next/link";
 
-import { RiInstagramLine } from "@remixicon/react";
+import { RiInstagramLine, RiTiktokLine } from "@remixicon/react";
+
+import { Logo } from "@/assets/logo";
 
 export function Footer() {
 	return (
@@ -11,9 +13,7 @@ export function Footer() {
 					{/* Brand & Social */}
 					<div className="flex w-full flex-col items-center justify-between gap-8 md:flex-row md:items-start">
 						<div className="space-y-4 text-center md:text-left">
-							<h3 className="font-display font-semibold text-charcoal text-lg">
-								SIMPLY KF
-							</h3>
+							<Logo />
 							<p className="font-body text-charcoal/60 text-sm">
 								Designed in Dubai. Exclusively for the UK.
 							</p>
@@ -47,15 +47,30 @@ export function Footer() {
 							© {new Date().getFullYear()} SIMPLY KF. All rights reserved.
 						</p>
 
-						<a
-							className="text-charcoal/60 transition-colors hover:text-charcoal"
-							href="https://instagram.com"
-							rel="noopener noreferrer"
-							target="_blank"
-						>
-							<RiInstagramLine className="h-5 w-5" />
-							<span className="sr-only">Instagram</span>
-						</a>
+						<ul className="flex items-center gap-4">
+							<li>
+								<Link
+									className="text-charcoal/60 transition-colors hover:text-charcoal"
+									href="https://instagram.com"
+									rel="noopener noreferrer"
+									target="_blank"
+								>
+									<RiInstagramLine className="size-5" />
+									<span className="sr-only">Instagram</span>
+								</Link>
+							</li>
+							<li>
+								<Link
+									className="text-charcoal/60 transition-colors hover:text-charcoal"
+									href="https://instagram.com"
+									rel="noopener noreferrer"
+									target="_blank"
+								>
+									<RiTiktokLine className="size-5" />
+									<span className="sr-only">Instagram</span>
+								</Link>
+							</li>
+						</ul>
 					</div>
 				</div>
 			</div>
