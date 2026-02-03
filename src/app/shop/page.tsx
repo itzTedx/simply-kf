@@ -32,129 +32,7 @@ import {
 } from "@/components/ui/sheet";
 import { Slider } from "@/components/ui/slider";
 
-interface Product {
-	id: string;
-	name: string;
-	price: number;
-	image: string;
-	category: string;
-	colors: string[];
-}
-
-const PRODUCTS: Product[] = [
-	{
-		id: "1",
-		name: "The Classic Abaya in Noir",
-		price: 180,
-		image: "/images/products/product-1.webp",
-		category: "Abayas",
-		colors: ["Black"],
-	},
-	{
-		id: "2",
-		name: "Silk Crepe Kimono",
-		price: 220,
-		image: "/images/products/product-2.webp",
-		category: "Essentials",
-		colors: ["Beige"],
-	},
-	{
-		id: "3",
-		name: "Structured Liner Abaya",
-		price: 195,
-		image: "/images/products/product-3.webp",
-		category: "Abayas",
-		colors: ["Navy"],
-	},
-	{
-		id: "4",
-		name: "Soft Touch Modal Set",
-		price: 150,
-		image: "/images/products/product-4.webp",
-		category: "Essentials",
-		colors: ["Taupe"],
-	},
-	{
-		id: "5",
-		name: "Elevated Wrap Abaya",
-		price: 210,
-		image: "/images/products/product-5.webp",
-		category: "Abayas",
-		colors: ["Grey"],
-	},
-	{
-		id: "6",
-		name: "Textured Linen Dress",
-		price: 165,
-		image: "/images/products/product-6.webp",
-		category: "Essentials",
-		colors: ["White"],
-	},
-	{
-		id: "7",
-		name: "Textured Linen Dress",
-		price: 165,
-		image: "/images/products/product-7.webp",
-		category: "Essentials",
-		colors: ["White"],
-	},
-	{
-		id: "8",
-		name: "Textured Linen Dress",
-		price: 165,
-		image: "/images/products/product-8.webp",
-		category: "Essentials",
-		colors: ["White"],
-	},
-	{
-		id: "9",
-		name: "Textured Linen Dress",
-		price: 165,
-		image: "/images/products/product-9.webp",
-		category: "Essentials",
-		colors: ["White"],
-	},
-	{
-		id: "10",
-		name: "Textured Linen Dress",
-		price: 165,
-		image: "/images/products/product-10.webp",
-		category: "Essentials",
-		colors: ["White"],
-	},
-	{
-		id: "11",
-		name: "Textured Linen Dress",
-		price: 165,
-		image: "/images/products/product-11.webp",
-		category: "Essentials",
-		colors: ["White"],
-	},
-	{
-		id: "12",
-		name: "Textured Linen Dress",
-		price: 165,
-		image: "/images/products/product-12.webp",
-		category: "Essentials",
-		colors: ["White"],
-	},
-	{
-		id: "13",
-		name: "Textured Linen Dress",
-		price: 165,
-		image: "/images/products/product-13.webp",
-		category: "Essentials",
-		colors: ["White"],
-	},
-	{
-		id: "14",
-		name: "Textured Linen Dress",
-		price: 165,
-		image: "/images/products/product-14.webp",
-		category: "Essentials",
-		colors: ["White"],
-	},
-];
+import { PRODUCTS } from "@/data/products";
 
 const FILTERS = {
 	categories: ["Abayas", "Essentials", "Sets", "Hijabs"],
@@ -183,8 +61,8 @@ export default function ShopPage() {
 					value={priceRange}
 				/>
 				<div className="flex items-center justify-between text-muted-foreground text-xs">
-					<span>£{priceRange[0]}</span>
-					<span>£{priceRange[1]}</span>
+					<span>AED{priceRange[0]}</span>
+					<span>AED{priceRange[1]}</span>
 				</div>
 			</div>
 
@@ -395,7 +273,7 @@ export default function ShopPage() {
 											className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
 											fill
 											sizes="(max-width: 768px) 50vw, 33vw"
-											src={product.image}
+											src={product.images[0]}
 										/>
 									</div>
 
@@ -408,7 +286,7 @@ export default function ShopPage() {
 											Designed in Dubai
 										</p>
 										<p className="pt-1 font-body font-medium text-sm text-zinc-900">
-											£{product.price}
+											AED{product.price}
 										</p>
 									</div>
 								</Link>
