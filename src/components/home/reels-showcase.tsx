@@ -5,6 +5,8 @@ import { useState } from "react";
 import Link from "next/link";
 
 import { RiCloseLine, RiPlayLine } from "@remixicon/react";
+import Autoplay from "embla-carousel-autoplay";
+import WheelGesturesPlugin from "embla-carousel-wheel-gestures";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -62,6 +64,12 @@ export function ReelsShowcase({ reels = mockReels }: ReelsShowcaseProps) {
 				opts={{
 					align: "start",
 				}}
+				plugins={[
+					Autoplay({
+						delay: 3000,
+					}),
+					WheelGesturesPlugin(),
+				]}
 			>
 				<CarouselContent>
 					{reels.map((reel) => (
@@ -87,12 +95,7 @@ export function ReelsShowcase({ reels = mockReels }: ReelsShowcaseProps) {
 					rel="noopener noreferrer"
 					target="_blank"
 				>
-					<Button
-						className="rounded-lg border-neutral-200 bg-transparent text-neutral-900 hover:bg-neutral-50"
-						variant="outline"
-					>
-						View on TikTok
-					</Button>
+					<Button variant="outline">View on TikTok</Button>
 				</Link>
 				<p className="mt-3 font-body text-neutral-500 text-sm">
 					Follow{" "}
