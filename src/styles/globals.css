@@ -45,25 +45,41 @@
 
 :root {
 	--radius: 0.625rem;
-	--card: oklch(1 0 0);
-	--card-foreground: oklch(0.141 0.005 285.823);
-	--popover: oklch(1 0 0);
-	--popover-foreground: oklch(0.141 0.005 285.823);
-	--primary: oklch(0.21 0.006 285.885);
-	--primary-foreground: oklch(0.985 0 0);
-	--secondary: oklch(0.967 0.001 286.375);
-	--secondary-foreground: oklch(0.21 0.006 285.885);
-	--muted: oklch(0.967 0.001 286.375);
-	--muted-foreground: oklch(0.552 0.016 285.938);
-	--accent: oklch(0.967 0.001 286.375);
-	--accent-foreground: oklch(0.21 0.006 285.885);
-	--destructive: oklch(0.577 0.245 27.325);
-	--border: oklch(0.92 0.004 286.32);
-	--input: oklch(0.92 0.004 286.32);
-	--ring: oklch(0.705 0.015 286.067);
 
-	--background: oklch(0.9858 0.0045 78.3);
-	--foreground: oklch(0.141 0.005 285.823);
+	/* Base colors - warm ivory and deep charcoal */
+	--background: oklch(0.98 0.008 85); /* soft ivory / warm off-white */
+	--foreground: oklch(0.22 0.015 250); /* deep charcoal (not black) */
+
+	/* Surface colors - warm whites */
+	--card: oklch(0.99 0.005 90); /* warm white */
+	--card-foreground: oklch(0.22 0.015 250); /* charcoal */
+	--popover: oklch(0.99 0.005 90); /* warm white */
+	--popover-foreground: oklch(0.22 0.015 250); /* charcoal */
+
+	/* Primary - muted charcoal / deep taupe */
+	--primary: oklch(0.35 0.02 70); /* muted charcoal / deep taupe */
+	--primary-foreground: oklch(0.98 0.008 85); /* soft ivory */
+
+	/* Secondary - light beige */
+	--secondary: oklch(0.92 0.03 80); /* light beige */
+	--secondary-foreground: oklch(0.22 0.015 250); /* charcoal */
+
+	/* Muted - very light sand */
+	--muted: oklch(0.95 0.02 75); /* very light sand */
+	--muted-foreground: oklch(0.45 0.025 65); /* soft gray-brown */
+
+	/* Accent - warm taupe */
+	--accent: oklch(0.85 0.025 68); /* warm taupe */
+	--accent-foreground: oklch(0.22 0.015 250); /* charcoal */
+
+	/* Borders & inputs - soft warm gray */
+	--border: oklch(0.88 0.02 72); /* soft warm gray */
+	--input: oklch(0.88 0.02 72); /* soft warm gray */
+	--ring: oklch(0.35 0.02 70 / 0.3); /* muted charcoal (low opacity) */
+
+	/* Status - muted burgundy */
+	--destructive: oklch(0.45 0.08 15); /* muted burgundy (not bright red) */
+	--destructive-foreground: oklch(0.99 0.005 90); /* warm white */
 }
 
 @layer base {
@@ -72,5 +88,33 @@
 	}
 	body {
 		@apply bg-background text-foreground;
+	}
+
+	/* Typography integration */
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		@apply font-display tracking-wide;
+	}
+
+	/* Component styling overrides */
+	.button {
+		@apply rounded-md transition-all duration-200;
+	}
+
+	.input,
+	.textarea {
+		@apply border-border bg-transparent focus:ring-2 focus:ring-ring/20;
+	}
+
+	.card {
+		@apply border-border/50 shadow-none;
+	}
+
+	.skeleton {
+		@apply bg-muted/40;
 	}
 }
