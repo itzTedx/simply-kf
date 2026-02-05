@@ -4,6 +4,8 @@ import localFont from "next/font/local";
 export const inter = Inter_Tight({
 	variable: "--font-body",
 	display: "swap",
+	subsets: ["latin"],
+	weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
 export const malibu = localFont({
