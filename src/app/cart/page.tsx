@@ -12,10 +12,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
-import { useCart } from "@/contexts/cart-context";
+import { useCartStore } from "@/stores/cart-store";
 
 export default function CartPage() {
-	const { items, removeItem, updateQuantity, total, clearCart } = useCart();
+	const items = useCartStore((state) => state.items);
+	const removeItem = useCartStore((state) => state.removeItem);
+	const updateQuantity = useCartStore((state) => state.updateQuantity);
+	const total = useCartStore((state) => state.total);
+	const clearCart = useCartStore((state) => state.clearCart);
 	const [showCheckout, setShowCheckout] = useState(false);
 
 	const handlePaymentSuccess = () => {

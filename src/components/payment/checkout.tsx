@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react";
 
+import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
-import { usePayment } from "@/contexts/payment-context";
+import { usePaymentStore } from "@/stores/payment-store";
 
 import StripeElements from "./stripe-elements";
 
@@ -28,7 +30,12 @@ export default function Checkout({
 	onPaymentSuccess,
 	onBack,
 }: CheckoutProps) {
-	const { createPaymentIntent, isProcessing, error, clearError } = usePayment();
+	const createPaymentIntent = usePaymentStore(
+		(state) => state.createPaymentIntent
+	);
+	const isProcessing = usePaymentStore((state) => state.isProcessing);
+	const error = usePaymentStore((state) => state.error);
+	const clearError = usePaymentStore((state) => state.clearError);
 	const [clientSecret, setClientSecret] = useState<string | null>(null);
 	const [showPaymentForm, setShowPaymentForm] = useState(false);
 
@@ -57,6 +64,9 @@ export default function Checkout({
 
 	const handlePaymentError = (errorMessage: string) => {
 		console.error("Payment error:", errorMessage);
+		toast.error("Payment failed", {
+			description: errorMessage,
+		});
 	};
 
 	if (showPaymentForm && clientSecret) {

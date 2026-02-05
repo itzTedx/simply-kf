@@ -16,15 +16,15 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { Product } from "@/constants/products";
-import { useCart } from "@/contexts/cart-context";
 import { cn } from "@/lib/utils";
+import { useCartStore } from "@/stores/cart-store";
 
 interface ProductViewProps {
 	product: Product;
 }
 
 export function ProductView({ product }: ProductViewProps) {
-	const { addItem } = useCart();
+	const addItem = useCartStore((state) => state.addItem);
 
 	const [selectedColor, setSelectedColor] = useState<string>(product.colors[0]);
 	const [mainImage, setMainImage] = useState<string>(product.images[0]);
@@ -158,16 +158,9 @@ export function ProductView({ product }: ProductViewProps) {
 
 					{/* Actions */}
 					<div className="space-y-3 pt-6">
-						<Button
-							className="h-14 w-full rounded-none bg-zinc-900 text-base text-white uppercase tracking-wide hover:bg-zinc-800"
-							disabled={false}
-							onClick={handleAddToCart}
-						>
+						<Button className="w-full" onClick={handleAddToCart} size="lg">
 							Add to Bag
 						</Button>
-						<button className="w-full py-2 text-center text-xs text-zinc-400 uppercase tracking-widest transition-colors hover:text-zinc-900">
-							Save for Later
-						</button>
 					</div>
 
 					{/* Details Accordion */}
@@ -177,7 +170,7 @@ export function ProductView({ product }: ProductViewProps) {
 								<AccordionTrigger className="font-display font-normal text-lg text-zinc-900">
 									Description
 								</AccordionTrigger>
-								<AccordionContent className="font-light text-zinc-600 leading-relaxed">
+								<AccordionContent className="font-body leading-relaxed">
 									{product.description}
 									<br />
 									<br />
@@ -189,7 +182,7 @@ export function ProductView({ product }: ProductViewProps) {
 								<AccordionTrigger className="font-display font-normal text-lg text-zinc-900">
 									Fabric & Care
 								</AccordionTrigger>
-								<AccordionContent className="font-light text-zinc-600 leading-relaxed">
+								<AccordionContent className="font-body leading-relaxed">
 									<ul className="list-inside list-disc space-y-1">
 										<li>Premium crepe blend</li>
 										<li>Dry clean only recommended</li>
@@ -202,16 +195,9 @@ export function ProductView({ product }: ProductViewProps) {
 								<AccordionTrigger className="font-display font-normal text-lg text-zinc-900">
 									Delivery & Returns
 								</AccordionTrigger>
-								<AccordionContent className="font-light text-zinc-600 leading-relaxed">
+								<AccordionContent className="font-body leading-relaxed">
 									<p className="mb-2">UK & International Shipping available.</p>
-									<p>
-										Standard UK Delivery: 2-3 Working Days.
-										<br />
-										Next Day Delivery available at checkout.
-									</p>
-									<p className="mt-2 text-xs text-zinc-400">
-										Free returns within 14 days of purchase.
-									</p>
+									<p>Standard UK Delivery: 2-3 Working Days.</p>
 								</AccordionContent>
 							</AccordionItem>
 						</Accordion>

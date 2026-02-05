@@ -6,10 +6,10 @@ import { RiShoppingBagLine } from "@remixicon/react";
 
 import { Button } from "@/components/ui/button";
 
-import { useCart } from "@/contexts/cart-context";
+import { useCartStore } from "@/stores/cart-store";
 
 export const CartButton = () => {
-	const { cartCount } = useCart();
+	const cartCount = useCartStore((state) => state.cartCount);
 	return (
 		<Link href="/cart">
 			<Button
