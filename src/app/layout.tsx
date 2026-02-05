@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
 
+import { NuqsAdapter } from "nuqs/adapters/next/app";
+
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 
-import { amandine, malibu } from "@/assets/fonts";
+import { blinka, inter, malibu } from "@/assets/fonts";
 
 import { cn } from "@/lib/utils";
 
@@ -24,12 +26,15 @@ export default function RootLayout({
 				className={cn(
 					"min-h-screen font-body antialiased",
 					malibu.className,
-					amandine.variable
+					blinka.variable,
+					inter.variable
 				)}
 			>
-				<Header />
-				{children}
-				<Footer />
+				<NuqsAdapter>
+					<Header />
+					{children}
+					<Footer />
+				</NuqsAdapter>
 			</body>
 		</html>
 	);

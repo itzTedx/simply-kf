@@ -18,29 +18,29 @@ export function ProductHighlight() {
 
 				{/* Content Side */}
 				<div className="flex flex-col justify-center px-4 py-12 md:px-16 md:py-24 lg:px-24">
-					<span className="mb-4 font-body font-semibold text-charcoal/50 text-xs uppercase tracking-widest">
+					<span className="mb-4 font-semibold text-charcoal/50 text-xs uppercase tracking-widest">
 						Editorial Pick
 					</span>
 					<h2 className="mb-6 font-display font-medium text-3xl text-charcoal md:text-4xl lg:text-5xl">
 						The Everyday Abaya
 					</h2>
-					<p className="mb-8 font-body text-charcoal/70 md:text-lg">
+					<p className="mb-8 text-charcoal/70 md:text-lg">
 						Designed for the modern woman who values elegance without
 						compromise. The Everyday Abaya combines fluid movement with
 						structure, creating a silhouette that is both relaxing and refined.
 					</p>
 
-					<ul className="mb-8 space-y-3 font-body text-charcoal/80 text-sm">
+					<ul className="mb-8 space-y-3 font-body text-charcoal/80 tracking-wide">
 						<li className="flex items-start gap-3">
-							<span className="mt-1.5 h-1 w-1 rounded-full bg-charcoal" />
+							<span className="mt-1.5 size-1 rounded-full bg-charcoal" />
 							Fluid drape that moves with you
 						</li>
 						<li className="flex items-start gap-3">
-							<span className="mt-1.5 h-1 w-1 rounded-full bg-charcoal" />
+							<span className="mt-1.5 size-1 rounded-full bg-charcoal" />
 							Premium fabric sourced for comfort
 						</li>
 						<li className="flex items-start gap-3">
-							<span className="mt-1.5 h-1 w-1 rounded-full bg-charcoal" />
+							<span className="mt-1.5 size-1 rounded-full bg-charcoal" />
 							Designed for everyday elegance
 						</li>
 					</ul>

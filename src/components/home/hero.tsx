@@ -19,7 +19,7 @@ export function Hero() {
 						Timeless Abayas,
 						<br className="hidden md:block" /> Thoughtfully Made
 					</h1>
-					<p className="font-body text-lg text-muted-foreground md:text-xl">
+					<p className="text-lg text-muted-foreground md:text-xl">
 						Elevated modest wear, designed in Dubai. Exclusively for the UK.
 					</p>
 

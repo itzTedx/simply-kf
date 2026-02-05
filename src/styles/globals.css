@@ -7,10 +7,10 @@
 @theme inline {
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
+
 	--font-sans: var(--font-sans);
-	--font-mono: var(--font-geist-mono);
 	--font-display: var(--font-display);
-	--font-body: var(--font-sans);
+	--font-body: var(--font-body);
 
 	/* Custom Palette */
 	--color-ivory: oklch(0.99 0.005 100);
@@ -57,7 +57,7 @@
 	--radius: 0.625rem;
 
 	/* Base colors - warm ivory and deep charcoal */
-	--background: oklch(0.9521 0 0); /* soft ivory / warm off-white */
+	--background: oklch(0.9769 0.0011 17.18); /* soft ivory / warm off-white */
 	--foreground: oklch(0.22 0.015 250); /* deep charcoal (not black) */
 
 	/* Surface colors - warm whites */

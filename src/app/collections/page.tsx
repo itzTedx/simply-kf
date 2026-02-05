@@ -3,35 +3,8 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 
+import { COLLECTIONS } from "@/constants/collections";
 import { cn } from "@/lib/utils";
-
-// Placeholder data for the collections
-const collections = [
-	{
-		id: "essentials",
-		title: "Essentials",
-		description: "Refined everyday abayas designed for effortless wear.",
-		image: "/images/collections/collection-1.webp",
-	},
-	{
-		id: "statement",
-		title: "Statement Abayas",
-		description: "Elevated designs crafted for presence and quiet confidence.",
-		image: "/images/collections/collection-2.webp",
-	},
-	{
-		id: "limited",
-		title: "Limited Editions",
-		description: "Small-batch designs created in limited quantities.",
-		image: "/images/collections/collection-3.webp",
-	},
-	{
-		id: "modest-essentials",
-		title: "Modest Essentials",
-		description: "Foundational pieces designed to complement every wardrobe.",
-		image: "/images/featured.webp",
-	},
-];
 
 export default function CollectionsPage() {
 	return (
@@ -50,7 +23,7 @@ export default function CollectionsPage() {
 
 			{/* 2. Collections Grid (Vertical Stack) */}
 			<section className="container mx-auto space-y-24 px-4 pb-24 md:space-y-32 md:pb-32">
-				{collections.map((collection, index) => (
+				{COLLECTIONS.map((collection, index) => (
 					<div
 						className={cn(
 							"flex flex-col items-center gap-8 md:gap-16",
@@ -59,8 +32,7 @@ export default function CollectionsPage() {
 						)}
 						key={collection.id}
 					>
-						{/* Image Component */}
-						<div className="relative aspect-4/5 w-full overflow-hidden rounded-sm bg-zinc-100 md:aspect-3/4 md:w-1/2">
+						<div className="relative aspect-4/5 w-full overflow-hidden rounded-sm bg-zinc-100 md:aspect-4/5 md:w-1/2">
 							<Image
 								alt={`Image for ${collection.title}`}
 								className="object-cover"
@@ -81,8 +53,8 @@ export default function CollectionsPage() {
 							<div className="pt-4">
 								<Button
 									className="rounded-none border-zinc-900 px-8 py-6 text-sm text-zinc-900 uppercase tracking-widest transition-all duration-300 hover:bg-zinc-900 hover:text-white"
-									// nativeButton={false}
-									// render={<Link href={"/collections"} />}
+									nativeButton={false}
+									render={<Link href={"/collections"} />}
 									variant="outline"
 								>
 									Explore Collection

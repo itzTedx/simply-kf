@@ -13,7 +13,6 @@ export type Product = {
 	includes: string[];
 	images: string[];
 	availability: "in-stock" | "upcoming";
-	price: number;
 };
 
 export const PRODUCTS: Product[] = [
@@ -35,9 +34,8 @@ export const PRODUCTS: Product[] = [
 		size: "One size fits all",
 		material: "Premium fabric with sequin work",
 		includes: ["Matching belt", "Matching scarf", "White plain inner"],
-		images: ["/images/products/sheikha-abaya-1.webp"],
+		images: [],
 		availability: "in-stock",
-		price: 299,
 	},
 
 	{
@@ -58,9 +56,8 @@ export const PRODUCTS: Product[] = [
 		size: "One size fits all",
 		material: "Chiffon",
 		includes: ["Matching belt", "Matching scarf"],
-		images: ["/images/products/sheikha-abaya-1.webp"],
+		images: [],
 		availability: "in-stock",
-		price: 249,
 	},
 
 	{
@@ -82,8 +79,7 @@ export const PRODUCTS: Product[] = [
 		material: "Velvet",
 		length: "Approximately 54–56 inches",
 		includes: [],
-		images: ["/images/products/sheikha-abaya-1.webp"],
+		images: [],
 		availability: "upcoming",
-		price: 199,
 	},
 ];
