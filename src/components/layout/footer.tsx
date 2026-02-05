@@ -7,7 +7,7 @@ import { Logo } from "@/assets/logo";
 
 export function Footer() {
 	return (
-		<footer className="border-border/40 border-t bg-ivory pt-16 pb-8">
+		<footer className="mt-auto border-border/40 border-t bg-ivory pt-16 pb-8">
 			<div className="container mx-auto px-4 md:px-6">
 				<div className="flex flex-col items-center justify-center space-y-8 text-center md:items-start md:text-left">
 					{/* Brand & Social */}

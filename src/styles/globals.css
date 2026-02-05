@@ -83,7 +83,7 @@
 	--accent-foreground: oklch(0.22 0.015 250); /* charcoal */
 
 	/* Borders & inputs - soft warm gray */
-	--border: oklch(0.88 0.02 72); /* soft warm gray */
+	--border: oklch(75.839% 0.01851 72.945); /* soft warm gray */
 	--input: oklch(0.88 0.02 72); /* soft warm gray */
 	--ring: oklch(0.35 0.02 70 / 0.3); /* muted charcoal (low opacity) */
 

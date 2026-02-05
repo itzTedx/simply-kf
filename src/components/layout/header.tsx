@@ -1,11 +1,13 @@
 import { Route } from "next";
 import Link from "next/link";
 
-import { RiMenuLine, RiShoppingBagLine, RiUserLine } from "@remixicon/react";
+import { RiMenuLine, RiUserLine } from "@remixicon/react";
 
 import { Button } from "@/components/ui/button";
 
 import { Logo } from "@/assets/logo";
+
+import { CartButton } from "../shop/cart-button";
 
 const NAV_LINKS = [
 	{ name: "Home", href: "/" },
@@ -60,14 +62,7 @@ export function Header() {
 							<RiUserLine className="size-5" />
 							<span className="sr-only">Account</span>
 						</Button>
-						<Button
-							className="text-charcoal/80 hover:text-charcoal"
-							size="icon"
-							variant="ghost"
-						>
-							<RiShoppingBagLine className="size-5" />
-							<span className="sr-only">Cart</span>
-						</Button>
+						<CartButton />
 					</div>
 				</div>
 			</div>

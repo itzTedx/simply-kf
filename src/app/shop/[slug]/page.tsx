@@ -32,7 +32,7 @@ export default async function ProductPage({ params }: PageProps) {
 	).slice(0, 4);
 
 	return (
-		<main className="min-h-screen pt-32 pb-24 lg:pt-40">
+		<main className="min-h-screen pt-32 pb-24 lg:pt-9">
 			<div className="container mx-auto px-4">
 				{/* Back Link */}
 				<div className="mb-8 lg:mb-12">
@@ -56,7 +56,7 @@ export default async function ProductPage({ params }: PageProps) {
 						&quot;Modesty is not about hiding. It is about revealing your
 						dignity with grace.&quot;
 					</h2>
-					<p className="font-light text-zinc-500 leading-relaxed">
+					<p className="text-zinc-500 leading-relaxed">
 						Designed in Dubai, Simply KF embodies the essence of quiet luxury.
 						Each piece is crafted to transcend trends, offering timeless
 						elegance for the woman who walks with purpose.
