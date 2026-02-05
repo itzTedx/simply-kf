@@ -31,7 +31,7 @@ export default function ContactPage() {
 	}
 
 	return (
-		<main className="fade-in slide-in-from-bottom-4 container mx-auto max-w-xl animate-in px-4 py-16 duration-700 md:py-24">
+		<main className="fade-in slide-in-from-bottom-4 container mx-auto max-w-xl animate-in px-4 py-16 duration-700 sm:px-6 md:py-24">
 			{/* page structure 1: Hero / Intro */}
 			<div className="mb-12 space-y-4 text-center">
 				<h1 className="font-display text-4xl text-neutral-800 md:text-5xl">

@@ -8,7 +8,7 @@ import { ReelsShowcase } from "@/components/home/reels-showcase";
 
 export default function Home() {
 	return (
-		<main>
+		<main className="min-h-screen">
 			<Hero />
 			<FeaturedCollections />
 			<ProductHighlight />

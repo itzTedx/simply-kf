@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
 import { COLLECTIONS } from "@/constants/collections";
 import { cn } from "@/lib/utils";
+
+export const metadata: Metadata = {
+	title: "Our Collections",
+	description:
+		"Explore SIMPLY KF collections — a considered edit of timeless abayas and essentials. Designed with intention in Dubai.",
+};
 
 export default function CollectionsPage() {
 	return (
@@ -87,7 +94,7 @@ export default function CollectionsPage() {
 
 			{/* 5. Closing CTA */}
 			<section className="space-y-8 pb-24 text-center md:pb-32">
-				<div className="flex flex-colsm:flex-col items-center justify-center gap-4">
+				<div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
 					<Link
 						className="inline-flex w-64 items-center justify-center rounded-none bg-zinc-900 px-10 py-7 text-sm text-white uppercase tracking-widest shadow-sm transition-all hover:bg-zinc-800 hover:shadow-md"
 						href={"/shop"}

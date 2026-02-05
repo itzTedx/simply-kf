@@ -15,12 +15,11 @@ const stripePromise = loadStripe(
 );
 
 interface CheckoutFormProps {
-	clientSecret: string;
 	onSuccess: () => void;
 	onError: (error: string) => void;
 }
 
-function CheckoutForm({ clientSecret, onSuccess, onError }: CheckoutFormProps) {
+function CheckoutForm({ onSuccess, onError }: CheckoutFormProps) {
 	const stripe = useStripe();
 	const elements = useElements();
 	const [isProcessing, setIsProcessing] = useState(false);
@@ -79,6 +78,10 @@ function CheckoutForm({ clientSecret, onSuccess, onError }: CheckoutFormProps) {
 				setMessage("An unexpected error occurred.");
 				onError("An unexpected error occurred.");
 			}
+		} else {
+			// Payment completed without redirect (e.g. card without 3DS)
+			setMessage("Payment succeeded!");
+			onSuccess();
 		}
 
 		setIsProcessing(false);
@@ -139,12 +142,8 @@ export default function StripeElements({
 	};
 
 	return (
-		<Elements options={options} stripe={stripePromise}>
-			<CheckoutForm
-				clientSecret={clientSecret}
-				onError={onError}
-				onSuccess={onSuccess}
-			/>
+		<Elements key={clientSecret} options={options} stripe={stripePromise}>
+			<CheckoutForm onError={onError} onSuccess={onSuccess} />
 		</Elements>
 	);
 }

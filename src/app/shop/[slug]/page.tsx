@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -16,6 +17,33 @@ export async function generateStaticParams() {
 	return PRODUCTS.map((product) => ({
 		slug: product.slug,
 	}));
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+	const { slug } = await params;
+	const product = PRODUCTS.find((p) => p.slug === slug);
+	if (!product) return { title: "Product Not Found" };
+
+	const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://simplykf.com";
+	const imageUrl = product.images[0]?.startsWith("http")
+		? product.images[0]
+		: `${siteUrl}${product.images[0]}`;
+
+	return {
+		title: product.name,
+		description: product.description,
+		openGraph: {
+			title: `${product.name} | Simply KF`,
+			description: product.description,
+			images: [{ url: imageUrl, alt: product.name }],
+			type: "website",
+		},
+		twitter: {
+			card: "summary_large_image",
+			title: `${product.name} | Simply KF`,
+			description: product.description,
+		},
+	};
 }
 
 export default async function ProductPage({ params }: PageProps) {

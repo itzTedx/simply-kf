@@ -7,9 +7,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function PaymentCanceled() {
 	return (
-		<div className="flex min-h-screen items-center justify-center bg-gray-50">
-			<div className="mx-4 w-full max-w-md">
-				<Card>
+		<main className="flex min-h-[60vh] items-center justify-center bg-zinc-50/50 px-4 py-16 md:py-24">
+			<div className="w-full max-w-md">
+				<Card className="border-zinc-200 shadow-lg">
 					<CardHeader className="text-center">
 						<div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
 							<svg
@@ -57,6 +57,6 @@ export default function PaymentCanceled() {
 					</CardContent>
 				</Card>
 			</div>
-		</div>
+		</main>
 	);
 }

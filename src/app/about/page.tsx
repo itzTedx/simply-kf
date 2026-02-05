@@ -1,13 +1,20 @@
 import { Route } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+
+export const metadata: Metadata = {
+	title: "About Us",
+	description:
+		"Learn about SIMPLY KF — modest fashion designed in Dubai, curated for the UK. Our philosophy: timeless over trends, thoughtful design, and quality craftsmanship.",
+};
 
 export default function AboutPage() {
 	return (
 		<main className="min-h-screen bg-ivory font-body text-charcoal selection:bg-taupe selection:text-ivory">
 			{/* 1. Page Hero */}
-			<section className="relative flex h-[70vh] w-full items-center justify-center overflow-hidden">
+			<section className="relative flex min-h-[50vh] w-full items-center justify-center overflow-hidden sm:min-h-[60vh] md:h-[70vh]">
 				{/* Background Placeholder */}
 				<div className="fade-in absolute inset-0 animate-in bg-stone-200 transition-opacity duration-700">
 					<div className="flex h-full w-full items-center justify-center bg-neutral-200/50 font-display text-taupe/30 text-xl uppercase tracking-widest">

@@ -1,9 +1,19 @@
+"use client";
+
+import { useState } from "react";
 import { Route } from "next";
 import Link from "next/link";
 
 import { RiMenuLine, RiUserLine } from "@remixicon/react";
 
 import { Button } from "@/components/ui/button";
+import {
+	Sheet,
+	SheetContent,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
+} from "@/components/ui/sheet";
 
 import { Logo } from "@/assets/logo";
 
@@ -19,15 +29,46 @@ const NAV_LINKS = [
 ] as const;
 
 export function Header() {
+	const [open, setOpen] = useState(false);
 	return (
-		<header className="fixed top-3 left-1/2 z-50 -translate-x-1/2 max-sm:w-full">
-			<div className="flex items-center justify-between gap-4 px-4">
+		<header className="fixed top-3 left-1/2 z-50 -translate-x-1/2 max-sm:w-full sm:max-w-[calc(100%-2rem)]">
+			<div className="flex items-center justify-between gap-4 px-4 sm:px-0">
 				<div className="flex items-center gap-3">
 					{/* Mobile Menu (Hidden on Desktop) */}
-					<Button className="md:hidden" size="icon" variant="ghost">
-						<RiMenuLine className="size-5" />
-						<span className="sr-only">Toggle menu</span>
-					</Button>
+					<Sheet open={open} onOpenChange={setOpen}>
+						<SheetTrigger
+							render={
+								<Button
+									aria-label="Toggle menu"
+									className="md:hidden"
+									size="icon"
+									variant="ghost"
+								/>
+							}
+						>
+							<RiMenuLine className="size-5" />
+						</SheetTrigger>
+						<SheetContent
+							className="w-[300px] sm:w-[360px]"
+							side="left"
+						>
+							<SheetHeader className="text-left">
+								<SheetTitle className="font-display text-xl">Menu</SheetTitle>
+							</SheetHeader>
+							<nav className="mt-8 flex flex-col gap-2">
+								{NAV_LINKS.map((link) => (
+									<Link
+										className="rounded-lg px-4 py-3 font-body text-charcoal transition-colors hover:bg-charcoal/5"
+										href={link.href as Route}
+										key={link.name}
+										onClick={() => setOpen(false)}
+									>
+										{link.name}
+									</Link>
+								))}
+							</nav>
+						</SheetContent>
+					</Sheet>
 
 					{/* Logo */}
 					<Link

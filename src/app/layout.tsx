@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "@/styles/globals.css";
 
 import { NuqsAdapter } from "nuqs/adapters/next/app";
@@ -12,9 +12,52 @@ import { blinka, inter, malibu } from "@/assets/fonts";
 
 import { cn } from "@/lib/utils";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://simplykf.com";
+
+export const viewport: Viewport = {
+	themeColor: "#1c1917",
+	width: "device-width",
+	initialScale: 1,
+};
+
 export const metadata: Metadata = {
-	title: "Simply KF",
-	description: "Modest fashion brand",
+	metadataBase: new URL(siteUrl),
+	title: {
+		default: "Simply KF | Timeless Modest Abayas & Essentials",
+		template: "%s | Simply KF",
+	},
+	description:
+		"Elevated modest wear designed in Dubai. Exclusively for the UK. Discover timeless abayas, elegant essentials, and refined modest fashion.",
+	keywords: [
+		"modest fashion",
+		"abaya",
+		"modest wear UK",
+		"Dubai abaya",
+		"elegant abaya",
+		"modest clothing",
+		"Simply KF",
+	],
+	authors: [{ name: "Simply KF", url: siteUrl }],
+	creator: "Simply KF",
+	openGraph: {
+		type: "website",
+		locale: "en_GB",
+		url: siteUrl,
+		siteName: "Simply KF",
+		title: "Simply KF | Timeless Modest Abayas & Essentials",
+		description:
+			"Elevated modest wear designed in Dubai. Exclusively for the UK.",
+	},
+	twitter: {
+		card: "summary_large_image",
+		title: "Simply KF | Timeless Modest Abayas",
+		description:
+			"Elevated modest wear designed in Dubai. Exclusively for the UK.",
+	},
+	robots: {
+		index: true,
+		follow: true,
+	},
 };
 
 export default function RootLayout({

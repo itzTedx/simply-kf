@@ -78,7 +78,7 @@ export default function Checkout({
 							Complete Payment
 						</CardTitle>
 						<div className="font-semibold text-lg">
-							Total: ${total.toFixed(2)}
+							Total: £{total.toFixed(2)}
 						</div>
 					</CardHeader>
 					<CardContent>
@@ -112,14 +112,14 @@ export default function Checkout({
 									</div>
 								</div>
 								<div className="font-medium">
-									${(item.price * item.quantity).toFixed(2)}
+									£{(item.price * item.quantity).toFixed(2)}
 								</div>
 							</div>
 						))}
 						<Separator />
 						<div className="flex items-center justify-between font-bold text-lg">
 							<span>Total</span>
-							<span>${total.toFixed(2)}</span>
+							<span>£{total.toFixed(2)}</span>
 						</div>
 					</div>
 
