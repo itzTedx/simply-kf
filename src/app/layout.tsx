@@ -6,6 +6,7 @@ import { Toaster } from "sonner";
 
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
+import { CartStoreHydration } from "@/components/stores/cart-store-hydration";
 
 import { blinka, inter, malibu } from "@/assets/fonts";
 
@@ -32,6 +33,7 @@ export default function RootLayout({
 				)}
 			>
 				<NuqsAdapter>
+					<CartStoreHydration />
 					<Header />
 					{children}
 					<Footer />
