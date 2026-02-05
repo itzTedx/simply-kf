@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 
 import { useQueryStates } from "nuqs";
 
@@ -18,7 +18,7 @@ import {
 
 import { PRODUCTS } from "@/data/products";
 
-export default function ShopPage() {
+function ShopPageContent() {
 	const [priceRange, setPriceRange] = useState([0, 500]);
 	const [selectedSort, setSelectedSort] = useState("newest");
 
@@ -188,5 +188,13 @@ export default function ShopPage() {
 				</div>
 			</div>
 		</main>
+	);
+}
+
+export default function ShopPage() {
+	return (
+		<Suspense fallback={<div>Loading...</div>}>
+			<ShopPageContent />
+		</Suspense>
 	);
 }

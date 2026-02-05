@@ -1,8 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { Button } from "@/components/ui/button";
-
 import { COLLECTIONS } from "@/constants/collections";
 import { cn } from "@/lib/utils";
 
@@ -51,14 +49,12 @@ export default function CollectionsPage() {
 								{collection.description}
 							</p>
 							<div className="pt-4">
-								<Button
-									className="rounded-none border-zinc-900 px-8 py-6 text-sm text-zinc-900 uppercase tracking-widest transition-all duration-300 hover:bg-zinc-900 hover:text-white"
-									nativeButton={false}
-									render={<Link href={"/collections"} />}
-									variant="outline"
+								<Link
+									className="inline-flex items-center justify-center rounded-none border-zinc-900 px-8 py-6 text-sm text-zinc-900 uppercase tracking-widest transition-all duration-300 hover:bg-zinc-900 hover:text-white"
+									href={"/collections"}
 								>
 									Explore Collection
-								</Button>
+								</Link>
 							</div>
 						</div>
 					</div>
@@ -92,23 +88,18 @@ export default function CollectionsPage() {
 			{/* 5. Closing CTA */}
 			<section className="space-y-8 pb-24 text-center md:pb-32">
 				<div className="flex flex-colsm:flex-col items-center justify-center gap-4">
-					<Button
-						className="w-64 rounded-none bg-zinc-900 px-10 py-7 text-sm text-white uppercase tracking-widest shadow-sm transition-all hover:bg-zinc-800 hover:shadow-md"
-						nativeButton={false}
-						render={<Link href={"/shop"} />}
-						size="lg"
+					<Link
+						className="inline-flex w-64 items-center justify-center rounded-none bg-zinc-900 px-10 py-7 text-sm text-white uppercase tracking-widest shadow-sm transition-all hover:bg-zinc-800 hover:shadow-md"
+						href={"/shop"}
 					>
 						Shop All Abayas
-					</Button>
-					<Button
-						className="w-64 rounded-none px-10 py-7 text-sm text-zinc-600 uppercase tracking-widest hover:bg-transparent hover:text-zinc-900"
-						nativeButton={false}
-						render={<Link href={"/shop"} />}
-						size="lg"
-						variant="ghost"
+					</Link>
+					<Link
+						className="inline-flex w-64 items-center justify-center rounded-none px-10 py-7 text-sm text-zinc-600 uppercase tracking-widest hover:bg-transparent hover:text-zinc-900"
+						href={"/shop"}
 					>
 						Explore Essentials
-					</Button>
+					</Link>
 				</div>
 			</section>
 		</main>
