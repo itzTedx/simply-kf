@@ -4,7 +4,7 @@ import "@/styles/globals.css";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 
-import { amandine, inter } from "@/assets/fonts";
+import { amandine, malibu } from "@/assets/fonts";
 
 import { cn } from "@/lib/utils";
 
@@ -23,7 +23,7 @@ export default function RootLayout({
 			<body
 				className={cn(
 					"min-h-screen font-body antialiased",
-					inter.className,
+					malibu.className,
 					amandine.variable
 				)}
 			>

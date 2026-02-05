@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import Link from "next/link";
 
-import { RiCloseLine, RiPlayLine } from "@remixicon/react";
+import { RiPlayLine } from "@remixicon/react";
 import Autoplay from "embla-carousel-autoplay";
 import WheelGesturesPlugin from "embla-carousel-wheel-gestures";
 
@@ -38,11 +38,6 @@ export function ReelsShowcase({ reels = mockReels }: ReelsShowcaseProps) {
 	const openReel = (reel: Reel) => {
 		setSelectedReel(reel);
 		setIsDialogOpen(true);
-	};
-
-	const closeDialog = () => {
-		setIsDialogOpen(false);
-		setSelectedReel(null);
 	};
 
 	return (
@@ -84,8 +79,8 @@ export function ReelsShowcase({ reels = mockReels }: ReelsShowcaseProps) {
 						</CarouselItem>
 					))}
 				</CarouselContent>
-				<CarouselPrevious />
-				<CarouselNext />
+				<CarouselPrevious className="relative" />
+				<CarouselNext className="relative" />
 			</Carousel>
 
 			{/* Call to Action */}
@@ -130,17 +125,6 @@ export function ReelsShowcase({ reels = mockReels }: ReelsShowcaseProps) {
 								<source src={selectedReel.videoUrl} type="video/mp4" />
 								Your browser does not support the video tag.
 							</video>
-
-							{/* Close button */}
-							<Button
-								className="absolute top-4 right-4 border-black/20 bg-black/50 text-white hover:bg-black/70"
-								onClick={closeDialog}
-								size="icon-sm"
-								variant="ghost"
-							>
-								<RiCloseLine className="size-4" />
-								<span className="sr-only">Close</span>
-							</Button>
 						</div>
 					)}
 				</DialogContent>

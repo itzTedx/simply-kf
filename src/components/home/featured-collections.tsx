@@ -33,25 +33,30 @@ export function FeaturedCollections() {
 							className="group relative flex flex-col gap-4"
 							key={`${index}-${collection.title}`}
 						>
-							<div className="relative aspect-3/4 overflow-hidden rounded-md bg-muted">
-								<Image alt="Collection Image" fill src={collection.image} />
-							</div>
+							<div className="relative flex aspect-3/4 items-end overflow-hidden rounded-md bg-muted p-6">
+								<Image
+									alt="Collection Image"
+									className="object-cover transition-all duration-300 ease-out group-hover:scale-105"
+									fill
+									src={collection.image}
+								/>
+								<div className="relative z-10 mt-2 space-y-2 text-center md:text-left">
+									<h3 className="font-display font-medium text-2xl text-charcoal">
+										{collection.title}
+									</h3>
+									<p className="font-body text-charcoal/60 text-sm">
+										{collection.description}
+									</p>
 
-							<div className="mt-2 space-y-2 text-center md:text-left">
-								<h3 className="font-display font-medium text-2xl text-charcoal">
-									{collection.title}
-								</h3>
-								<p className="font-body text-charcoal/60 text-sm">
-									{collection.description}
-								</p>
-								<div className="pt-2">
 									<Link
-										className="font-body font-semibold text-charcoal text-xs uppercase tracking-widest underline decoration-charcoal/30 underline-offset-4 transition-all hover:decoration-charcoal"
+										className="t font-body font-semibold text-muted-foreground text-xs underline decoration-charcoal/30 underline-offset-4 transition-all hover:decoration-charcoal"
 										href={collection.href as Route}
 									>
 										View Collection
 									</Link>
 								</div>
+
+								<div className="absolute inset-x-0 bottom-0 z-0 h-1/2 bg-linear-to-t from-10% from-neutral-50/90" />
 							</div>
 						</div>
 					))}

@@ -1,4 +1,3 @@
-import { BrandPillars } from "@/components/home/brand-pillars";
 import { CraftQuality } from "@/components/home/craft-quality";
 import { FeaturedCollections } from "@/components/home/featured-collections";
 import { Hero } from "@/components/home/hero";
@@ -11,7 +10,6 @@ export default function Home() {
 	return (
 		<main>
 			<Hero />
-			<BrandPillars />
 			<FeaturedCollections />
 			<ProductHighlight />
 			<ReelsShowcase />

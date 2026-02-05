@@ -1,4 +1,3 @@
-import { Chivo_Mono } from "next/font/google";
 import localFont from "next/font/local";
 
 export const inter = localFont({
@@ -67,10 +66,6 @@ export const amandine = localFont({
 			path: "./amandine/amandine_light.otf",
 		},
 		{
-			weight: "300",
-			path: "./amandine/amandine_light.otf",
-		},
-		{
 			weight: "400",
 			path: "./amandine/amandine_regular.otf",
 		},
@@ -97,17 +92,73 @@ export const amandine = localFont({
 	],
 });
 
-export const mono = Chivo_Mono({
-	variable: "--font-mono",
-	subsets: ["latin"],
-	weight: "500",
+export const malibu = localFont({
+	variable: "--font-display",
+	display: "swap",
+	preload: true,
+	src: "./malibu/malibu-regular.otf",
 	fallback: [
-		"SFMono-Regular",
-		"Menlo",
-		"Monaco",
-		"Consolas",
-		"Liberation Mono",
-		"Courier New",
-		"monospace",
+		"-apple-system",
+		"BlinkMacSystemFont",
+		"Segoe UI",
+		"Roboto",
+		"Oxygen",
+		"Ubuntu",
+		"Cantarell",
+		"Helvetica Neue",
+		"Arial",
+		"sans-serif",
+	],
+});
+
+export const helvena = localFont({
+	variable: "--font-sans",
+	display: "swap",
+	preload: true,
+	src: [
+		{
+			weight: "200",
+			path: "./helvena/Helvena-Extralight.woff2",
+		},
+		{
+			weight: "300",
+			path: "./helvena/Helvena-Light.woff2",
+		},
+		{
+			weight: "400",
+			path: "./helvena/Helvena-Regular.woff2",
+		},
+		{
+			weight: "500",
+			path: "./helvena/Helvena-Medium.woff2",
+		},
+		{
+			weight: "600",
+			path: "./helvena/Helvena-SemiBold.woff2",
+		},
+		{
+			weight: "700",
+			path: "./helvena/Helvena-Bold.woff2",
+		},
+		{
+			weight: "800",
+			path: "./helvena/Helvena-Extrabold.woff2",
+		},
+		{
+			weight: "900",
+			path: "./helvena/Helvena-Black.woff2",
+		},
+	],
+	fallback: [
+		"-apple-system",
+		"BlinkMacSystemFont",
+		"Segoe UI",
+		"Roboto",
+		"Oxygen",
+		"Ubuntu",
+		"Cantarell",
+		"Helvetica Neue",
+		"Arial",
+		"sans-serif",
 	],
 });

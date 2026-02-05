@@ -1,5 +1,15 @@
 import Image from "next/image";
 
-export const Logo = () => {
-	return <Image alt="Simply KF Logo" height={60} src="/logo.svg" width={40} />;
+import { cn } from "@/lib/utils";
+
+export const Logo = ({ className }: { className?: string }) => {
+	return (
+		<Image
+			alt="Simply KF Logo"
+			className={cn("", className)}
+			height={60}
+			src="/logo.svg"
+			width={30}
+		/>
+	);
 };
