@@ -21,7 +21,6 @@ interface ProductViewProps {
 }
 
 export function ProductView({ product }: ProductViewProps) {
-	const [selectedSize, setSelectedSize] = useState<string>("");
 	const [selectedColor, setSelectedColor] = useState<string>(product.colors[0]);
 	const [mainImage, setMainImage] = useState<string>(product.images[0]);
 	const [isImageLoading, setIsImageLoading] = useState(true);
@@ -123,27 +122,14 @@ export function ProductView({ product }: ProductViewProps) {
 						<div className="space-y-3">
 							<div className="flex items-center justify-between">
 								<span className="text-xs text-zinc-500 uppercase tracking-widest">
-									Size: <span className="text-zinc-900">{selectedSize}</span>
+									Size: <span className="text-zinc-900">{product.size}</span>
 								</span>
 								<button className="text-xs text-zinc-400 underline decoration-zinc-300 underline-offset-4 transition-colors hover:text-zinc-900">
 									Size Guide
 								</button>
 							</div>
-							<div className="grid grid-cols-4 gap-2 sm:grid-cols-6">
-								{product.sizes.map((size) => (
-									<button
-										className={cn(
-											"flex h-12 w-full items-center justify-center border text-sm transition-all",
-											selectedSize === size
-												? "border-zinc-900 bg-zinc-50 font-medium text-zinc-900"
-												: "border-zinc-200 text-zinc-500 hover:border-zinc-900 hover:text-zinc-900"
-										)}
-										key={size}
-										onClick={() => setSelectedSize(size)}
-									>
-										{size}
-									</button>
-								))}
+							<div className="flex items-center justify-center">
+								<span className="text-sm text-zinc-600">{product.size}</span>
 							</div>
 						</div>
 					</div>
@@ -152,9 +138,9 @@ export function ProductView({ product }: ProductViewProps) {
 					<div className="space-y-3 pt-6">
 						<Button
 							className="h-14 w-full rounded-none bg-zinc-900 text-base text-white uppercase tracking-wide hover:bg-zinc-800"
-							disabled={!selectedSize}
+							disabled={false}
 						>
-							{selectedSize ? "Add to Bag" : "Select a Size"}
+							Add to Bag
 						</Button>
 						<button className="w-full py-2 text-center text-xs text-zinc-400 uppercase tracking-widest transition-colors hover:text-zinc-900">
 							Save for Later
