@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
+
 import { Button } from "@/components/ui/button";
-import { Product } from "@/data/products";
+
+import { Product } from "@/constants/products";
 
 interface ProductGridProps {
 	products: Product[];
@@ -58,7 +60,7 @@ export function ProductGrid({ products, onClearFilters }: ProductGridProps) {
 								Designed in Dubai
 							</p>
 							<p className="pt-1 font-body font-medium text-sm text-zinc-900">
-								AED{product.price}
+								£{product.price}
 							</p>
 						</div>
 					</Link>

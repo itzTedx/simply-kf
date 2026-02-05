@@ -16,18 +16,13 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 
-import { PRODUCTS } from "@/data/products";
+import { PRODUCTS } from "@/constants/products";
 
 function ShopPageContent() {
-	const [priceRange, setPriceRange] = useState([0, 500]);
+	const [priceRange, setPriceRange] = useState([0, 1000]);
 	const [selectedSort, setSelectedSort] = useState("newest");
 
 	const [filters, setFilters] = useQueryStates({
-		categories: {
-			parse: (value: string) => value.split(",").filter(Boolean),
-			serialize: (value: string[]) => value.join(","),
-			default: [] as string[],
-		},
 		collections: {
 			parse: (value: string) => value.split(",").filter(Boolean),
 			serialize: (value: string[]) => value.join(","),
@@ -50,16 +45,22 @@ function ShopPageContent() {
 		},
 	});
 
+	// Reset all filters function
+	const resetAllFilters = () => {
+		setFilters({
+			collections: [],
+			colors: [],
+			materials: [],
+			availability: [],
+		});
+		setPriceRange([0, 1000]);
+		setSelectedSort("newest");
+	};
+
 	// Filter products based on selected filters
 	const filteredProducts = useMemo(() => {
 		let filtered = PRODUCTS;
-
-		// Filter by categories
-		if (filters.categories && filters.categories.length > 0) {
-			filtered = filtered.filter((product) =>
-				filters.categories!.includes(product.category)
-			);
-		}
+		console.log(filtered);
 
 		// Filter by collections
 		if (filters.collections && filters.collections.length > 0) {
@@ -108,7 +109,6 @@ function ShopPageContent() {
 				);
 		}
 	}, [
-		filters.categories,
 		filters.collections,
 		filters.colors,
 		filters.materials,
@@ -149,7 +149,7 @@ function ShopPageContent() {
 					{/* Main Content Area */}
 					<div className="flex-1 space-y-8">
 						{/* Desktop Sorting (Top Right) */}
-						<div className="hidden flex-row-reverse lg:flex">
+						<div className="hidden flex-row-reverse items-center justify-between lg:flex">
 							<div className="w-[200px]">
 								<Select
 									onValueChange={(value) => setSelectedSort(value || "newest")}
@@ -169,19 +169,18 @@ function ShopPageContent() {
 									</SelectContent>
 								</Select>
 							</div>
+
+							<button
+								className="text-sm text-zinc-500 underline decoration-zinc-300 underline-offset-4 transition-colors hover:text-zinc-900"
+								onClick={resetAllFilters}
+							>
+								Reset All Filters
+							</button>
 						</div>
 
 						{/* 4. Product Grid */}
 						<ProductGrid
-							onClearFilters={() =>
-								setFilters({
-									categories: [],
-									collections: [],
-									colors: [],
-									materials: [],
-									availability: [],
-								})
-							}
+							onClearFilters={resetAllFilters}
 							products={filteredProducts}
 						/>
 					</div>

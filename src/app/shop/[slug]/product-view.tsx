@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { Product } from "@/data/products";
+import { Product } from "@/constants/products";
 import { cn } from "@/lib/utils";
 
 interface ProductViewProps {

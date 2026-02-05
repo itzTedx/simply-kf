@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 
-import { PRODUCTS } from "@/data/products";
+import { PRODUCTS } from "@/constants/products";
 
 import { ProductView } from "./product-view";
 
@@ -28,7 +28,7 @@ export default async function ProductPage({ params }: PageProps) {
 
 	// Related products logic: same category, exclude current, limit to 4
 	const relatedProducts = PRODUCTS.filter(
-		(p) => p.category === product.category && p.slug !== product.slug
+		(p) => p.collection === product.collection && p.slug !== product.slug
 	).slice(0, 4);
 
 	return (
@@ -40,7 +40,7 @@ export default async function ProductPage({ params }: PageProps) {
 						className="text-xs text-zinc-500 uppercase tracking-widest transition-colors hover:text-zinc-900"
 						href="/shop"
 					>
-						← Back to {product.category}
+						← Back to {product.collection}
 					</Link>
 				</div>
 
@@ -68,11 +68,11 @@ export default async function ProductPage({ params }: PageProps) {
 					<section className="mt-32 border-zinc-100 border-t pt-24">
 						<div className="mb-12 flex flex-col items-center justify-between md:flex-row">
 							<h3 className="font-display text-2xl text-zinc-900">
-								More from {product.category}
+								More from {product.collection}
 							</h3>
 							<Link
 								className="hidden text-xs text-zinc-500 uppercase tracking-widest transition-colors hover:text-zinc-900 md:block"
-								href={`/shop?category=${product.category}`}
+								href={`/shop?collection=${product.collection}`}
 							>
 								View All
 							</Link>
@@ -114,9 +114,9 @@ export default async function ProductPage({ params }: PageProps) {
 						<div className="mt-12 text-center md:hidden">
 							<Link
 								className="border-zinc-300 border-b pb-1 text-xs text-zinc-500 uppercase tracking-widest transition-colors hover:text-zinc-900"
-								href={`/shop?category=${product.category}`}
+								href={`/shop?collection=${product.collection}`}
 							>
-								View All {product.category}
+								View All {product.collection}
 							</Link>
 						</div>
 					</section>
