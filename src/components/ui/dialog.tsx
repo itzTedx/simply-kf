@@ -54,7 +54,7 @@ function DialogContent({
 			<DialogOverlay />
 			<DialogPrimitive.Popup
 				className={cn(
-					"data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-98 data-open:zoom-in-98 fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-6 rounded-[var(--radius)] bg-card p-6 text-sm outline-none duration-300 data-closed:animate-out data-open:animate-in sm:max-w-lg",
+					"data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-98 data-open:zoom-in-98 fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-6 rounded-(--radius) bg-card p-6 text-sm outline-none duration-300 data-closed:animate-out data-open:animate-in sm:max-w-lg",
 					className
 				)}
 				data-slot="dialog-content"

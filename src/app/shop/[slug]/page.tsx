@@ -109,7 +109,7 @@ export default async function ProductPage({ params }: PageProps) {
 									href={`/shop/${item.slug}`}
 									key={item.id}
 								>
-									<div className="relative mb-4 aspect-[3/4] overflow-hidden rounded-sm bg-muted/40">
+									<div className="relative mb-4 aspect-3/4 overflow-hidden rounded-sm bg-muted/40">
 										<Image
 											alt={item.name}
 											className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"

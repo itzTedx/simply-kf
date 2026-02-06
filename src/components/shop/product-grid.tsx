@@ -40,7 +40,7 @@ export function ProductGrid({ products, onClearFilters }: ProductGridProps) {
 						key={product.id}
 					>
 						{product.images && (
-							<div className="relative aspect-[3/4] w-full overflow-hidden rounded-sm bg-muted/40">
+							<div className="relative aspect-3/4 w-full overflow-hidden rounded-sm bg-muted/40">
 								<Image
 									alt={product.name}
 									className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
