@@ -21,7 +21,7 @@ export function FeaturedCollections() {
 							className="group relative flex flex-col"
 							key={`${index}-${collection.title}`}
 						>
-							<div className="relative flex aspect-[3/4] items-end overflow-hidden rounded-md bg-muted/50 active:opacity-95 md:rounded-sm">
+							<div className="relative flex aspect-3/4 items-end overflow-hidden rounded-md bg-muted/50 active:opacity-95 md:rounded-sm">
 								<Image
 									alt=""
 									className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
@@ -29,7 +29,7 @@ export function FeaturedCollections() {
 									sizes="(max-width: 768px) 100vw, 33vw"
 									src={collection.image}
 								/>
-								<div className="absolute inset-x-0 bottom-0 z-10 h-1/2 bg-gradient-to-t from-background/90 to-transparent" />
+								<div className="absolute inset-x-0 bottom-0 z-10 h-1/2 bg-linear-to-t from-background/90 to-transparent" />
 								<div className="relative z-10 space-y-2 p-5 pt-10 text-center md:p-6 md:pt-12 md:text-left">
 									<h3 className="font-display font-normal text-foreground text-xl md:text-2xl">
 										{collection.title}
