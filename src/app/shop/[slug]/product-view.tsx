@@ -97,7 +97,7 @@ export function ProductView({ product }: ProductViewProps) {
 	return (
 		<div className="grid grid-cols-1 gap-x-10 gap-y-14 lg:grid-cols-2 lg:gap-x-20 lg:gap-y-16">
 			<div className="flex flex-col gap-5">
-				<div className="relative aspect-[3/4] w-full overflow-hidden rounded-sm bg-muted/40">
+				<div className="relative aspect-3/4 w-full overflow-hidden rounded-sm bg-muted/40">
 					{isImageLoading && (
 						<Skeleton className="absolute inset-0 size-full" />
 					)}
@@ -141,7 +141,7 @@ export function ProductView({ product }: ProductViewProps) {
 			<div className="flex flex-col">
 				<div className="sticky top-28 space-y-8">
 					<div className="space-y-5 border-border/40 border-b pb-8">
-						<h1 className="font-display font-normal text-3xl text-foreground leading-tight md:text-4xl lg:text-[2.75rem]">
+						<h1 className="font-normal font-sans text-3xl text-foreground leading-tight md:text-4xl lg:text-[2.75rem]">
 							{product.name}
 						</h1>
 						<div className="flex items-center justify-between">
@@ -325,7 +325,7 @@ export function ProductView({ product }: ProductViewProps) {
 								className="border-0 border-border/40 border-b"
 								value="details"
 							>
-								<AccordionTrigger className="py-4 font-display font-normal text-foreground hover:no-underline">
+								<AccordionTrigger className="py-4 font-normal font-sans text-foreground hover:no-underline">
 									Description
 								</AccordionTrigger>
 								<AccordionContent className="pb-4 font-body text-foreground/75 text-sm leading-relaxed">
@@ -340,15 +340,16 @@ export function ProductView({ product }: ProductViewProps) {
 								className="border-0 border-border/40 border-b"
 								value="fabric"
 							>
-								<AccordionTrigger className="py-4 font-display font-normal text-foreground hover:no-underline">
+								<AccordionTrigger className="py-4 font-normal font-sans text-foreground hover:no-underline">
 									Fabric & care
 								</AccordionTrigger>
 								<AccordionContent className="pb-4 font-body text-foreground/75 text-sm leading-relaxed">
 									<ul className="list-inside list-disc space-y-1.5">
-										<li>Premium crepe blend</li>
-										<li>Dry clean only recommended</li>
-										<li>Steam iron on low heat</li>
-										<li>Do not bleach or tumble dry</li>
+										{product.features.map((feat) => (
+											<li className="text-lg" key={feat}>
+												{feat}
+											</li>
+										))}
 									</ul>
 								</AccordionContent>
 							</AccordionItem>
@@ -356,7 +357,7 @@ export function ProductView({ product }: ProductViewProps) {
 								className="border-0 border-border/40 border-b"
 								value="delivery"
 							>
-								<AccordionTrigger className="py-4 font-display font-normal text-foreground hover:no-underline">
+								<AccordionTrigger className="py-4 font-normal font-sans text-foreground hover:no-underline">
 									Delivery & returns
 								</AccordionTrigger>
 								<AccordionContent className="pb-4 font-body text-foreground/75 text-sm leading-relaxed">

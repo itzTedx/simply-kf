@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import { CraftQuality } from "@/components/home/craft-quality";
 import { FeaturedCollections } from "@/components/home/featured-collections";
@@ -14,12 +15,14 @@ export default function Home() {
 			<Hero />
 			<FeaturedProducts />
 			<section className="container relative mx-auto aspect-16/5 max-w-6xl overflow-hidden rounded-md">
-				<Image
-					alt="Hero"
-					className="object-cover"
-					fill
-					src="/images/banner-1.webp"
-				/>
+				<Link href="/shop?availability=in-stock">
+					<Image
+						alt="Hero"
+						className="object-cover"
+						fill
+						src="/images/banner-1.webp"
+					/>
+				</Link>
 			</section>
 			<FeaturedCollections />
 			<ProductHighlight />

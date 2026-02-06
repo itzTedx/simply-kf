@@ -129,7 +129,7 @@ export default function ContactPage() {
 					)}
 
 					<Button
-						className="h-11 w-full rounded-[var(--radius)]"
+						className="h-11 w-full rounded-(--radius)"
 						disabled={isPending}
 						size="lg"
 						type="submit"
@@ -147,7 +147,7 @@ export default function ContactPage() {
 			</div>
 
 			<div className="mx-auto mb-8 max-w-sm text-center">
-				<p className="font-body text-[0.6875rem] text-foreground/45 uppercase leading-relaxed tracking-[0.1em]">
+				<p className="font-body text-[0.6875rem] text-foreground/45 uppercase leading-relaxed tracking-widest">
 					SIMPLY KF is curated exclusively for customers in the UK. We aim to
 					respond within 24–48 hours.
 				</p>

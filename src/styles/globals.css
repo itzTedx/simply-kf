@@ -104,7 +104,7 @@
 
 	/* Soft transitions site-wide */
 	.button {
-		@apply rounded-[var(--radius)] transition-all duration-300 ease-out;
+		@apply rounded-(--radius) transition-all duration-300 ease-out;
 	}
 
 	.input,

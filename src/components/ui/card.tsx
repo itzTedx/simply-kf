@@ -10,7 +10,7 @@ function Card({
 	return (
 		<div
 			className={cn(
-				"group/card flex flex-col gap-6 overflow-hidden rounded-[var(--radius)] bg-card py-6 text-card-foreground text-sm has-[>img:first-child]:pt-0 has-data-[slot=card-footer]:pb-0 data-[size=sm]:gap-4 data-[size=sm]:py-4 data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-[var(--radius)] *:[img:last-child]:rounded-b-[var(--radius)]",
+				"group/card flex flex-col gap-6 overflow-hidden rounded-(--radius) bg-card py-6 text-card-foreground text-sm has-[>img:first-child]:pt-0 has-data-[slot=card-footer]:pb-0 data-[size=sm]:gap-4 data-[size=sm]:py-4 data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-(--radius) *:[img:last-child]:rounded-b-(--radius)",
 				className
 			)}
 			data-size={size}
@@ -83,7 +83,7 @@ function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
 	return (
 		<div
 			className={cn(
-				"flex items-center rounded-b-[var(--radius)] border-border/30 border-t bg-muted/10 p-6 group-data-[size=sm]/card:p-4",
+				"flex items-center rounded-b-(--radius) border-border/30 border-t bg-muted/10 p-6 group-data-[size=sm]/card:p-4",
 				className
 			)}
 			data-slot="card-footer"
