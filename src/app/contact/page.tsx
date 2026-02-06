@@ -31,26 +31,28 @@ export default function ContactPage() {
 	}
 
 	return (
-		<main className="fade-in slide-in-from-bottom-4 container mx-auto max-w-xl animate-in px-4 py-16 duration-700 sm:px-6 md:py-24">
-			{/* page structure 1: Hero / Intro */}
-			<div className="mb-12 space-y-4 text-center">
-				<h1 className="font-display text-4xl text-neutral-800 md:text-5xl">
-					Get in Touch
+		<main className="container mx-auto max-w-xl px-4 py-20 sm:px-6 md:py-28">
+			<div className="mb-14 space-y-4 text-center">
+				<h1 className="font-display font-normal text-3xl text-foreground tracking-tight md:text-4xl">
+					Get in touch
 				</h1>
-				<p className="mx-auto max-w-md text-neutral-600 leading-relaxed">
+				<p className="mx-auto max-w-md font-body text-foreground/65 text-sm leading-relaxed">
 					We’re here to assist with any questions about our collections, sizing,
 					or orders.
 				</p>
 			</div>
 
-			{/* page structure 2: Contact Form */}
 			<form className="mb-16" onSubmit={handleSubmit}>
 				<FieldGroup className="space-y-6">
-					{/* Name */}
 					<Field>
-						<FieldLabel htmlFor="name">Full Name</FieldLabel>
+						<FieldLabel
+							className="font-body text-foreground/80 text-sm"
+							htmlFor="name"
+						>
+							Full name
+						</FieldLabel>
 						<Input
-							className="h-11 border-neutral-200 bg-neutral-50/50 transition-all duration-300 focus:border-neutral-400 focus:ring-0"
+							className="h-11 border-border/70 bg-transparent font-body placeholder:text-foreground/40"
 							disabled={isPending}
 							id="name"
 							name="name"
@@ -59,11 +61,15 @@ export default function ContactPage() {
 						/>
 					</Field>
 
-					{/* Email */}
 					<Field>
-						<FieldLabel htmlFor="email">Email Address</FieldLabel>
+						<FieldLabel
+							className="font-body text-foreground/80 text-sm"
+							htmlFor="email"
+						>
+							Email address
+						</FieldLabel>
 						<Input
-							className="h-11 border-neutral-200 bg-neutral-50/50 transition-all duration-300 focus:border-neutral-400 focus:ring-0"
+							className="h-11 border-border/70 bg-transparent font-body placeholder:text-foreground/40"
 							disabled={isPending}
 							id="email"
 							name="email"
@@ -73,16 +79,20 @@ export default function ContactPage() {
 						/>
 					</Field>
 
-					{/* Subject */}
 					<Field>
 						<div className="flex items-baseline justify-between">
-							<FieldLabel htmlFor="subject">Subject</FieldLabel>
-							<span className="font-light text-neutral-400 text-xs tracking-wide">
-								OPTIONAL
+							<FieldLabel
+								className="font-body text-foreground/80 text-sm"
+								htmlFor="subject"
+							>
+								Subject
+							</FieldLabel>
+							<span className="font-body text-foreground/40 text-xs">
+								Optional
 							</span>
 						</div>
 						<Input
-							className="h-11 border-neutral-200 bg-neutral-50/50 transition-all duration-300 focus:border-neutral-400 focus:ring-0"
+							className="h-11 border-border/70 bg-transparent font-body placeholder:text-foreground/40"
 							disabled={isPending}
 							id="subject"
 							name="subject"
@@ -90,11 +100,15 @@ export default function ContactPage() {
 						/>
 					</Field>
 
-					{/* Message */}
 					<Field>
-						<FieldLabel htmlFor="message">Message</FieldLabel>
+						<FieldLabel
+							className="font-body text-foreground/80 text-sm"
+							htmlFor="message"
+						>
+							Message
+						</FieldLabel>
 						<Textarea
-							className="min-h-[150px] resize-none border-neutral-200 bg-neutral-50/50 transition-all duration-300 focus:border-neutral-400 focus:ring-0"
+							className="min-h-[140px] resize-none border-border/70 bg-transparent font-body placeholder:text-foreground/40"
 							disabled={isPending}
 							id="message"
 							name="message"
@@ -103,48 +117,45 @@ export default function ContactPage() {
 						/>
 					</Field>
 
-					{/* Validation Messages */}
 					{formState?.error && (
-						<p className="fade-in animate-in text-center text-red-500 text-sm">
+						<p className="text-center font-body text-destructive text-sm">
 							{formState.error}
 						</p>
 					)}
 					{formState?.success && (
-						<p className="fade-in animate-in text-center text-emerald-700 text-sm">
+						<p className="text-center font-body text-foreground/80 text-sm">
 							{formState.success}
 						</p>
 					)}
 
-					{/* Submit Button */}
 					<Button
-						className="h-12 w-full rounded-lg bg-neutral-900 text-base text-white shadow-sm transition-all duration-300 hover:bg-neutral-800 hover:shadow-md"
+						className="h-11 w-full rounded-[var(--radius)]"
 						disabled={isPending}
 						size="lg"
 						type="submit"
 					>
-						{isPending ? "Sending..." : "Send Message"}
+						{isPending ? "Sending…" : "Send message"}
 					</Button>
 				</FieldGroup>
 			</form>
 
-			{/* page structure 3: Contact Information */}
-			<div className="mb-12 space-y-2 text-center">
-				<p className="font-medium text-neutral-900">support@simplykf.com</p>
-				<p className="font-medium text-neutral-500 tracking-wide">@simplykf</p>
+			<div className="mb-10 space-y-2 text-center">
+				<p className="font-body text-foreground text-sm">
+					support@simplykf.com
+				</p>
+				<p className="font-body text-foreground/55 text-sm">@simplykf</p>
 			</div>
 
-			{/* page structure 4: UK Focus Note */}
-			<div className="mx-auto mb-8 max-w-xs text-center">
-				<p className="font-light text-neutral-500 text-xs uppercase leading-relaxed tracking-wider">
+			<div className="mx-auto mb-8 max-w-sm text-center">
+				<p className="font-body text-[0.6875rem] text-foreground/45 uppercase leading-relaxed tracking-[0.1em]">
 					SIMPLY KF is curated exclusively for customers in the UK. We aim to
-					respond to all enquiries within 24–48 hours.
+					respond within 24–48 hours.
 				</p>
 			</div>
 
-			{/* page structure 5: Closing Line */}
 			<div className="text-center">
-				<p className="font-light text-neutral-400 text-sm italic">
-					Thank you for reaching out to SIMPLY KF.
+				<p className="font-body text-foreground/40 text-sm italic">
+					Thank you for reaching out.
 				</p>
 			</div>
 		</main>

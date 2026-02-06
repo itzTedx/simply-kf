@@ -12,11 +12,12 @@
 	--font-display: var(--font-display);
 	--font-body: var(--font-body);
 
-	/* Custom Palette */
-	--color-ivory: oklch(0.99 0.005 100);
-	--color-beige: oklch(0.94 0.03 95);
-	--color-taupe: oklch(0.65 0.04 60);
-	--color-charcoal: oklch(0.25 0.01 260);
+	/* SIMPLY KF — Cream / off-white / warm ivory, beige, soft taupe, muted gold, soft charcoal */
+	--color-ivory: oklch(0.985 0.006 95);
+	--color-beige: oklch(0.94 0.025 85);
+	--color-taupe: oklch(0.62 0.04 55);
+	--color-charcoal: oklch(0.22 0.012 260);
+	--color-gold: oklch(0.72 0.08 75);
 
 	--color-ring: var(--ring);
 	--color-input: var(--input);
@@ -41,80 +42,81 @@
 	--radius-2xl: calc(var(--radius) + 8px);
 	--radius-3xl: calc(var(--radius) + 12px);
 	--radius-4xl: calc(var(--radius) + 16px);
-
-	--button-primary:
-		inset 0 1px 1.5px --alpha(var(--color-white) / 16%),
-		0 0 0 0.5px var(--color-primary),
-		0 0 0 0.5px --alpha(var(--gray-950) / 12%),
-		0 3px 3px -1.5px --alpha(var(--gray-950) / 6%),
-		0 6px 6px -3px --alpha(var(--gray-950) / 6%),
-		0 12px 12px -6px --alpha(var(--gray-950) / 9%),
-		0 24px 24px -12px --alpha(var(--gray-950) / 6%),
-		0 48px 48px -24px --alpha(var(--gray-950) / 6%);
 }
 
 :root {
-	--radius: 0.625rem;
+	/* Softer corners — boutique, not sharp */
+	--radius: 0.5rem;
 
-	/* Base colors - warm ivory and deep charcoal */
-	--background: oklch(0.9769 0.0011 17.18); /* soft ivory / warm off-white */
-	--foreground: oklch(0.22 0.015 250); /* deep charcoal (not black) */
+	/* Primary: cream / off-white / warm ivory */
+	--background: oklch(0.98 0.004 90);
+	--foreground: oklch(0.21 0.012 260);
 
-	/* Surface colors - warm whites */
-	--card: oklch(0.99 0.005 90); /* warm white */
-	--card-foreground: oklch(0.22 0.015 250); /* charcoal */
-	--popover: oklch(0.99 0.005 90); /* warm white */
-	--popover-foreground: oklch(0.22 0.015 250); /* charcoal */
+	/* Surfaces: layered neutrals */
+	--card: oklch(0.99 0.004 92);
+	--card-foreground: oklch(0.21 0.012 260);
+	--popover: oklch(0.995 0.003 90);
+	--popover-foreground: oklch(0.21 0.012 260);
 
-	/* Primary - muted charcoal / deep taupe */
-	--primary: oklch(0.35 0.02 70); /* muted charcoal / deep taupe */
-	--primary-foreground: oklch(0.98 0.008 85); /* soft ivory */
+	/* Primary action: soft charcoal (sparingly) */
+	--primary: oklch(0.28 0.015 260);
+	--primary-foreground: oklch(0.98 0.006 90);
 
-	/* Secondary - light beige */
-	--secondary: oklch(0.92 0.03 80); /* light beige */
-	--secondary-foreground: oklch(0.22 0.015 250); /* charcoal */
+	/* Secondary: beauty-hold beige / soft taupe */
+	--secondary: oklch(0.93 0.02 80);
+	--secondary-foreground: oklch(0.25 0.012 260);
 
-	/* Muted - very light sand */
-	--muted: oklch(0.95 0.02 75); /* very light sand */
-	--muted-foreground: oklch(0.45 0.025 65); /* soft gray-brown */
+	/* Muted: very light sand */
+	--muted: oklch(0.96 0.015 85);
+	--muted-foreground: oklch(0.48 0.02 65);
 
-	/* Accent - warm taupe */
-	--accent: oklch(0.85 0.025 68); /* warm taupe */
-	--accent-foreground: oklch(0.22 0.015 250); /* charcoal */
+	/* Accent: warm taupe (hover states) */
+	--accent: oklch(0.9 0.02 75);
+	--accent-foreground: oklch(0.25 0.012 260);
 
-	/* Borders & inputs - soft warm gray */
-	--border: oklch(75.839% 0.01851 72.945); /* soft warm gray */
-	--input: oklch(0.88 0.02 72); /* soft warm gray */
-	--ring: oklch(0.35 0.02 70 / 0.3); /* muted charcoal (low opacity) */
+	/* Borders & inputs — minimal, soft */
+	--border: oklch(0.9 0.015 80);
+	--input: oklch(0.94 0.015 85);
+	--ring: oklch(0.35 0.02 70 / 0.2);
 
-	/* Status - muted burgundy */
-	--destructive: oklch(0.45 0.08 15); /* muted burgundy (not bright red) */
-	--destructive-foreground: oklch(0.99 0.005 90); /* warm white */
+	/* Status */
+	--destructive: oklch(0.48 0.08 18);
+	--destructive-foreground: oklch(0.99 0.004 90);
 }
 
 @layer base {
 	* {
 		@apply border-border outline-ring/50;
 	}
+	html {
+		@apply scroll-smooth;
+	}
 	body {
 		@apply bg-background text-foreground;
 	}
 
-	/* Component styling overrides */
+	/* Editorial typography — generous line-height, calm weight */
+	h1,
+	h2,
+	h3 {
+		@apply font-display leading-[1.15] tracking-tight;
+	}
+
+	/* Soft transitions site-wide */
 	.button {
-		@apply rounded-md transition-all duration-200;
+		@apply rounded-[var(--radius)] transition-all duration-300 ease-out;
 	}
 
 	.input,
 	.textarea {
-		@apply border-border bg-transparent focus:ring-2 focus:ring-ring/20;
+		@apply border-border/80 bg-transparent transition-colors duration-200 focus-visible:border-foreground/20 focus-visible:ring-2 focus-visible:ring-ring/15;
 	}
 
 	.card {
-		@apply border-border/50 shadow-none;
+		@apply border-0 shadow-none;
 	}
 
 	.skeleton {
-		@apply bg-muted/40;
+		@apply bg-muted/50;
 	}
 }

@@ -44,10 +44,9 @@ export function FilterSection({
 }: FilterSectionProps) {
 	return (
 		<div className="space-y-8">
-			{/* Price Filter */}
 			<div className="space-y-4">
-				<h3 className="font-body font-medium text-sm text-zinc-900 uppercase tracking-wide">
-					Price Range
+				<h3 className="font-body text-[0.6875rem] text-foreground/70 uppercase tracking-[0.12em]">
+					Price range
 				</h3>
 				<Slider
 					className="py-4"
@@ -57,17 +56,22 @@ export function FilterSection({
 					step={10}
 					value={priceRange}
 				/>
-				<div className="flex items-center justify-between text-muted-foreground text-xs">
+				<div className="flex justify-between font-body text-foreground/50 text-xs">
 					<span>£{priceRange[0]}</span>
 					<span>£{priceRange[1]}</span>
 				</div>
 			</div>
 
-			{/* Filter Groups */}
-			<Accordion className="w-full" defaultValue={["collection"]} multiple>
-				{/* Collections */}
-				<AccordionItem className="border-zinc-200" value="collection">
-					<AccordionTrigger className="font-body text-sm text-zinc-900 uppercase tracking-wide hover:no-underline">
+			<Accordion
+				className="w-full border-0"
+				defaultValue={["collection"]}
+				multiple
+			>
+				<AccordionItem
+					className="border-0 border-border/40 border-b"
+					value="collection"
+				>
+					<AccordionTrigger className="py-4 font-body text-foreground/80 text-xs uppercase tracking-wide hover:no-underline">
 						Collection
 					</AccordionTrigger>
 					<AccordionContent>
@@ -76,7 +80,7 @@ export function FilterSection({
 								<div className="flex items-center space-x-3" key={item}>
 									<Checkbox
 										checked={filters.collections?.includes(item) || false}
-										className="border-zinc-300 data-[state=checked]:border-zinc-900 data-[state=checked]:bg-zinc-900"
+										className="border-border data-[state=checked]:border-primary data-[state=checked]:bg-primary"
 										id={`collection-${item}`}
 										onCheckedChange={(checked) => {
 											if (checked) {
@@ -95,7 +99,7 @@ export function FilterSection({
 										}}
 									/>
 									<label
-										className="cursor-pointer font-body text-sm text-zinc-600 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+										className="cursor-pointer font-body text-foreground/70 text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 										htmlFor={`collection-${item}`}
 									>
 										{item.charAt(0).toUpperCase() + item.slice(1)}
@@ -106,9 +110,11 @@ export function FilterSection({
 					</AccordionContent>
 				</AccordionItem>
 
-				{/* Colors */}
-				<AccordionItem className="border-zinc-200" value="color">
-					<AccordionTrigger className="font-body text-sm text-zinc-900 uppercase tracking-wide hover:no-underline">
+				<AccordionItem
+					className="border-0 border-border/40 border-b"
+					value="color"
+				>
+					<AccordionTrigger className="py-4 font-body text-foreground/80 text-xs uppercase tracking-wide hover:no-underline">
 						Colour
 					</AccordionTrigger>
 					<AccordionContent>
@@ -117,7 +123,7 @@ export function FilterSection({
 								<div className="flex items-center space-x-3" key={item}>
 									<Checkbox
 										checked={filters.colors?.includes(item) || false}
-										className="border-zinc-300 data-[state=checked]:border-zinc-900 data-[state=checked]:bg-zinc-900"
+										className="border-border data-[state=checked]:border-primary data-[state=checked]:bg-primary"
 										id={`color-${item}`}
 										onCheckedChange={(checked) => {
 											if (checked) {
@@ -136,7 +142,7 @@ export function FilterSection({
 										}}
 									/>
 									<label
-										className="cursor-pointer font-body text-sm text-zinc-600 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+										className="cursor-pointer font-body text-foreground/70 text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 										htmlFor={`color-${item}`}
 									>
 										{item}
@@ -147,9 +153,11 @@ export function FilterSection({
 					</AccordionContent>
 				</AccordionItem>
 
-				{/* Materials */}
-				<AccordionItem className="border-zinc-200" value="material">
-					<AccordionTrigger className="font-body text-sm text-zinc-900 uppercase tracking-wide hover:no-underline">
+				<AccordionItem
+					className="border-0 border-border/40 border-b"
+					value="material"
+				>
+					<AccordionTrigger className="py-4 font-body text-foreground/80 text-xs uppercase tracking-wide hover:no-underline">
 						Material
 					</AccordionTrigger>
 					<AccordionContent>
@@ -158,7 +166,7 @@ export function FilterSection({
 								<div className="flex items-center space-x-3" key={item}>
 									<Checkbox
 										checked={filters.materials?.includes(item) || false}
-										className="border-zinc-300 data-[state=checked]:border-zinc-900 data-[state=checked]:bg-zinc-900"
+										className="border-border data-[state=checked]:border-primary data-[state=checked]:bg-primary"
 										id={`material-${item}`}
 										onCheckedChange={(checked) => {
 											if (checked) {
@@ -177,7 +185,7 @@ export function FilterSection({
 										}}
 									/>
 									<label
-										className="cursor-pointer font-body text-sm text-zinc-600 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+										className="cursor-pointer font-body text-foreground/70 text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 										htmlFor={`material-${item}`}
 									>
 										{item}
@@ -188,9 +196,11 @@ export function FilterSection({
 					</AccordionContent>
 				</AccordionItem>
 
-				{/* Availability */}
-				<AccordionItem className="border-zinc-200" value="availability">
-					<AccordionTrigger className="font-body text-sm text-zinc-900 uppercase tracking-wide hover:no-underline">
+				<AccordionItem
+					className="border-0 border-border/40 border-b"
+					value="availability"
+				>
+					<AccordionTrigger className="py-4 font-body text-foreground/80 text-xs uppercase tracking-wide hover:no-underline">
 						Availability
 					</AccordionTrigger>
 					<AccordionContent>
@@ -199,7 +209,7 @@ export function FilterSection({
 								<div className="flex items-center space-x-3" key={item}>
 									<Checkbox
 										checked={filters.availability?.includes(item) || false}
-										className="border-zinc-300 data-[state=checked]:border-zinc-900 data-[state=checked]:bg-zinc-900"
+										className="border-border data-[state=checked]:border-primary data-[state=checked]:bg-primary"
 										id={`availability-${item}`}
 										onCheckedChange={(checked) => {
 											if (checked) {
@@ -218,7 +228,7 @@ export function FilterSection({
 										}}
 									/>
 									<label
-										className="cursor-pointer font-body text-sm text-zinc-600 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+										className="cursor-pointer font-body text-foreground/70 text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 										htmlFor={`availability-${item}`}
 									>
 										{item.charAt(0).toUpperCase() +

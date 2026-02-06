@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+
 import { Route } from "next";
 import Link from "next/link";
 
@@ -24,18 +25,16 @@ const NAV_LINKS = [
 	{ name: "Shop", href: "/shop" },
 	{ name: "Collections", href: "/collections" },
 	{ name: "About", href: "/about" },
-	{ name: "Journal", href: "/journal" },
 	{ name: "Contact", href: "/contact" },
 ] as const;
 
 export function Header() {
 	const [open, setOpen] = useState(false);
 	return (
-		<header className="fixed top-3 left-1/2 z-50 -translate-x-1/2 max-sm:w-full sm:max-w-[calc(100%-2rem)]">
+		<header className="fixed top-4 left-1/2 z-50 -translate-x-1/2 max-sm:w-full sm:max-w-[calc(100%-2rem)]">
 			<div className="flex items-center justify-between gap-4 px-4 sm:px-0">
 				<div className="flex items-center gap-3">
-					{/* Mobile Menu (Hidden on Desktop) */}
-					<Sheet open={open} onOpenChange={setOpen}>
+					<Sheet onOpenChange={setOpen} open={open}>
 						<SheetTrigger
 							render={
 								<Button
@@ -49,16 +48,18 @@ export function Header() {
 							<RiMenuLine className="size-5" />
 						</SheetTrigger>
 						<SheetContent
-							className="w-[300px] sm:w-[360px]"
+							className="w-[280px] border-0 bg-card/95 backdrop-blur-md sm:w-[320px]"
 							side="left"
 						>
-							<SheetHeader className="text-left">
-								<SheetTitle className="font-display text-xl">Menu</SheetTitle>
+							<SheetHeader className="pb-6 text-left">
+								<SheetTitle className="font-display font-normal text-foreground text-lg">
+									Menu
+								</SheetTitle>
 							</SheetHeader>
-							<nav className="mt-8 flex flex-col gap-2">
+							<nav className="flex flex-col gap-0.5">
 								{NAV_LINKS.map((link) => (
 									<Link
-										className="rounded-lg px-4 py-3 font-body text-charcoal transition-colors hover:bg-charcoal/5"
+										className="rounded-md px-4 py-3 font-body text-foreground/80 text-sm transition-colors duration-200 hover:bg-foreground/5 hover:text-foreground"
 										href={link.href as Route}
 										key={link.name}
 										onClick={() => setOpen(false)}
@@ -70,21 +71,19 @@ export function Header() {
 						</SheetContent>
 					</Sheet>
 
-					{/* Logo */}
 					<Link
-						className="flex size-12 items-center justify-center rounded-full border-border/40 bg-white/80 backdrop-blur-lg transition-colors hover:bg-white supports-backdrop-filter:bg-white/60 sm:size-14"
+						className="flex size-11 items-center justify-center rounded-full bg-card/90 backdrop-blur-md transition-all duration-300 hover:bg-card sm:size-12"
 						href="/"
 					>
-						<Logo className="size-8 md:size-10" />
+						<Logo className="size-7 md:size-8" />
 					</Link>
 				</div>
 
-				<div className="flex h-14 items-center gap-6 rounded-xl border-border/40 bg-white/80 px-4 backdrop-blur-lg supports-backdrop-filter:bg-white/60 md:px-6">
-					{/* Desktop Navigation */}
+				<div className="flex h-12 items-center gap-8 rounded-full bg-card/90 px-5 backdrop-blur-md md:h-12 md:px-8">
 					<nav className="hidden gap-8 md:flex">
 						{NAV_LINKS.map((link) => (
 							<Link
-								className="font-body font-medium text-charcoal/80 text-sm transition-colors hover:text-amber-600"
+								className="font-body text-[0.8125rem] text-foreground/75 tracking-wide transition-colors duration-300 hover:text-foreground"
 								href={link.href as Route}
 								key={link.name}
 							>
@@ -93,14 +92,13 @@ export function Header() {
 						))}
 					</nav>
 
-					{/* Actions */}
-					<div className="flex items-center gap-2">
+					<div className="flex items-center gap-1">
 						<Button
-							className="text-charcoal/80 hover:text-charcoal"
-							size="icon"
+							className="text-foreground/70 hover:text-foreground"
+							size="icon-sm"
 							variant="ghost"
 						>
-							<RiUserLine className="size-5" />
+							<RiUserLine className="size-4" />
 							<span className="sr-only">Account</span>
 						</Button>
 						<CartButton />

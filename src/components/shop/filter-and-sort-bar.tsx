@@ -56,7 +56,7 @@ export function FilterAndSortBar({
 				<SheetTrigger
 					render={
 						<Button
-							className="h-10 gap-2 border-zinc-200 font-body text-zinc-900 uppercase tracking-wider"
+							className="h-9 gap-2 border-border/70 font-body text-foreground/80 text-xs tracking-wide"
 							size="sm"
 							variant="outline"
 						/>
@@ -65,14 +65,19 @@ export function FilterAndSortBar({
 					<RiEqualizerLine className="size-4" />
 					Filters
 				</SheetTrigger>
-				<SheetContent className="w-[300px] sm:w-[400px]" side="left">
-					<SheetHeader className="text-left">
-						<SheetTitle className="font-display text-2xl uppercase">
+				<SheetContent
+					className="w-[280px] border-0 bg-card/98 sm:w-[320px]"
+					side="left"
+				>
+					<SheetHeader className="pb-4 text-left">
+						<SheetTitle className="font-display font-normal text-lg">
 							Filters
 						</SheetTitle>
-						<SheetDescription>Refine your selection.</SheetDescription>
+						<SheetDescription className="text-foreground/60 text-sm">
+							Refine your selection.
+						</SheetDescription>
 					</SheetHeader>
-					<div className="py-8">
+					<div className="py-6">
 						<FilterSection
 							filters={filters}
 							priceRange={priceRange}
@@ -83,13 +88,13 @@ export function FilterAndSortBar({
 				</SheetContent>
 			</Sheet>
 
-			<div className="w-[180px]">
+			<div className="w-[160px]">
 				<Select
 					onValueChange={(value) => setSelectedSort(value || "newest")}
 					value={selectedSort}
 				>
-					<SelectTrigger className="h-10 border-zinc-200 font-body text-xs text-zinc-900 uppercase tracking-wider focus:ring-zinc-900">
-						<SelectValue placeholder="Sort By" />
+					<SelectTrigger className="h-9 border-border/70 font-body text-foreground/80 text-xs tracking-wide">
+						<SelectValue placeholder="Sort by" />
 					</SelectTrigger>
 					<SelectContent>
 						<SelectItem value="newest">Newest</SelectItem>

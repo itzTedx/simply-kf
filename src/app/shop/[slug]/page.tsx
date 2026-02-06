@@ -3,8 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { Button } from "@/components/ui/button";
-
 import { PRODUCTS } from "@/constants/products";
 
 import { ProductView } from "./product-view";
@@ -19,7 +17,9 @@ export async function generateStaticParams() {
 	}));
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+	params,
+}: PageProps): Promise<Metadata> {
 	const { slug } = await params;
 	const product = PRODUCTS.find((p) => p.slug === slug);
 	if (!product) return { title: "Product Not Found" };
@@ -60,78 +60,69 @@ export default async function ProductPage({ params }: PageProps) {
 	).slice(0, 4);
 
 	return (
-		<main className="min-h-screen pt-32 pb-24 lg:pt-9">
-			<div className="container mx-auto px-4">
-				{/* Back Link */}
-				<div className="mb-8 lg:mb-12">
+		<main className="min-h-screen pt-28 pb-24 md:pt-32 md:pb-28">
+			<div className="container mx-auto max-w-6xl px-4 md:px-6">
+				<div className="mb-10 md:mb-14">
 					<Link
-						className="text-xs text-zinc-500 uppercase tracking-widest transition-colors hover:text-zinc-900"
+						className="font-body text-foreground/55 text-xs tracking-wide transition-colors hover:text-foreground/90"
 						href="/shop"
 					>
 						← Back to {product.collection}
 					</Link>
 				</div>
 
-				{/* Main Product View */}
 				<ProductView product={product} />
 
-				{/* Editorial Section */}
-				<section className="mx-auto mt-32 max-w-2xl space-y-6 text-center">
-					<span className="font-serif text-xs text-zinc-500 italic">
+				<section className="mx-auto mt-28 max-w-2xl space-y-6 text-center md:mt-36">
+					<span className="font-body text-[0.6875rem] text-foreground/45 uppercase tracking-[0.15em]">
 						The Philosophy
 					</span>
-					<h2 className="font-display text-3xl text-zinc-900 leading-tight lg:text-4xl">
+					<h2 className="font-display font-normal text-2xl text-foreground leading-tight md:text-3xl lg:text-4xl">
 						&quot;Modesty is not about hiding. It is about revealing your
 						dignity with grace.&quot;
 					</h2>
-					<p className="text-zinc-500 leading-relaxed">
-						Designed in Dubai, Simply KF embodies the essence of quiet luxury.
-						Each piece is crafted to transcend trends, offering timeless
-						elegance for the woman who walks with purpose.
+					<p className="font-body text-foreground/65 text-sm leading-relaxed md:text-base">
+						Designed in Dubai, Simply KF embodies quiet luxury. Each piece is
+						crafted to transcend trends, offering timeless elegance for the
+						woman who walks with purpose.
 					</p>
 				</section>
 
-				{/* Related Products */}
 				{relatedProducts.length > 0 && (
-					<section className="mt-32 border-zinc-100 border-t pt-24">
-						<div className="mb-12 flex flex-col items-center justify-between md:flex-row">
-							<h3 className="font-display text-2xl text-zinc-900">
+					<section className="mt-28 border-border/30 border-t pt-20 md:mt-36 md:pt-24">
+						<div className="mb-12 flex flex-col items-center justify-between gap-4 md:flex-row">
+							<h3 className="font-display font-normal text-foreground text-xl md:text-2xl">
 								More from {product.collection}
 							</h3>
 							<Link
-								className="hidden text-xs text-zinc-500 uppercase tracking-widest transition-colors hover:text-zinc-900 md:block"
+								className="hidden font-body text-foreground/55 text-xs tracking-wide transition-colors hover:text-foreground/85 md:block"
 								href={`/shop?collection=${product.collection}`}
 							>
-								View All
+								View all
 							</Link>
 						</div>
 
-						<div className="grid grid-cols-2 gap-x-6 gap-y-12 lg:grid-cols-4 lg:gap-x-8">
+						<div className="grid grid-cols-2 gap-x-5 gap-y-14 md:grid-cols-4 md:gap-x-8 md:gap-y-16">
 							{relatedProducts.map((item) => (
 								<Link
-									className="group"
+									className="group block"
 									href={`/shop/${item.slug}`}
 									key={item.id}
 								>
-									<div className="relative mb-4 aspect-3/4 overflow-hidden rounded-sm bg-zinc-50">
+									<div className="relative mb-4 aspect-[3/4] overflow-hidden rounded-sm bg-muted/40">
 										<Image
-											alt={item.name} // Fallback to singular image if needed, though we updated types
-											className="object-cover transition-transform duration-700 group-hover:scale-105"
+											alt={item.name}
+											className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
 											fill
 											sizes="(max-width: 768px) 50vw, 25vw"
 											src={item.images[0]}
 										/>
-										<div className="absolute inset-x-0 bottom-0 translate-y-full p-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-											<Button className="h-10 w-full bg-white/90 text-xs text-zinc-900 uppercase tracking-wider shadow-sm backdrop-blur-sm hover:bg-white">
-												Quick View
-											</Button>
-										</div>
 									</div>
 									<div className="space-y-1 text-center md:text-left">
-										<h4 className="font-display text-lg text-zinc-900 leading-none">
+										<h4 className="font-display font-normal text-foreground text-sm md:text-base">
 											{item.name}
 										</h4>
-										<p className="font-light text-sm text-zinc-500">
+										<p className="font-body text-foreground/65 text-sm">
 											£{item.price}
 										</p>
 									</div>
@@ -139,12 +130,12 @@ export default async function ProductPage({ params }: PageProps) {
 							))}
 						</div>
 
-						<div className="mt-12 text-center md:hidden">
+						<div className="mt-10 text-center md:hidden">
 							<Link
-								className="border-zinc-300 border-b pb-1 text-xs text-zinc-500 uppercase tracking-widest transition-colors hover:text-zinc-900"
+								className="font-body text-foreground/55 text-xs tracking-wide transition-colors hover:text-foreground/85"
 								href={`/shop?collection=${product.collection}`}
 							>
-								View All {product.collection}
+								View all {product.collection}
 							</Link>
 						</div>
 					</section>

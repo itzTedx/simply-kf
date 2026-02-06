@@ -41,61 +41,46 @@ export function ReelsShowcase({ reels = mockReels }: ReelsShowcaseProps) {
 	};
 
 	return (
-		<section className="container mx-auto py-16 md:py-24">
-			{/* Section Header */}
-			<div className="mb-12 text-center md:mb-16">
-				<h2 className="mb-4 font-display text-3xl text-neutral-900 md:text-4xl">
+		<section className="container mx-auto max-w-6xl px-4 py-16 md:py-28">
+			<div className="mb-10 text-center md:mb-20">
+				<h2 className="mb-3 font-display font-normal text-foreground text-xl tracking-tight md:mb-4 md:text-3xl">
 					Styled in Motion
 				</h2>
-				<p className="mx-auto max-w-2xl font-body text-neutral-600 md:text-lg">
+				<p className="mx-auto max-w-xl font-body text-foreground/65 text-sm leading-relaxed md:text-base">
 					Discover how SIMPLY KF is worn — effortless, refined, timeless.
 				</p>
 			</div>
 
-			{/* Reels Grid */}
-
 			<Carousel
-				className="mb-12"
-				opts={{
-					align: "start",
-				}}
-				plugins={[
-					Autoplay({
-						delay: 3000,
-					}),
-					WheelGesturesPlugin(),
-				]}
+				className="mb-10 md:mb-14"
+				opts={{ align: "start" }}
+				plugins={[Autoplay({ delay: 4000 }), WheelGesturesPlugin()]}
 			>
-				<CarouselContent>
+				<CarouselContent className="-ml-2">
 					{reels.map((reel) => (
-						<CarouselItem className="basis-1/2 lg:basis-1/4" key={reel.id}>
-							<div className="p-1">
-								<ReelCard
-									key={reel.id}
-									onClick={() => openReel(reel)}
-									reel={reel}
-								/>
-							</div>
+						<CarouselItem className="basis-1/2 pl-2 lg:basis-1/4" key={reel.id}>
+							<ReelCard onClick={() => openReel(reel)} reel={reel} />
 						</CarouselItem>
 					))}
 				</CarouselContent>
-				<CarouselPrevious className="relative" />
-				<CarouselNext className="relative" />
+				<CarouselPrevious className="border-0 bg-card/90 text-foreground/80 hover:bg-card hover:text-foreground" />
+				<CarouselNext className="border-0 bg-card/90 text-foreground/80 hover:bg-card hover:text-foreground" />
 			</Carousel>
 
-			{/* Call to Action */}
 			<div className="text-center">
 				<Link
 					href="https://www.tiktok.com/@simplykfabayas"
 					rel="noopener noreferrer"
 					target="_blank"
 				>
-					<Button variant="outline">View on TikTok</Button>
+					<Button size="sm" variant="outline">
+						View on TikTok
+					</Button>
 				</Link>
-				<p className="mt-3 font-body text-neutral-500 text-sm">
+				<p className="mt-4 font-body text-foreground/50 text-xs">
 					Follow{" "}
 					<Link
-						className="text-neutral-700 underline underline-offset-2 hover:text-neutral-900"
+						className="text-foreground/70 underline-offset-2 transition-colors hover:text-foreground"
 						href="https://instagram.com/simplykf"
 						rel="noopener noreferrer"
 						target="_blank"
@@ -105,16 +90,14 @@ export function ReelsShowcase({ reels = mockReels }: ReelsShowcaseProps) {
 				</p>
 			</div>
 
-			{/* Video Modal */}
 			<Dialog onOpenChange={setIsDialogOpen} open={isDialogOpen}>
-				<DialogContent className="max-w-2xl p-0">
+				<DialogContent className="max-w-2xl border-0 bg-card/98 p-0 backdrop-blur-sm">
 					<DialogHeader className="sr-only">
 						<DialogTitle>Reel Video</DialogTitle>
 						<DialogDescription>View SIMPLY KF reel video</DialogDescription>
 					</DialogHeader>
 					{selectedReel && (
 						<div className="relative aspect-9/16 w-full">
-							{/* Actual video */}
 							<video
 								autoPlay
 								className="h-full w-full object-cover"
@@ -143,7 +126,7 @@ function ReelCard({ reel, onClick }: ReelCardProps) {
 
 	return (
 		<div
-			className="group cursor-pointer space-y-3"
+			className="group cursor-pointer space-y-2.5"
 			onClick={onClick}
 			onKeyDown={(e) => {
 				if (e.key === "Enter" || e.key === " ") {
@@ -154,15 +137,11 @@ function ReelCard({ reel, onClick }: ReelCardProps) {
 			role="button"
 			tabIndex={0}
 		>
-			{/* Video Thumbnail Container */}
-			<div className="relative aspect-9/16 w-full overflow-hidden rounded-lg bg-neutral-100">
-				{/* Loading skeleton */}
+			<div className="relative aspect-9/16 w-full overflow-hidden rounded-sm bg-muted/50">
 				{!videoLoaded && <Skeleton className="absolute inset-0" />}
-
-				{/* Video thumbnail */}
 				<video
 					autoPlay
-					className={`object-cover transition-transform duration-300 ease-out group-hover:scale-105 ${
+					className={`object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02] ${
 						videoLoaded ? "opacity-100" : "opacity-0"
 					}`}
 					loop
@@ -174,18 +153,14 @@ function ReelCard({ reel, onClick }: ReelCardProps) {
 				>
 					<source src={reel.thumbnail} type="video/mp4" />
 				</video>
-
-				{/* Play icon overlay */}
-				<div className="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors duration-300 group-hover:bg-black/20">
-					<div className="rounded-full bg-white/90 p-3 transition-transform duration-300 group-hover:scale-110">
-						<RiPlayLine className="size-6 text-neutral-900" />
+				<div className="absolute inset-0 flex items-center justify-center bg-foreground/0 transition-colors duration-300 group-hover:bg-foreground/10">
+					<div className="rounded-full bg-card/95 p-2.5 shadow-none transition-transform duration-300 group-hover:scale-105">
+						<RiPlayLine className="size-5 text-foreground" />
 					</div>
 				</div>
 			</div>
-
-			{/* Caption */}
 			{reel.caption && (
-				<p className="line-clamp-2 font-body text-neutral-700 text-sm leading-relaxed">
+				<p className="line-clamp-2 font-body text-foreground/65 text-xs leading-relaxed">
 					{reel.caption}
 				</p>
 			)}

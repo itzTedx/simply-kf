@@ -45,10 +45,9 @@ export function ProductView({ product }: ProductViewProps) {
 	};
 
 	return (
-		<div className="grid grid-cols-1 gap-x-12 gap-y-12 lg:grid-cols-2 lg:gap-x-24">
-			{/* Left Column: Image Gallery */}
-			<div className="flex flex-col gap-4">
-				<div className="relative aspect-3/4 w-full overflow-hidden rounded-sm bg-zinc-50">
+		<div className="grid grid-cols-1 gap-x-10 gap-y-14 lg:grid-cols-2 lg:gap-x-20 lg:gap-y-16">
+			<div className="flex flex-col gap-5">
+				<div className="relative aspect-[3/4] w-full overflow-hidden rounded-sm bg-muted/40">
 					{isImageLoading && (
 						<Skeleton className="absolute inset-0 size-full" />
 					)}
@@ -65,14 +64,14 @@ export function ProductView({ product }: ProductViewProps) {
 						src={mainImage}
 					/>
 				</div>
-				<div className="grid grid-cols-4 gap-4">
+				<div className="grid grid-cols-4 gap-3">
 					{product.images.map((img, idx) => (
 						<button
 							className={cn(
-								"relative aspect-3/4 w-full overflow-hidden rounded-sm bg-zinc-50 transition-all",
+								"relative aspect-[3/4] w-full overflow-hidden rounded-sm bg-muted/40 transition-all duration-200",
 								mainImage === img
-									? "ring-1 ring-zinc-900"
-									: "opacity-60 hover:opacity-80"
+									? "ring-1 ring-foreground/30"
+									: "opacity-60 hover:opacity-90"
 							)}
 							key={`${product.name}-${idx}`}
 							onClick={() => setMainImage(img)}
@@ -89,47 +88,39 @@ export function ProductView({ product }: ProductViewProps) {
 				</div>
 			</div>
 
-			{/* Right Column: Product Info & Actions */}
-			<div className="flex h-full flex-col">
-				<div className="sticky top-24 space-y-6">
-					{/* Header */}
-					<div className="space-y-4 border-zinc-200 border-b pb-6">
-						<h1 className="font-display text-4xl text-zinc-900 lg:text-5xl">
+			<div className="flex flex-col">
+				<div className="sticky top-28 space-y-8">
+					<div className="space-y-5 border-border/40 border-b pb-8">
+						<h1 className="font-display font-normal text-3xl text-foreground leading-tight md:text-4xl lg:text-[2.75rem]">
 							{product.name}
 						</h1>
 						<div className="flex items-center justify-between">
-							<p className="font-body font-semibold text-2xl text-accent-foreground">
+							<p className="font-body text-foreground text-xl">
 								£{product.price}
 							</p>
-							<span className="text-muted-foreground text-sm uppercase tracking-widest">
+							<span className="font-body text-foreground/50 text-xs uppercase tracking-wider">
 								Designed in Dubai
 							</span>
 						</div>
 					</div>
 
-					{/* Description */}
-					<p className="font-body text-lg text-zinc-600 leading-relaxed">
+					<p className="font-body text-base text-foreground/75 leading-relaxed md:text-lg">
 						{product.description}
 					</p>
 
-					{/* Selectors */}
-					<div className="space-y-6 pt-2">
-						{/* Colors */}
+					<div className="space-y-6 pt-1">
 						<div className="space-y-3">
-							<p className="font-body text-sm text-zinc-500 uppercase">
-								Color:{" "}
-								<span className="font-medium text-zinc-900">
-									{selectedColor}
-								</span>
+							<p className="font-body text-foreground/60 text-xs uppercase tracking-wider">
+								Colour: <span className="text-foreground">{selectedColor}</span>
 							</p>
-							<div className="flex flex-wrap gap-3">
+							<div className="flex flex-wrap gap-2">
 								{product.colors.map((color) => (
 									<button
 										className={cn(
-											"h-8 rounded-full border px-4 font-body text-sm transition-all",
+											"h-8 rounded-full border px-4 font-body text-xs transition-colors duration-200",
 											selectedColor === color
-												? "border-zinc-900 bg-zinc-900 text-white"
-												: "border-zinc-200 text-zinc-600 hover:border-zinc-400"
+												? "border-primary bg-primary text-primary-foreground"
+												: "border-border/80 text-foreground/70 hover:border-foreground/25 hover:text-foreground"
 										)}
 										key={color}
 										onClick={() => setSelectedColor(color)}
@@ -140,50 +131,50 @@ export function ProductView({ product }: ProductViewProps) {
 							</div>
 						</div>
 
-						{/* Sizes */}
-						<div className="space-y-3">
+						<div className="space-y-2">
 							<div className="flex items-center justify-between">
-								<span className="text-xs text-zinc-500 uppercase tracking-widest">
-									Size: <span className="text-zinc-900">{product.size}</span>
+								<span className="font-body text-foreground/55 text-xs uppercase tracking-wider">
+									Size: <span className="text-foreground">{product.size}</span>
 								</span>
-								<button className="text-xs text-zinc-400 underline decoration-zinc-300 underline-offset-4 transition-colors hover:text-zinc-900">
-									Size Guide
+								<button className="font-body text-foreground/45 text-xs underline-offset-2 transition-colors hover:text-foreground/75">
+									Size guide
 								</button>
-							</div>
-							<div className="flex items-center justify-center">
-								<span className="text-sm text-zinc-600">{product.size}</span>
 							</div>
 						</div>
 					</div>
 
-					{/* Actions */}
-					<div className="space-y-3 pt-6">
+					<div className="pt-4">
 						<Button className="w-full" onClick={handleAddToCart} size="lg">
-							Add to Bag
+							Add to bag
 						</Button>
 					</div>
 
-					{/* Details Accordion */}
-					<div className="pt-8">
-						<Accordion className="w-full">
-							<AccordionItem value="details">
-								<AccordionTrigger className="font-display font-normal text-lg text-zinc-900">
+					<div className="pt-6">
+						<Accordion className="w-full border-0">
+							<AccordionItem
+								className="border-0 border-border/40 border-b"
+								value="details"
+							>
+								<AccordionTrigger className="py-4 font-display font-normal text-foreground hover:no-underline">
 									Description
 								</AccordionTrigger>
-								<AccordionContent className="font-body leading-relaxed">
+								<AccordionContent className="pb-4 font-body text-foreground/75 text-sm leading-relaxed">
 									{product.description}
 									<br />
 									<br />
-									Our {product.name} is a testament to the Simply KF philosophy
-									where craftsmanship meets contemporary design.
+									Our {product.name} reflects the Simply KF philosophy —
+									craftsmanship meets contemporary design.
 								</AccordionContent>
 							</AccordionItem>
-							<AccordionItem value="fabric">
-								<AccordionTrigger className="font-display font-normal text-lg text-zinc-900">
-									Fabric & Care
+							<AccordionItem
+								className="border-0 border-border/40 border-b"
+								value="fabric"
+							>
+								<AccordionTrigger className="py-4 font-display font-normal text-foreground hover:no-underline">
+									Fabric & care
 								</AccordionTrigger>
-								<AccordionContent className="font-body leading-relaxed">
-									<ul className="list-inside list-disc space-y-1">
+								<AccordionContent className="pb-4 font-body text-foreground/75 text-sm leading-relaxed">
+									<ul className="list-inside list-disc space-y-1.5">
 										<li>Premium crepe blend</li>
 										<li>Dry clean only recommended</li>
 										<li>Steam iron on low heat</li>
@@ -191,13 +182,16 @@ export function ProductView({ product }: ProductViewProps) {
 									</ul>
 								</AccordionContent>
 							</AccordionItem>
-							<AccordionItem value="delivery">
-								<AccordionTrigger className="font-display font-normal text-lg text-zinc-900">
-									Delivery & Returns
+							<AccordionItem
+								className="border-0 border-border/40 border-b"
+								value="delivery"
+							>
+								<AccordionTrigger className="py-4 font-display font-normal text-foreground hover:no-underline">
+									Delivery & returns
 								</AccordionTrigger>
-								<AccordionContent className="font-body leading-relaxed">
-									<p className="mb-2">UK & International Shipping available.</p>
-									<p>Standard UK Delivery: 2-3 Working Days.</p>
+								<AccordionContent className="pb-4 font-body text-foreground/75 text-sm leading-relaxed">
+									<p className="mb-2">UK & international shipping available.</p>
+									<p>Standard UK delivery: 2–3 working days.</p>
 								</AccordionContent>
 							</AccordionItem>
 						</Accordion>

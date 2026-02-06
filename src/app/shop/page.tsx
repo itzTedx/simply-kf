@@ -60,7 +60,6 @@ function ShopPageContent() {
 	// Filter products based on selected filters
 	const filteredProducts = useMemo(() => {
 		let filtered = PRODUCTS;
-		console.log(filtered);
 
 		// Filter by collections
 		if (filters.collections && filters.collections.length > 0) {
@@ -122,11 +121,10 @@ function ShopPageContent() {
 			{/* 1. Page Intro */}
 			<ShopHeader />
 
-			<div className="container mx-auto px-4 py-6">
-				<div className="flex flex-col gap-12 lg:flex-row">
-					{/* 2. Filters (Sidebar) - Desktop Only */}
-					<aside className="hidden w-64 shrink-0 lg:block">
-						<div className="sticky top-32">
+			<div className="container mx-auto max-w-6xl px-4 py-8 md:px-6 md:py-10">
+				<div className="flex flex-col gap-12 lg:flex-row lg:gap-16">
+					<aside className="hidden w-56 shrink-0 lg:block">
+						<div className="sticky top-28">
 							<FilterSection
 								filters={filters}
 								priceRange={priceRange}
@@ -136,7 +134,6 @@ function ShopPageContent() {
 						</div>
 					</aside>
 
-					{/* Mobile Filter & Sort Bar */}
 					<FilterAndSortBar
 						filters={filters}
 						priceRange={priceRange}
@@ -146,17 +143,21 @@ function ShopPageContent() {
 						setSelectedSort={setSelectedSort}
 					/>
 
-					{/* Main Content Area */}
 					<div className="flex-1 space-y-8">
-						{/* Desktop Sorting (Top Right) */}
-						<div className="hidden flex-row-reverse items-center justify-between lg:flex">
-							<div className="w-[200px]">
+						<div className="hidden items-center justify-between lg:flex">
+							<button
+								className="font-body text-foreground/50 text-xs tracking-wide transition-colors hover:text-foreground/80"
+								onClick={resetAllFilters}
+							>
+								Reset filters
+							</button>
+							<div className="w-[180px]">
 								<Select
 									onValueChange={(value) => setSelectedSort(value || "newest")}
 									value={selectedSort}
 								>
-									<SelectTrigger className="border-0 border-zinc-200 border-b px-0 font-body text-sm text-zinc-900 uppercase tracking-wider shadow-none focus:ring-0">
-										<SelectValue placeholder="Sort By" />
+									<SelectTrigger className="h-9 border-0 border-border/60 border-b bg-transparent px-0 font-body text-foreground/80 text-xs tracking-wide shadow-none focus:ring-0 focus-visible:ring-0">
+										<SelectValue placeholder="Sort by" />
 									</SelectTrigger>
 									<SelectContent align="end">
 										<SelectItem value="newest">Newest</SelectItem>
@@ -169,16 +170,8 @@ function ShopPageContent() {
 									</SelectContent>
 								</Select>
 							</div>
-
-							<button
-								className="text-sm text-zinc-500 underline decoration-zinc-300 underline-offset-4 transition-colors hover:text-zinc-900"
-								onClick={resetAllFilters}
-							>
-								Reset All Filters
-							</button>
 						</div>
 
-						{/* 4. Product Grid */}
 						<ProductGrid
 							onClearFilters={resetAllFilters}
 							products={filteredProducts}

@@ -3,32 +3,33 @@ import { Input } from "@/components/ui/input";
 
 export function Newsletter() {
 	return (
-		<section className="bg-ivory py-24">
-			<div className="container mx-auto px-4 md:px-6">
-				<div className="mx-auto flex max-w-xl flex-col items-center space-y-8 text-center">
-					<div className="space-y-2">
-						<h2 className="font-display font-medium text-3xl text-charcoal">
-							Join SIMPLY KF
-						</h2>
-						<p className="font-body text-charcoal/60">
-							Early access to collections & private releases.
-						</p>
-					</div>
-
-					<form className="flex w-full max-w-sm flex-col gap-3 sm:flex-row">
-						<Input
-							className="h-11 border-border/60 bg-white font-body text-charcoal placeholder:text-charcoal/40 focus-visible:ring-charcoal/10"
-							placeholder="Email address"
-							type="email"
-						/>
-						<Button
-							className="h-11 min-w-[120px] bg-charcoal text-white hover:bg-charcoal/90"
-							type="submit"
-						>
-							Subscribe
-						</Button>
-					</form>
+		<section className="bg-background px-5 py-20 text-center md:px-6 md:py-36">
+			<div className="container mx-auto max-w-xl">
+				<p className="font-body text-[0.6875rem] text-foreground/50 uppercase tracking-[0.2em]">
+					Newsletter
+				</p>
+				<div className="mt-4 space-y-6">
+					<h2 className="font-display font-normal text-foreground text-xl tracking-tight md:text-3xl">
+						Join SIMPLY KF
+					</h2>
+					<p className="font-body text-foreground/65 text-sm leading-relaxed">
+						Early access to collections and private releases.
+					</p>
 				</div>
+
+				<form className="mt-8 flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-center md:mt-10">
+					<Input
+						className="h-12 min-h-12 w-full border-border/70 bg-transparent font-body text-foreground placeholder:text-foreground/40 sm:max-w-sm"
+						placeholder="Email address"
+						type="email"
+					/>
+					<Button
+						className="h-12 min-h-12 w-full sm:w-auto sm:min-w-[120px]"
+						type="submit"
+					>
+						Subscribe
+					</Button>
+				</form>
 			</div>
 		</section>
 	);

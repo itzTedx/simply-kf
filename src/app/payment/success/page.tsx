@@ -7,7 +7,6 @@ import Link from "next/link";
 import { RiCheckLine } from "@remixicon/react";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { useCartStore } from "@/stores/cart-store";
 
@@ -26,31 +25,24 @@ export default function PaymentSuccessPage() {
 	}, []);
 
 	return (
-		<main className="container mx-auto flex min-h-[60vh] items-center justify-center px-4 py-16 sm:px-6 md:py-24">
-			<Card className="w-full max-w-md text-center shadow-lg">
-				<CardHeader>
-					<div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
-						<RiCheckLine className="h-8 w-8 text-green-600" />
-					</div>
-					<CardTitle className="font-bold text-2xl text-gray-900">
-						Payment Successful!
-					</CardTitle>
-				</CardHeader>
-				<CardContent className="space-y-6">
-					<p className="text-gray-600">
-						Thank you for your purchase. Your order has been processed
-						successfully. You will receive a confirmation email shortly.
-					</p>
-
-					<div className="pt-4">
-						<Link href="/shop">
-							<Button className="w-full bg-zinc-900 hover:bg-zinc-800">
-								Continue Shopping
-							</Button>
-						</Link>
-					</div>
-				</CardContent>
-			</Card>
+		<main className="container mx-auto flex min-h-[60vh] items-center justify-center px-4 py-20 sm:px-6 md:py-28">
+			<div className="w-full max-w-md rounded-[var(--radius)] bg-card/50 px-8 py-12 text-center">
+				<div className="mx-auto mb-6 flex size-14 items-center justify-center rounded-full bg-foreground/10">
+					<RiCheckLine className="size-7 text-foreground" />
+				</div>
+				<h1 className="mb-4 font-display font-normal text-2xl text-foreground">
+					Thank you
+				</h1>
+				<p className="mb-8 font-body text-foreground/70 text-sm leading-relaxed">
+					Your order has been placed. You will receive a confirmation email
+					shortly.
+				</p>
+				<Link href="/shop">
+					<Button className="w-full rounded-[var(--radius)]" size="lg">
+						Continue shopping
+					</Button>
+				</Link>
+			</div>
 		</main>
 	);
 }

@@ -1,13 +1,14 @@
 export function CraftQuality() {
 	return (
-		<section className="bg-ivory py-24 md:py-32">
-			<div className="container mx-auto px-4 text-center md:px-6">
-				<div className="mx-auto max-w-2xl">
-					<p className="font-bold font-display text-2xl text-charcoal leading-relaxed md:text-3xl lg:text-4xl">
-						“Designed in Dubai, each piece reflects thoughtful craftsmanship,
-						refined tailoring, and timeless design.”
-					</p>
-				</div>
+		<section className="bg-background px-5 py-20 text-center md:px-6 md:py-36">
+			<div className="container mx-auto max-w-3xl">
+				<p className="font-display font-normal text-foreground text-xl leading-relaxed md:text-3xl lg:text-[2rem]">
+					“Designed in Dubai, each piece reflects thoughtful craftsmanship,
+					refined tailoring, and timeless design.”
+				</p>
+				<p className="mt-5 font-body text-foreground/50 text-sm md:mt-6">
+					SIMPLY KF
+				</p>
 			</div>
 		</section>
 	);

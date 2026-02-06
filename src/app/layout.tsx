@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://simplykf.com";
 
 export const viewport: Viewport = {
-	themeColor: "#1c1917",
+	themeColor: "#f5f2ed",
 	width: "device-width",
 	initialScale: 1,
 };

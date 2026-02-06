@@ -13,13 +13,13 @@ interface ProductGridProps {
 export function ProductGrid({ products, onClearFilters }: ProductGridProps) {
 	if (products.length === 0) {
 		return (
-			<div className="py-24 text-center">
-				<p className="font-body text-muted-foreground">
+			<div className="py-20 text-center md:py-28">
+				<p className="font-body text-foreground/65 text-sm">
 					No pieces match your selection.
 				</p>
 				{onClearFilters && (
 					<Button
-						className="mt-4 text-zinc-900"
+						className="mt-4 font-body text-foreground/80"
 						onClick={onClearFilters}
 						variant="link"
 					>
@@ -32,7 +32,7 @@ export function ProductGrid({ products, onClearFilters }: ProductGridProps) {
 
 	return (
 		<>
-			<div className="grid grid-cols-2 gap-x-4 gap-y-12 sm:gap-x-8 md:grid-cols-3 xl:grid-cols-3">
+			<div className="grid grid-cols-2 gap-x-5 gap-y-14 sm:gap-x-8 md:grid-cols-3 md:gap-y-16">
 				{products.map((product) => (
 					<Link
 						className="group block space-y-4"
@@ -40,26 +40,24 @@ export function ProductGrid({ products, onClearFilters }: ProductGridProps) {
 						key={product.id}
 					>
 						{product.images && (
-							<div className="relative aspect-3/4 w-full overflow-hidden rounded-md bg-zinc-100">
+							<div className="relative aspect-[3/4] w-full overflow-hidden rounded-sm bg-muted/40">
 								<Image
 									alt={product.name}
-									className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+									className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
 									fill
 									sizes="(max-width: 768px) 50vw, 33vw"
 									src={product.images[0]}
 								/>
 							</div>
 						)}
-
-						{/* Product Info */}
 						<div className="space-y-1 text-center md:text-left">
-							<h3 className="font-display text-sm text-zinc-900 md:text-base">
+							<h3 className="font-display font-normal text-foreground text-sm md:text-[0.9375rem]">
 								{product.name}
 							</h3>
-							<p className="font-body text-muted-foreground text-xs">
+							<p className="font-body text-foreground/50 text-xs">
 								Designed in Dubai
 							</p>
-							<p className="pt-1 font-body font-medium text-sm text-zinc-900">
+							<p className="pt-0.5 font-body text-foreground text-sm">
 								£{product.price}
 							</p>
 						</div>
@@ -67,10 +65,9 @@ export function ProductGrid({ products, onClearFilters }: ProductGridProps) {
 				))}
 			</div>
 
-			{/* Load More */}
-			<div className="flex justify-center pt-16 md:pt-24">
+			<div className="flex justify-center pt-16 md:pt-20">
 				<Button
-					className="rounded-none border-zinc-200 px-12 py-6 text-xs text-zinc-900 uppercase tracking-widest hover:bg-zinc-50 hover:text-zinc-900"
+					className="font-body text-foreground/70 text-xs tracking-wide"
 					variant="outline"
 				>
 					Load More

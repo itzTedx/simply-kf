@@ -13,14 +13,14 @@ export const CartButton = () => {
 	return (
 		<Link href="/cart">
 			<Button
-				className="relative text-charcoal/80 hover:text-charcoal"
-				size="icon"
+				className="relative text-foreground/75 hover:text-foreground"
+				size="icon-sm"
 				variant="ghost"
 			>
-				<RiShoppingBagLine className="size-5" />
+				<RiShoppingBagLine className="size-4" />
 				<span className="sr-only">Cart</span>
 				{cartCount > 0 && (
-					<span className="absolute -top-1 -right-1 flex size-5 items-center justify-center rounded-full bg-accent font-body font-medium text-accent-foreground text-xs">
+					<span className="absolute -top-0.5 -right-0.5 flex size-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 font-body font-medium text-[0.65rem] text-primary-foreground">
 						{cartCount > 99 ? "99+" : cartCount}
 					</span>
 				)}

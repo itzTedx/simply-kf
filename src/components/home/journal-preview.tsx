@@ -12,47 +12,46 @@ export function JournalPreview() {
 	];
 
 	return (
-		<section className="bg-white py-16 md:py-24">
-			<div className="container mx-auto px-4 md:px-6">
-				<div className="mb-12 flex items-center justify-between">
-					<h2 className="font-display font-medium text-2xl text-charcoal">
+		<section className="bg-secondary/20 py-20 md:py-28">
+			<div className="container mx-auto max-w-6xl px-4 md:px-6">
+				<div className="mb-14 flex items-end justify-between">
+					<h2 className="font-display font-normal text-foreground text-xl tracking-tight md:text-2xl">
 						The Journal
 					</h2>
 					<Link
-						className="font-body font-medium text-charcoal/60 text-sm hover:text-charcoal"
+						className="font-body text-foreground/55 text-xs tracking-wide transition-colors hover:text-foreground/85"
 						href="#"
 					>
 						View All
 					</Link>
 				</div>
 
-				<div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+				<div className="grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-14">
 					{articles.map((article, index) => (
-						<div
-							className="group cursor-pointer space-y-4"
+						<Link
+							className="group block space-y-4"
+							href={article.href}
 							key={`${index}-${article.title}`}
 						>
-							<div className="aspect-4/3 w-full overflow-hidden bg-muted transition-transform duration-500 group-hover:bg-muted/80">
-								<div className="flex h-full w-full items-center justify-center bg-stone-100 text-stone-300">
-									<span className="font-mono text-xs uppercase tracking-widest">
-										[Article Img]
+							<div className="aspect-[4/3] w-full overflow-hidden rounded-sm bg-muted/50 transition-transform duration-500 ease-out group-hover:scale-[1.01]">
+								<div className="flex h-full w-full items-center justify-center text-foreground/20">
+									<span className="font-body text-[0.65rem] uppercase tracking-[0.15em]">
+										Article
 									</span>
 								</div>
 							</div>
 							<div className="space-y-2">
-								<span className="font-body font-semibold text-charcoal/40 text-xs uppercase tracking-widest">
+								<span className="font-body text-[0.6875rem] text-foreground/45 uppercase tracking-[0.15em]">
 									{article.category}
 								</span>
-								<h3 className="font-display font-medium text-charcoal text-xl decoration-charcoal/30 underline-offset-4 group-hover:underline">
+								<h3 className="font-display font-normal text-foreground text-lg leading-snug transition-colors group-hover:text-foreground/85">
 									{article.title}
 								</h3>
-								<div className="pt-2">
-									<span className="font-body font-medium text-charcoal/60 text-xs hover:text-charcoal">
-										Read Story
-									</span>
-								</div>
+								<span className="inline-block font-body text-foreground/55 text-xs transition-colors group-hover:text-foreground/80">
+									Read Story
+								</span>
 							</div>
-						</div>
+						</Link>
 					))}
 				</div>
 			</div>
