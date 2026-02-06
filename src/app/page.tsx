@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { CraftQuality } from "@/components/home/craft-quality";
 import { FeaturedCollections } from "@/components/home/featured-collections";
 import { FeaturedProducts } from "@/components/home/featured-products";
@@ -10,8 +12,16 @@ export default function Home() {
 	return (
 		<main className="min-h-screen">
 			<Hero />
-			<FeaturedCollections />
 			<FeaturedProducts />
+			<section className="container relative mx-auto aspect-16/5 max-w-6xl overflow-hidden rounded-md">
+				<Image
+					alt="Hero"
+					className="object-cover"
+					fill
+					src="/images/banner-1.webp"
+				/>
+			</section>
+			<FeaturedCollections />
 			<ProductHighlight />
 			<ReelsShowcase />
 			<CraftQuality />
