@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 
 import {
+	AddressElement,
 	Elements,
 	PaymentElement,
 	useElements,
@@ -63,10 +64,49 @@ function CheckoutForm({ onSuccess, onError }: CheckoutFormProps) {
 
 		setIsProcessing(true);
 
+		// Collect shipping address from the AddressElement so it shows
+		// on the PaymentIntent / Charge in the Stripe dashboard.
+		const addressElement = elements.getElement(AddressElement);
+
+		type ShippingForConfirm = {
+			name: string;
+			phone?: string;
+			address: {
+				line1: string;
+				line2?: string;
+				city?: string;
+				state?: string;
+				postal_code?: string;
+				country?: string;
+			};
+		} | null;
+
+		let shipping: ShippingForConfirm = null;
+
+		if (addressElement) {
+			const { value } = await addressElement.getValue();
+
+			shipping = {
+				// `Shipping.name` is required and expects `string`, so default
+				// to an empty string if the element hasn't collected it.
+				name: value.name ?? "",
+				phone: value.phone ?? undefined,
+				address: {
+					line1: value.address.line1 ?? "",
+					line2: value.address.line2 ?? undefined,
+					city: value.address.city ?? undefined,
+					state: value.address.state ?? undefined,
+					postal_code: value.address.postal_code ?? undefined,
+					country: value.address.country ?? undefined,
+				},
+			};
+		}
+
 		const { error } = await stripe.confirmPayment({
 			elements,
 			confirmParams: {
 				return_url: `${window.location.origin}/payment/success`,
+				...(shipping ? { shipping } : {}),
 			},
 		});
 
@@ -89,9 +129,24 @@ function CheckoutForm({ onSuccess, onError }: CheckoutFormProps) {
 
 	return (
 		<form className="space-y-6" id="payment-form" onSubmit={handleSubmit}>
+			<div className="space-y-2">
+				<p className="font-medium text-sm">Shipping address</p>
+				<AddressElement
+					options={{
+						mode: "shipping",
+						allowedCountries: ["GB"],
+					}}
+				/>
+			</div>
+
 			<PaymentElement
 				options={{
 					layout: "tabs",
+					fields: {
+						// Collect and attach customer billing details
+						// (including email and phone) to the payment.
+						billingDetails: "auto",
+					},
 				}}
 			/>
 

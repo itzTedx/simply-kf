@@ -17,6 +17,7 @@ interface CartItem {
 	name: string;
 	price: number;
 	quantity: number;
+	image?: string;
 }
 
 interface CheckoutProps {
@@ -51,7 +52,7 @@ export default function Checkout({
 	}, [error, clearError]);
 
 	const handleInitiatePayment = async () => {
-		const secret = await createPaymentIntent(total);
+		const secret = await createPaymentIntent(total, items);
 		if (secret) {
 			setClientSecret(secret);
 			setShowPaymentForm(true);

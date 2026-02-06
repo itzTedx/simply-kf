@@ -2,10 +2,21 @@ import { create } from "zustand";
 
 import { createPaymentIntent as createPaymentIntentAction } from "@/app/actions/stripe";
 
+interface CheckoutItem {
+	id: string;
+	name: string;
+	price: number;
+	quantity: number;
+	image?: string;
+}
+
 interface PaymentStore {
 	isProcessing: boolean;
 	error: string | null;
-	createPaymentIntent: (amount: number) => Promise<string | null>;
+	createPaymentIntent: (
+		amount: number,
+		items: CheckoutItem[]
+	) => Promise<string | null>;
 	clearError: () => void;
 }
 
@@ -13,12 +24,15 @@ export const usePaymentStore = create<PaymentStore>((set) => ({
 	isProcessing: false,
 	error: null,
 
-	createPaymentIntent: async (amount: number): Promise<string | null> => {
+	createPaymentIntent: async (
+		amount: number,
+		items: CheckoutItem[]
+	): Promise<string | null> => {
 		set({ isProcessing: true, error: null });
 
 		try {
 			const { clientSecret, error: backendError } =
-				await createPaymentIntentAction(amount);
+				await createPaymentIntentAction(amount, items);
 
 			if (backendError) {
 				throw new Error(backendError);
