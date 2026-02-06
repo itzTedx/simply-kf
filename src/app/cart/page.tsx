@@ -14,10 +14,12 @@ import { Separator } from "@/components/ui/separator";
 import { useCartStore } from "@/stores/cart-store";
 
 export default function CartPage() {
+	const SHIPPING_FEE = 4.5;
+	const FREE_SHIPPING_THRESHOLD = 30;
+
 	const items = useCartStore((state) => state.items);
 	const removeItem = useCartStore((state) => state.removeItem);
 	const updateQuantity = useCartStore((state) => state.updateQuantity);
-	const total = useCartStore((state) => state.total);
 	const clearCart = useCartStore((state) => state.clearCart);
 	const [showCheckout, setShowCheckout] = useState(false);
 
@@ -29,6 +31,15 @@ export default function CartPage() {
 	const handleBackToCart = () => {
 		setShowCheckout(false);
 	};
+
+	const hasItems = items.length > 0;
+	const subtotal = items.reduce(
+		(sum, item) => sum + item.price * item.quantity,
+		0
+	);
+	const shipping =
+		hasItems && subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_FEE;
+	const orderTotal = hasItems ? subtotal + shipping : 0;
 
 	if (showCheckout) {
 		return (
@@ -53,7 +64,7 @@ export default function CartPage() {
 				</p>
 			</div>
 
-			{items.length === 0 ? (
+			{!hasItems ? (
 				<div className="rounded-(--radius) bg-card/50 py-16 text-center">
 					<h3 className="mb-3 font-display font-normal text-foreground text-lg">
 						Your bag is empty
@@ -182,9 +193,22 @@ export default function CartPage() {
 								))}
 							</div>
 							<Separator className="bg-border/40" />
+							<div className="space-y-1 font-body text-foreground text-sm">
+								<div className="flex justify-between">
+									<span>Subtotal</span>
+									<span>£{subtotal.toFixed(2)}</span>
+								</div>
+								<div className="flex justify-between text-foreground/80">
+									<span>Shipping</span>
+									<span>
+										{shipping === 0 ? "Free" : `£${shipping.toFixed(2)}`}
+									</span>
+								</div>
+							</div>
+							<Separator className="bg-border/40" />
 							<div className="flex justify-between font-body text-base text-foreground">
 								<span>Total</span>
-								<span>£{total.toFixed(2)}</span>
+								<span>£{orderTotal.toFixed(2)}</span>
 							</div>
 							<Button
 								className="w-full rounded-(--radius)"

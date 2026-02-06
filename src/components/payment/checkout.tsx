@@ -31,6 +31,9 @@ export default function Checkout({
 	onPaymentSuccess,
 	onBack,
 }: CheckoutProps) {
+	const SHIPPING_FEE = 4.5;
+	const FREE_SHIPPING_THRESHOLD = 30;
+
 	const createPaymentIntent = usePaymentStore(
 		(state) => state.createPaymentIntent
 	);
@@ -40,10 +43,13 @@ export default function Checkout({
 	const [clientSecret, setClientSecret] = useState<string | null>(null);
 	const [showPaymentForm, setShowPaymentForm] = useState(false);
 
-	const total = items.reduce(
+	const subtotal = items.reduce(
 		(sum, item) => sum + item.price * item.quantity,
 		0
 	);
+	const shipping =
+		items.length > 0 && subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_FEE;
+	const total = subtotal + shipping;
 
 	useEffect(() => {
 		if (error) {
@@ -79,10 +85,29 @@ export default function Checkout({
 							Complete Payment
 						</CardTitle>
 						<div className="font-semibold text-lg">
-							Total: £{total.toFixed(2)}
+							Total (incl. shipping): £{total.toFixed(2)}
 						</div>
 					</CardHeader>
 					<CardContent>
+						{/* Order Summary (shown during payment as well) */}
+						<div className="mb-6 space-y-3 text-sm">
+							<div className="flex items-center justify-between">
+								<span className="text-gray-600">Subtotal</span>
+								<span>£{subtotal.toFixed(2)}</span>
+							</div>
+							<div className="flex items-center justify-between">
+								<span className="text-gray-600">Shipping</span>
+								<span>
+									{shipping === 0 ? "Free" : `£${shipping.toFixed(2)}`}
+								</span>
+							</div>
+							<div className="flex items-center justify-between font-semibold">
+								<span>Total</span>
+								<span>£{total.toFixed(2)}</span>
+							</div>
+							<Separator />
+						</div>
+
 						<StripeElements
 							clientSecret={clientSecret}
 							onError={handlePaymentError}
@@ -118,9 +143,21 @@ export default function Checkout({
 							</div>
 						))}
 						<Separator />
-						<div className="flex items-center justify-between font-bold text-lg">
-							<span>Total</span>
-							<span>£{total.toFixed(2)}</span>
+						<div className="space-y-1 text-sm">
+							<div className="flex items-center justify-between">
+								<span>Subtotal</span>
+								<span>£{subtotal.toFixed(2)}</span>
+							</div>
+							<div className="flex items-center justify-between text-gray-600">
+								<span>Shipping</span>
+								<span>
+									{shipping === 0 ? "Free" : `£${shipping.toFixed(2)}`}
+								</span>
+							</div>
+							<div className="flex items-center justify-between font-bold text-lg">
+								<span>Total</span>
+								<span>£{total.toFixed(2)}</span>
+							</div>
 						</div>
 					</div>
 
