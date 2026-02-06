@@ -6,7 +6,7 @@ export type Product = {
 	description: string;
 	features: string[];
 	colors: string[];
-	size: string;
+	size: string | number[];
 	material: string;
 	length?: string;
 	includes: string[];
@@ -80,12 +80,12 @@ export const PRODUCTS: Product[] = [
 		includes: [],
 		images: ["/images/products/velvet-kaftan.webp"],
 		availability: "in-stock",
-		price: 24.99,
+		price: 29.99,
 	},
 
 	{
 		id: "classic-abaya",
-		name: "Simple Calligraphy Black & Gold (Limited Edition)",
+		name: "Simple Calligraphy Black & Gold",
 		slug: "classic-abaya",
 		collection: "eid",
 		description:
@@ -112,11 +112,11 @@ export const PRODUCTS: Product[] = [
 
 	{
 		id: "silk-kaftan",
-		name: "Silk Kaftan",
+		name: "Velvet Kaftan",
 		slug: "silk-kaftan",
 		collection: "eid",
 		description:
-			"Luxurious silk kaftan with intricate embroidery. Perfect for special occasions and formal events.",
+			"Luxurious velvet kaftan with intricate embroidery. Perfect for special occasions and formal events.",
 		features: [
 			"Premium silk fabric",
 			"Hand embroidery",
@@ -124,11 +124,11 @@ export const PRODUCTS: Product[] = [
 			"Luxurious feel",
 		],
 		colors: ["Gold", "Silver", "Maroon"],
-		size: "One size fits all",
+		size: [54, 46],
 		material: "Silk",
 		length: "Approximately 58 inches",
 		includes: ["Matching belt"],
-		images: ["/images/products/qamar-abaya-1.webp"],
+		images: ["/images/products/pre-order-velvet.webp"],
 		availability: "pre-order",
 		price: 29.99,
 	},

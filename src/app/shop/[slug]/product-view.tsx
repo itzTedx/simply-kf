@@ -39,6 +39,12 @@ export function ProductView({ product }: ProductViewProps) {
 
 	const [selectedColor, setSelectedColor] = useState<string>(product.colors[0]);
 	const [mainImage, setMainImage] = useState<string>(product.images[0]);
+	const initialSelectedSize = Array.isArray(product.size)
+		? product.size[0]
+		: null;
+	const [selectedSize, setSelectedSize] = useState<number | null>(
+		initialSelectedSize
+	);
 	const [isImageLoading, setIsImageLoading] = useState(true);
 	const [preOrderForm, setPreOrderForm] = useState({
 		name: "",
@@ -49,6 +55,12 @@ export function ProductView({ product }: ProductViewProps) {
 	const [preOrderOpen, setPreOrderOpen] = useState(false);
 
 	const handleAddToCart = () => {
+		const resolvedSize = Array.isArray(product.size)
+			? selectedSize !== null
+				? String(selectedSize)
+				: String(product.size[0])
+			: product.size;
+
 		addItem({
 			id: product.id,
 			name: product.name,
@@ -56,7 +68,7 @@ export function ProductView({ product }: ProductViewProps) {
 			quantity: 1,
 			image: product.images[0],
 			color: selectedColor,
-			size: product.size,
+			size: resolvedSize,
 		});
 
 		toast.success(`${product.name} has been added to your bag.`);
@@ -172,12 +184,36 @@ export function ProductView({ product }: ProductViewProps) {
 						<div className="space-y-2">
 							<div className="flex items-center justify-between">
 								<span className="font-body text-foreground/55 text-xs uppercase tracking-wider">
-									Size: <span className="text-foreground">{product.size}</span>
+									Size:{" "}
+									<span className="text-foreground">
+										{Array.isArray(product.size)
+											? (selectedSize ?? product.size[0])
+											: product.size}
+									</span>
 								</span>
 								<button className="font-body text-foreground/45 text-xs underline-offset-2 transition-colors hover:text-foreground/75">
 									Size guide
 								</button>
 							</div>
+							{Array.isArray(product.size) && (
+								<div className="flex flex-wrap gap-2 pt-1">
+									{product.size.map((sizeOption) => (
+										<button
+											className={cn(
+												"h-8 rounded-full border px-4 font-body text-xs transition-colors duration-200",
+												selectedSize === sizeOption
+													? "border-primary bg-primary text-primary-foreground"
+													: "border-border/80 text-foreground/70 hover:border-foreground/25 hover:text-foreground"
+											)}
+											key={sizeOption}
+											onClick={() => setSelectedSize(sizeOption)}
+											type="button"
+										>
+											{sizeOption}
+										</button>
+									))}
+								</div>
+							)}
 						</div>
 					</div>
 
@@ -196,7 +232,10 @@ export function ProductView({ product }: ProductViewProps) {
 										<DialogTitle>Pre-order {product.name}</DialogTitle>
 										<DialogDescription>
 											Leave your details and we&apos;ll notify you when this
-											item is ready. Selected: {selectedColor}, {product.size}
+											item is ready. Selected: {selectedColor},{" "}
+											{Array.isArray(product.size)
+												? (selectedSize ?? product.size[0])
+												: product.size}
 										</DialogDescription>
 									</DialogHeader>
 									<form
