@@ -53,7 +53,7 @@ export default function CollectionsPage() {
 							<div className="pt-2">
 								<Link
 									className="inline-flex items-center justify-center rounded-(--radius) border border-foreground/20 bg-transparent px-8 py-4 font-body text-foreground text-xs tracking-wide transition-colors duration-200 hover:bg-foreground/5"
-									href="/shop"
+									href={`/shop?availability=${collection.slug}`}
 								>
 									Explore collection
 								</Link>

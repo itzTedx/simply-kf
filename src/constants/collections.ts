@@ -26,27 +26,26 @@ export type Collection = {
 	title: string;
 	slug: string;
 	description: string;
-	type: "current" | "upcoming" | "all";
+	type: "current" | "eid" | "all";
 	image: `/images/collections/${string}.webp`;
 };
 
 export const COLLECTIONS: Collection[] = [
 	{
-		id: "current-collection",
-		title: "Current Collection",
-		slug: "current",
+		id: "abaya-collection",
+		title: "Abaya Collection",
+		slug: "in-stock",
 		description:
 			"Available now - our latest designs ready for immediate delivery.",
 		type: "current",
 		image: "/images/collections/collection-1.webp",
 	},
 	{
-		id: "upcoming-collection",
-		title: "Upcoming Collection",
-		slug: "upcoming",
-		description:
-			"Coming soon - exclusive designs launching in the near future.",
-		type: "upcoming",
+		id: "eid-collection",
+		title: "Eid Collection",
+		slug: "pre-order",
+		description: "Exclusive designs launching in the near future.",
+		type: "eid",
 		image: "/images/collections/collection-2.webp",
 	},
 	{
