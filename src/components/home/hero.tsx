@@ -44,6 +44,7 @@ export function Hero() {
 					<div className="flex flex-col gap-3 pt-1 sm:flex-row sm:justify-center sm:pt-2 md:justify-start">
 						<Button
 							className="h-12 min-h-12 w-full md:h-11 md:w-auto md:min-w-[140px]"
+							nativeButton={false}
 							render={<Link href="/shop" />}
 							size="lg"
 						>
@@ -51,6 +52,7 @@ export function Hero() {
 						</Button>
 						<Button
 							className="h-12 min-h-12 w-full md:h-11 md:w-auto md:min-w-[140px]"
+							nativeButton={false}
 							render={<Link href="/collections" />}
 							size="lg"
 							variant="outline"

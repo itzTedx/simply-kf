@@ -11,7 +11,7 @@ export type Product = {
 	length?: string;
 	includes: string[];
 	images: string[];
-	availability: "in-stock" | "upcoming";
+	availability: "in-stock" | "pre-order";
 	price: number;
 };
 
@@ -35,7 +35,7 @@ export const PRODUCTS: Product[] = [
 		includes: ["Matching belt", "Matching scarf", "White plain inner"],
 		images: ["/images/products/sheikha-abaya-1.webp"],
 		availability: "in-stock",
-		price: 450,
+		price: 24.99,
 	},
 
 	{
@@ -57,7 +57,7 @@ export const PRODUCTS: Product[] = [
 		includes: ["Matching belt", "Matching scarf"],
 		images: ["/images/products/qamar-abaya-1.webp"],
 		availability: "in-stock",
-		price: 380,
+		price: 24.99,
 	},
 
 	{
@@ -79,17 +79,17 @@ export const PRODUCTS: Product[] = [
 		length: "Approximately 54–56 inches",
 		includes: [],
 		images: ["/images/products/velvet-kaftan.webp"],
-		availability: "upcoming",
-		price: 520,
+		availability: "in-stock",
+		price: 24.99,
 	},
 
 	{
 		id: "classic-abaya",
-		name: "Classic Abaya",
+		name: "Simple Calligraphy Black & Gold (Limited Edition)",
 		slug: "classic-abaya",
 		collection: "eid",
 		description:
-			"A timeless classic abaya that never goes out of style. Simple, elegant, and versatile - perfect for any occasion.",
+			"A timeless Simple Calligraphy Black & Gold (Limited Edition) that never goes out of style. Simple, elegant, and versatile - perfect for any occasion.",
 		features: [
 			"Classic design",
 			"Premium fabric",
@@ -100,9 +100,14 @@ export const PRODUCTS: Product[] = [
 		size: "One size fits all",
 		material: "Premium crepe",
 		includes: ["Matching scarf"],
-		images: ["/images/products/qamar-abaya-1.webp"],
-		availability: "in-stock",
-		price: 320,
+		images: [
+			"/images/products/elegant-abaya-1.jpeg",
+			"/images/products/elegant-abaya-2.jpeg",
+			"/images/products/elegant-abaya-3.jpeg",
+			"/images/products/elegant-abaya-4.jpeg",
+		],
+		availability: "pre-order",
+		price: 24.99,
 	},
 
 	{
@@ -124,7 +129,7 @@ export const PRODUCTS: Product[] = [
 		length: "Approximately 58 inches",
 		includes: ["Matching belt"],
 		images: ["/images/products/qamar-abaya-1.webp"],
-		availability: "in-stock",
-		price: 680,
+		availability: "pre-order",
+		price: 29.99,
 	},
 ];

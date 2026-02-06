@@ -124,7 +124,7 @@ export default function CartPage() {
 												>
 													<RiSubtractLine className="size-4" />
 												</Button>
-												<span className="min-w-[2rem] text-center font-body text-foreground text-sm">
+												<span className="min-w-8 text-center font-body text-foreground text-sm">
 													{item.quantity}
 												</span>
 												<Button

@@ -53,7 +53,7 @@ export default function AboutPage() {
 
 			<section className="w-full px-4 py-16 md:px-6 md:py-20">
 				<div className="container mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 md:grid-cols-2 md:gap-20">
-					<div className="flex aspect-[4/5] items-center justify-center overflow-hidden rounded-sm bg-muted/50 text-foreground/20">
+					<div className="flex aspect-4/5 items-center justify-center overflow-hidden rounded-sm bg-muted/50 text-foreground/20">
 						<span className="font-body text-[0.65rem] uppercase tracking-[0.15em]">
 							Studio
 						</span>
@@ -98,7 +98,7 @@ export default function AboutPage() {
 							and sensibility in mind.
 						</p>
 					</div>
-					<div className="order-1 flex aspect-[4/5] items-center justify-center overflow-hidden rounded-sm bg-muted/50 text-foreground/20 md:order-2">
+					<div className="order-1 flex aspect-4/5 items-center justify-center overflow-hidden rounded-sm bg-muted/50 text-foreground/20 md:order-2">
 						<span className="font-body text-[0.65rem] uppercase tracking-[0.15em]">
 							Lifestyle
 						</span>
@@ -142,14 +142,16 @@ export default function AboutPage() {
 
 			<section className="flex flex-col items-center gap-4 px-4 pb-28 sm:flex-row md:pb-32">
 				<Button
-					className="min-w-[200px] rounded-[var(--radius)]"
+					className="min-w-[200px] rounded-(--radius)"
+					nativeButton={false}
 					render={<Link href={"/shop" as Route} />}
 					size="lg"
 				>
 					Explore the collection
 				</Button>
 				<Button
-					className="min-w-[200px] rounded-[var(--radius)]"
+					className="min-w-[200px] rounded-(--radius)"
+					nativeButton={false}
 					render={<Link href={"/shop" as Route} />}
 					size="lg"
 					variant="outline"

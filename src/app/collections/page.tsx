@@ -34,7 +34,7 @@ export default function CollectionsPage() {
 						)}
 						key={collection.id}
 					>
-						<div className="relative aspect-[4/5] w-full overflow-hidden rounded-sm bg-muted/40 md:w-1/2">
+						<div className="relative aspect-4/5 w-full overflow-hidden rounded-sm bg-muted/40 md:w-1/2">
 							<Image
 								alt=""
 								className="object-cover transition-transform duration-500 ease-out hover:scale-[1.01]"
@@ -86,13 +86,13 @@ export default function CollectionsPage() {
 
 			<section className="flex flex-col items-center gap-4 pb-24 md:pb-32">
 				<Link
-					className="inline-flex min-w-[200px] items-center justify-center rounded-[var(--radius)] bg-primary px-8 py-4 font-body text-primary-foreground text-xs tracking-wide transition-opacity duration-200 hover:opacity-90"
+					className="inline-flex min-w-[200px] items-center justify-center rounded-(--radius) bg-primary px-8 py-4 font-body text-primary-foreground text-xs tracking-wide transition-opacity duration-200 hover:opacity-90"
 					href="/shop"
 				>
 					Shop all
 				</Link>
 				<Link
-					className="inline-flex min-w-[200px] items-center justify-center rounded-[var(--radius)] border border-border/80 px-8 py-4 font-body text-foreground/80 text-xs tracking-wide transition-colors duration-200 hover:bg-foreground/5"
+					className="inline-flex min-w-[200px] items-center justify-center rounded-(--radius) border border-border/80 px-8 py-4 font-body text-foreground/80 text-xs tracking-wide transition-colors duration-200 hover:bg-foreground/5"
 					href="/shop"
 				>
 					Explore essentials

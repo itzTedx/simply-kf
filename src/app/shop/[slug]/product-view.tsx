@@ -13,7 +13,18 @@ import {
 	AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
+import { Field, FieldGroup, FieldLabel, FieldSet } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Textarea } from "@/components/ui/textarea";
 
 import { Product } from "@/constants/products";
 import { cn } from "@/lib/utils";
@@ -29,6 +40,13 @@ export function ProductView({ product }: ProductViewProps) {
 	const [selectedColor, setSelectedColor] = useState<string>(product.colors[0]);
 	const [mainImage, setMainImage] = useState<string>(product.images[0]);
 	const [isImageLoading, setIsImageLoading] = useState(true);
+	const [preOrderForm, setPreOrderForm] = useState({
+		name: "",
+		email: "",
+		message: "",
+	});
+	const [isPreOrderSubmitting, setIsPreOrderSubmitting] = useState(false);
+	const [preOrderOpen, setPreOrderOpen] = useState(false);
 
 	const handleAddToCart = () => {
 		addItem({
@@ -43,6 +61,26 @@ export function ProductView({ product }: ProductViewProps) {
 
 		toast.success(`${product.name} has been added to your bag.`);
 	};
+
+	const handlePreOrderSubmit = (e: React.FormEvent) => {
+		e.preventDefault();
+		if (!preOrderForm.name.trim() || !preOrderForm.email.trim()) {
+			toast.error("Please enter your name and email.");
+			return;
+		}
+		setIsPreOrderSubmitting(true);
+		// Simulate submit – replace with actual API call
+		setTimeout(() => {
+			setIsPreOrderSubmitting(false);
+			setPreOrderForm({ name: "", email: "", message: "" });
+			setPreOrderOpen(false);
+			toast.success(
+				`Pre-order received for ${product.name}. We'll notify you when it's ready.`
+			);
+		}, 800);
+	};
+
+	const isPreOrder = product.availability === "pre-order";
 
 	return (
 		<div className="grid grid-cols-1 gap-x-10 gap-y-14 lg:grid-cols-2 lg:gap-x-20 lg:gap-y-16">
@@ -68,7 +106,7 @@ export function ProductView({ product }: ProductViewProps) {
 					{product.images.map((img, idx) => (
 						<button
 							className={cn(
-								"relative aspect-[3/4] w-full overflow-hidden rounded-sm bg-muted/40 transition-all duration-200",
+								"relative aspect-3/4 w-full overflow-hidden rounded-sm bg-muted/40 transition-all duration-200",
 								mainImage === img
 									? "ring-1 ring-foreground/30"
 									: "opacity-60 hover:opacity-90"
@@ -144,9 +182,102 @@ export function ProductView({ product }: ProductViewProps) {
 					</div>
 
 					<div className="pt-4">
-						<Button className="w-full" onClick={handleAddToCart} size="lg">
-							Add to bag
-						</Button>
+						{isPreOrder ? (
+							<Dialog onOpenChange={setPreOrderOpen} open={preOrderOpen}>
+								<DialogTrigger
+									render={
+										<Button className="w-full" size="lg">
+											Pre-order
+										</Button>
+									}
+								/>
+								<DialogContent className="sm:max-w-md">
+									<DialogHeader>
+										<DialogTitle>Pre-order {product.name}</DialogTitle>
+										<DialogDescription>
+											Leave your details and we&apos;ll notify you when this
+											item is ready. Selected: {selectedColor}, {product.size}
+										</DialogDescription>
+									</DialogHeader>
+									<form
+										className="space-y-5 pt-2"
+										onSubmit={handlePreOrderSubmit}
+									>
+										<FieldSet>
+											<FieldGroup>
+												<Field>
+													<FieldLabel htmlFor="preorder-name">Name</FieldLabel>
+													<Input
+														id="preorder-name"
+														onChange={(e) =>
+															setPreOrderForm((p) => ({
+																...p,
+																name: e.target.value,
+															}))
+														}
+														placeholder="Your name"
+														required
+														value={preOrderForm.name}
+													/>
+												</Field>
+												<Field>
+													<FieldLabel htmlFor="preorder-email">
+														Email
+													</FieldLabel>
+													<Input
+														id="preorder-email"
+														onChange={(e) =>
+															setPreOrderForm((p) => ({
+																...p,
+																email: e.target.value,
+															}))
+														}
+														placeholder="your@email.com"
+														required
+														type="email"
+														value={preOrderForm.email}
+													/>
+												</Field>
+												<Field>
+													<FieldLabel htmlFor="preorder-message">
+														Message{" "}
+														<span className="text-foreground/50">
+															(optional)
+														</span>
+													</FieldLabel>
+													<Textarea
+														id="preorder-message"
+														onChange={(e) =>
+															setPreOrderForm((p) => ({
+																...p,
+																message: e.target.value,
+															}))
+														}
+														placeholder="Special requests or notes..."
+														rows={3}
+														value={preOrderForm.message}
+													/>
+												</Field>
+											</FieldGroup>
+										</FieldSet>
+										<Button
+											className="w-full"
+											disabled={isPreOrderSubmitting}
+											size="lg"
+											type="submit"
+										>
+											{isPreOrderSubmitting
+												? "Submitting..."
+												: "Submit pre-order"}
+										</Button>
+									</form>
+								</DialogContent>
+							</Dialog>
+						) : (
+							<Button className="w-full" onClick={handleAddToCart} size="lg">
+								Add to bag
+							</Button>
+						)}
 					</div>
 
 					<div className="pt-6">

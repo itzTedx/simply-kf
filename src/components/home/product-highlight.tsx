@@ -46,6 +46,7 @@ export function ProductHighlight() {
 
 					<Button
 						className="h-12 min-h-12 w-full md:h-11 md:w-fit"
+						nativeButton={false}
 						render={<Link href="/shop" />}
 						size="lg"
 					>
