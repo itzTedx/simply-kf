@@ -63,8 +63,8 @@ export function ReelsShowcase({ reels = mockReels }: ReelsShowcaseProps) {
 						</CarouselItem>
 					))}
 				</CarouselContent>
-				<CarouselPrevious className="border-0 bg-card/90 text-foreground/80 hover:bg-card hover:text-foreground" />
-				<CarouselNext className="border-0 bg-card/90 text-foreground/80 hover:bg-card hover:text-foreground" />
+				<CarouselPrevious className="hidden border-0 bg-card/90 text-foreground/80 hover:bg-card hover:text-foreground md:block" />
+				<CarouselNext className="hidden border-0 bg-card/90 text-foreground/80 hover:bg-card hover:text-foreground md:block" />
 			</Carousel>
 
 			<div className="text-center">
