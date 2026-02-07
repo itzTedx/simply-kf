@@ -73,7 +73,11 @@ export const PRODUCTS: Product[] = [
 			},
 			{
 				color: "Olive Green",
-				images: ["/images/products/sheikha-6.webp"],
+				images: [
+					"/images/products/sheikha-6.webp",
+					"/images/products/sheikha-green-2.webp",
+					"/images/products/sheikha-green-3.webp",
+				],
 			},
 			{
 				color: "Golden Beige",
