@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import { createPaymentIntent as createPaymentIntentAction } from "@/app/actions/stripe";
+import { createPaymentIntent as createPaymentIntentAction } from "@/app/(app)/actions/stripe";
 
 interface CheckoutItem {
 	id: string;
