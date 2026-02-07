@@ -14,7 +14,7 @@ export default function Home() {
 			<Hero />
 			<FeaturedProducts />
 			<section className="container relative mx-auto aspect-16/5 max-w-6xl overflow-hidden rounded-md">
-				<Link href="/shop?availability=in-stock">
+				<Link href="/shop?availability=sales">
 					<Image
 						alt="Hero"
 						className="object-cover"
