@@ -108,6 +108,7 @@ export function ProductView({ product }: ProductViewProps) {
 	}, [thumbCarouselApi, selectedIndex]);
 
 	// When color changes, reset carousel to first slide and show new variant images
+	// biome-ignore lint/correctness/useExhaustiveDependencies: no need to re-run this effect when the color changes
 	useEffect(() => {
 		carouselApi?.scrollTo(0);
 		setSelectedIndex(0);

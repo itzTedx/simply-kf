@@ -18,5 +18,17 @@
 		"editor.defaultFormatter": "biomejs.biome"
 	},
 	"typescript.tsdk": "node_modules\\typescript\\lib",
-	"cSpell.words": ["turbopack"]
+	"cSpell.words": [
+		"abaya",
+		"colour",
+		"colours",
+		"nuqs",
+		"preorder",
+		"qamar",
+		"remixicon",
+		"sheikha",
+		"simplykfabayas",
+		"Tieable",
+		"turbopack"
+	]
 }
