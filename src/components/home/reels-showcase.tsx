@@ -81,11 +81,11 @@ export function ReelsShowcase({ reels = mockReels }: ReelsShowcaseProps) {
 					Follow{" "}
 					<Link
 						className="text-foreground/70 underline-offset-2 transition-colors hover:text-foreground"
-						href="https://instagram.com/simplykf"
+						href="https://www.instagram.com/simplykfabayas/"
 						rel="noopener noreferrer"
 						target="_blank"
 					>
-						@simplykf
+						@simplykfabayas
 					</Link>
 				</p>
 			</div>
