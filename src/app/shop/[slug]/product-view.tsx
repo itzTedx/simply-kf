@@ -14,6 +14,7 @@ import {
 	AccordionItem,
 	AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
 	Carousel,
@@ -23,18 +24,7 @@ import {
 	CarouselNext,
 	CarouselPrevious,
 } from "@/components/ui/carousel";
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from "@/components/ui/dialog";
-import { Field, FieldGroup, FieldLabel, FieldSet } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Textarea } from "@/components/ui/textarea";
 
 import {
 	getProductColors,
@@ -81,13 +71,6 @@ export function ProductView({ product }: ProductViewProps) {
 	>();
 	const [selectedIndex, setSelectedIndex] = useState(0);
 	const [isImageLoading, setIsImageLoading] = useState(true);
-	const [preOrderForm, setPreOrderForm] = useState({
-		name: "",
-		email: "",
-		message: "",
-	});
-	const [isPreOrderSubmitting, setIsPreOrderSubmitting] = useState(false);
-	const [preOrderOpen, setPreOrderOpen] = useState(false);
 
 	const onSelect = useCallback((api: CarouselApi) => {
 		if (!api) return;
@@ -143,25 +126,7 @@ export function ProductView({ product }: ProductViewProps) {
 		toast.success(`${product.name} has been added to your bag.`);
 	};
 
-	const handlePreOrderSubmit = (e: React.FormEvent) => {
-		e.preventDefault();
-		if (!preOrderForm.name.trim() || !preOrderForm.email.trim()) {
-			toast.error("Please enter your name and email.");
-			return;
-		}
-		setIsPreOrderSubmitting(true);
-		// Simulate submit – replace with actual API call
-		setTimeout(() => {
-			setIsPreOrderSubmitting(false);
-			setPreOrderForm({ name: "", email: "", message: "" });
-			setPreOrderOpen(false);
-			toast.success(
-				`Pre-order received for ${product.name}. We'll notify you when it's ready.`
-			);
-		}, 800);
-	};
-
-	const isPreOrder = product.availability === "pre-order";
+	// const isPreOrder = product.availability === "pre-order";
 
 	return (
 		<div className="grid grid-cols-1 gap-x-10 gap-y-10 md:gap-y-14 lg:grid-cols-2 lg:gap-x-20 lg:gap-y-16">
@@ -326,105 +291,22 @@ export function ProductView({ product }: ProductViewProps) {
 					</div>
 
 					<div className="order-2 pt-4 lg:order-3">
-						{isPreOrder ? (
-							<Dialog onOpenChange={setPreOrderOpen} open={preOrderOpen}>
-								<DialogTrigger
-									render={
-										<Button className="w-full" size="lg">
-											Pre-order
-										</Button>
-									}
-								/>
-								<DialogContent className="sm:max-w-md">
-									<DialogHeader>
-										<DialogTitle>Pre-order {product.name}</DialogTitle>
-										<DialogDescription>
-											Leave your details and we&apos;ll notify you when this
-											item is ready. Selected: {selectedColor},{" "}
-											{Array.isArray(product.size)
-												? (selectedSize ?? product.size[0])
-												: product.size}
-										</DialogDescription>
-									</DialogHeader>
-									<form
-										className="space-y-5 pt-2"
-										onSubmit={handlePreOrderSubmit}
-									>
-										<FieldSet>
-											<FieldGroup>
-												<Field>
-													<FieldLabel htmlFor="preorder-name">Name</FieldLabel>
-													<Input
-														id="preorder-name"
-														onChange={(e) =>
-															setPreOrderForm((p) => ({
-																...p,
-																name: e.target.value,
-															}))
-														}
-														placeholder="Your name"
-														required
-														value={preOrderForm.name}
-													/>
-												</Field>
-												<Field>
-													<FieldLabel htmlFor="preorder-email">
-														Email
-													</FieldLabel>
-													<Input
-														id="preorder-email"
-														onChange={(e) =>
-															setPreOrderForm((p) => ({
-																...p,
-																email: e.target.value,
-															}))
-														}
-														placeholder="your@email.com"
-														required
-														type="email"
-														value={preOrderForm.email}
-													/>
-												</Field>
-												<Field>
-													<FieldLabel htmlFor="preorder-message">
-														Message{" "}
-														<span className="text-foreground/50">
-															(optional)
-														</span>
-													</FieldLabel>
-													<Textarea
-														id="preorder-message"
-														onChange={(e) =>
-															setPreOrderForm((p) => ({
-																...p,
-																message: e.target.value,
-															}))
-														}
-														placeholder="Special requests or notes..."
-														rows={3}
-														value={preOrderForm.message}
-													/>
-												</Field>
-											</FieldGroup>
-										</FieldSet>
-										<Button
-											className="w-full"
-											disabled={isPreOrderSubmitting}
-											size="lg"
-											type="submit"
-										>
-											{isPreOrderSubmitting
-												? "Submitting..."
-												: "Submit pre-order"}
-										</Button>
-									</form>
-								</DialogContent>
-							</Dialog>
-						) : (
-							<Button className="w-full" onClick={handleAddToCart} size="lg">
-								Add to bag
-							</Button>
-						)}
+						{/* {isPreOrder && (
+							<p className="mb-3 font-body text-foreground/70 text-sm">
+								Pre-order: pay now and we&apos;ll make your item, then deliver
+								when it&apos;s ready.
+							</p>
+						)} */}
+						<Button
+							className="relative w-full"
+							onClick={handleAddToCart}
+							size="lg"
+						>
+							<Badge className="absolute -top-3 right-3 rounded-md bg-foreground/60 backdrop-blur-lg">
+								Pre-order
+							</Badge>
+							Add to bag
+						</Button>
 					</div>
 
 					<div className="order-4 pt-6">
