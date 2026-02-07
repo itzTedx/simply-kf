@@ -95,7 +95,12 @@ export const PRODUCTS: Product[] = [
 		material: "Velvet",
 		length: "Approximately 54-56 inches",
 
-		images: ["/images/products/velvet-kaftan.webp"],
+		images: [
+			"/images/products/velvet-kaftan.webp",
+			"/images/products/velvet-2.webp",
+			"/images/products/velvet-3.webp",
+			"/images/products/velvet-4.webp",
+		],
 		availability: "in-stock",
 		price: 29.99,
 	},
