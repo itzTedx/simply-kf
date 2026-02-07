@@ -64,7 +64,12 @@ export const PRODUCTS: Product[] = [
 			},
 			{
 				color: "Navy Blue",
-				images: ["/images/products/sheikha-5.webp"],
+				images: [
+					"/images/products/sheikha-5.webp",
+					"/images/products/sheikha-blue-2.webp",
+					"/images/products/sheikha-blue-3.webp",
+					"/images/products/sheikha-blue-4.webp",
+				],
 			},
 			{
 				color: "Olive Green",
