@@ -72,10 +72,13 @@ export const PRODUCTS: Product[] = [
 		material: "Chiffon",
 
 		images: [
-			"/images/products/qamar-1.jpeg",
-			"/images/products/qamar-2.jpeg",
-			"/images/products/qamar-3.jpeg",
-			"/images/products/qamar-4.jpeg",
+			"/images/products/qamar-1.webp",
+			"/images/products/qamar-2.webp",
+			"/images/products/qamar-3.webp",
+			"/images/products/qamar-4.webp",
+			"/images/products/qamar-5.webp",
+			"/images/products/qamar-6.webp",
+			"/images/products/qamar-7.webp",
 		],
 		availability: "in-stock",
 		price: 24.99,
