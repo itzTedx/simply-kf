@@ -37,14 +37,16 @@ export function ProductGrid({ products, onClearFilters }: ProductGridProps) {
 				))}
 			</div>
 
-			<div className="flex justify-center pt-16 md:pt-20">
-				<Button
-					className="font-body text-foreground/70 text-xs tracking-wide"
-					variant="outline"
-				>
-					Load More
-				</Button>
-			</div>
+			{products.length > 12 && (
+				<div className="flex justify-center pt-16 md:pt-20">
+					<Button
+						className="font-body text-foreground/70 text-xs tracking-wide"
+						variant="outline"
+					>
+						Load More
+					</Button>
+				</div>
+			)}
 		</>
 	);
 }

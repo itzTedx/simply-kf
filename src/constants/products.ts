@@ -9,7 +9,7 @@ export type Product = {
 	size: string | number[];
 
 	images: string[];
-	availability: "in-stock" | "pre-order";
+	availability: "sales" | "pre-order";
 	price: number;
 };
 
@@ -47,7 +47,7 @@ export const PRODUCTS: Product[] = [
 			"/images/products/sheikha-7.webp",
 			"/images/products/sheikha-8.webp",
 		],
-		availability: "in-stock",
+		availability: "sales",
 		price: 24.99,
 	},
 
@@ -76,7 +76,7 @@ export const PRODUCTS: Product[] = [
 			"/images/products/qamar-6.webp",
 			"/images/products/qamar-7.webp",
 		],
-		availability: "in-stock",
+		availability: "sales",
 		price: 24.99,
 	},
 
@@ -102,7 +102,7 @@ export const PRODUCTS: Product[] = [
 			"/images/products/velvet-3.webp",
 			"/images/products/velvet-4.webp",
 		],
-		availability: "in-stock",
+		availability: "sales",
 		price: 29.99,
 	},
 

@@ -12,7 +12,6 @@ import { Slider } from "@/components/ui/slider";
 import { PRODUCTS } from "@/constants/products";
 
 // Extract unique values from products
-const UNIQUE_COLLECTIONS = ["current", "upcoming", "all"];
 const UNIQUE_COLORS = Array.from(new Set(PRODUCTS.flatMap((p) => p.colors)));
 const UNIQUE_AVAILABILITY = Array.from(
 	new Set(PRODUCTS.map((p) => p.availability))
@@ -22,13 +21,11 @@ interface FilterSectionProps {
 	priceRange: number[];
 	setPriceRange: (value: number[]) => void;
 	filters: {
-		collections?: string[] | null;
 		colors?: string[] | null;
 
 		availability?: string[] | null;
 	};
 	setFilters: (filters: {
-		collections?: string[] | null;
 		colors?: string[] | null;
 
 		availability?: string[] | null;
@@ -61,54 +58,7 @@ export function FilterSection({
 				</div>
 			</div>
 
-			<Accordion
-				className="w-full border-0"
-				defaultValue={["collection"]}
-				multiple
-			>
-				<AccordionItem
-					className="border-0 border-border/40 border-b"
-					value="collection"
-				>
-					<AccordionTrigger className="py-4 font-body text-foreground/80 text-xs uppercase tracking-wide hover:no-underline">
-						Collection
-					</AccordionTrigger>
-					<AccordionContent>
-						<div className="space-y-3 pt-2">
-							{UNIQUE_COLLECTIONS.map((item) => (
-								<div className="flex items-center space-x-3" key={item}>
-									<Checkbox
-										checked={filters.collections?.includes(item) || false}
-										className="border-border data-[state=checked]:border-primary data-[state=checked]:bg-primary"
-										id={`collection-${item}`}
-										onCheckedChange={(checked) => {
-											if (checked) {
-												setFilters({
-													...filters,
-													collections: [...(filters.collections || []), item],
-												});
-											} else {
-												setFilters({
-													...filters,
-													collections: (filters.collections || []).filter(
-														(c) => c !== item
-													),
-												});
-											}
-										}}
-									/>
-									<label
-										className="cursor-pointer font-body text-foreground/70 text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-										htmlFor={`collection-${item}`}
-									>
-										{item.charAt(0).toUpperCase() + item.slice(1)}
-									</label>
-								</div>
-							))}
-						</div>
-					</AccordionContent>
-				</AccordionItem>
-
+			<Accordion className="w-full border-0" defaultValue={["color"]} multiple>
 				<AccordionItem
 					className="border-0 border-border/40 border-b"
 					value="color"

@@ -23,11 +23,6 @@ function ShopPageContent() {
 	const [selectedSort, setSelectedSort] = useState("newest");
 
 	const [filters, setFilters] = useQueryStates({
-		collections: {
-			parse: (value: string) => value.split(",").filter(Boolean),
-			serialize: (value: string[]) => value.join(","),
-			default: [] as string[],
-		},
 		colors: {
 			parse: (value: string) => value.split(",").filter(Boolean),
 			serialize: (value: string[]) => value.join(","),
@@ -44,7 +39,6 @@ function ShopPageContent() {
 	// Reset all filters function
 	const resetAllFilters = () => {
 		setFilters({
-			collections: [],
 			colors: [],
 
 			availability: [],
@@ -56,13 +50,6 @@ function ShopPageContent() {
 	// Filter products based on selected filters
 	const filteredProducts = useMemo(() => {
 		let filtered = PRODUCTS;
-
-		// Filter by collections
-		if (filters.collections && filters.collections.length > 0) {
-			filtered = filtered.filter((product) =>
-				filters.collections!.includes(product.collection)
-			);
-		}
 
 		// Filter by colors
 		if (filters.colors && filters.colors.length > 0) {
@@ -97,7 +84,6 @@ function ShopPageContent() {
 				);
 		}
 	}, [
-		filters.collections,
 		filters.colors,
 
 		filters.availability,
