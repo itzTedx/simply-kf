@@ -8,7 +8,6 @@ import { Logo } from "@/assets/logo";
 export function Footer() {
 	const footerLinks = [
 		{ name: "Shop", href: "/shop" },
-		{ name: "About", href: "/about" },
 		{ name: "Size Guide", href: "#" },
 		{ name: "Delivery & Returns", href: "#" },
 		{ name: "Contact", href: "/contact" },
@@ -20,7 +19,12 @@ export function Footer() {
 				<div className="flex flex-col items-center gap-12 text-center md:items-start md:text-left">
 					<div className="flex w-full flex-col items-center gap-10 md:flex-row md:items-start md:justify-between">
 						<div className="space-y-4">
-							<Logo className="opacity-90" />
+							<div className="flex items-center gap-2 text-amber-700">
+								<Logo />
+								<h5 className="font-display font-normal text-foreground text-lg">
+									Simply KF
+								</h5>
+							</div>
 							<p className="font-body text-foreground/60 text-sm leading-relaxed">
 								Designed in Dubai. Exclusively for the UK.
 							</p>

@@ -9,7 +9,9 @@ import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/stores/cart-store";
 
 export const CartButton = () => {
-	const cartCount = useCartStore((state) => state.cartCount);
+	const cartCount = useCartStore((state) =>
+		state.items.reduce((sum, item) => sum + item.quantity, 0)
+	);
 	return (
 		<Link href="/cart">
 			<Button

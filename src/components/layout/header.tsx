@@ -1,7 +1,3 @@
-"use client";
-
-import { useState } from "react";
-
 import { Route } from "next";
 import Link from "next/link";
 
@@ -10,6 +6,7 @@ import { RiMenuLine, RiUserLine } from "@remixicon/react";
 import { Button } from "@/components/ui/button";
 import {
 	Sheet,
+	SheetClose,
 	SheetContent,
 	SheetHeader,
 	SheetTitle,
@@ -29,12 +26,11 @@ const NAV_LINKS = [
 ] as const;
 
 export function Header() {
-	const [open, setOpen] = useState(false);
 	return (
 		<header className="fixed top-4 left-1/2 z-50 -translate-x-1/2 max-sm:w-full sm:max-w-[calc(100%-2rem)]">
 			<div className="flex items-center justify-between gap-4 px-4 sm:px-0">
 				<div className="flex items-center gap-3">
-					<Sheet onOpenChange={setOpen} open={open}>
+					<Sheet>
 						<SheetTrigger
 							render={
 								<Button
@@ -58,14 +54,14 @@ export function Header() {
 							</SheetHeader>
 							<nav className="flex flex-col gap-0.5">
 								{NAV_LINKS.map((link) => (
-									<Link
-										className="rounded-md px-4 py-3 font-body text-foreground/80 text-sm transition-colors duration-200 hover:bg-foreground/5 hover:text-foreground"
-										href={link.href as Route}
-										key={link.name}
-										onClick={() => setOpen(false)}
-									>
-										{link.name}
-									</Link>
+									<SheetClose key={link.name}>
+										<Link
+											className="rounded-md px-4 py-3 font-body text-foreground/80 text-sm transition-colors duration-200 hover:bg-foreground/5 hover:text-foreground"
+											href={link.href as Route}
+										>
+											{link.name}
+										</Link>
+									</SheetClose>
 								))}
 							</nav>
 						</SheetContent>
