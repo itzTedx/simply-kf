@@ -75,7 +75,7 @@ export function FilterAndSortBar({
 							Refine your selection.
 						</SheetDescription>
 					</SheetHeader>
-					<div className="py-6">
+					<div className="p-6">
 						<FilterSection
 							filters={filters}
 							priceRange={priceRange}
@@ -86,7 +86,7 @@ export function FilterAndSortBar({
 				</SheetContent>
 			</Sheet>
 
-			<div className="w-[280px]">
+			<div className="md:w-[180px]">
 				<Select
 					onValueChange={(value) => setSelectedSort(value || "newest")}
 					value={selectedSort}
