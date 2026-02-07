@@ -7,8 +7,6 @@ export type Product = {
 	features: string[];
 	colors: string[];
 	size: string | number[];
-	material: string;
-	length?: string;
 
 	images: string[];
 	availability: "in-stock" | "pre-order";
@@ -38,7 +36,6 @@ export const PRODUCTS: Product[] = [
 			"Chocolate brown",
 		],
 		size: "One size fits all",
-		material: "Premium fabric with sequin work",
 
 		images: [
 			"/images/products/sheikha-1.webp",
@@ -69,7 +66,6 @@ export const PRODUCTS: Product[] = [
 		],
 		colors: ["Black", "Electric Blue", "Olive Green", "Silver Grey"],
 		size: "One size fits all",
-		material: "Chiffon",
 
 		images: [
 			"/images/products/qamar-1.webp",
@@ -99,8 +95,6 @@ export const PRODUCTS: Product[] = [
 		],
 		colors: ["Black"],
 		size: "One size fits all",
-		material: "Velvet",
-		length: "Approximately 54-56 inches",
 
 		images: [
 			"/images/products/velvet-kaftan.webp",
@@ -113,9 +107,9 @@ export const PRODUCTS: Product[] = [
 	},
 
 	{
-		id: "classic-abaya",
+		id: "simple-calligraphy-black-gold",
 		name: "Simple Calligraphy Black & Gold",
-		slug: "classic-abaya",
+		slug: "simple-calligraphy-black-gold",
 		collection: "eid",
 		description:
 			"A timeless Simple Calligraphy Black & Gold (Limited Edition) that never goes out of style. Simple, elegant, and versatile - perfect for any occasion.",
@@ -127,7 +121,6 @@ export const PRODUCTS: Product[] = [
 		],
 		colors: ["Black"],
 		size: "One size fits all",
-		material: "Premium crepe",
 
 		images: [
 			"/images/products/elegant-abaya-1.jpeg",
@@ -152,12 +145,13 @@ export const PRODUCTS: Product[] = [
 			"Elegant drape",
 			"Luxurious feel",
 		],
-		colors: ["Gold", "Silver", "Maroon"],
-		size: [54, 46],
-		material: "Silk",
-		length: "Approximately 58 inches",
+		colors: ["Black"],
+		size: [54, 56],
 
-		images: ["/images/products/pre-order-velvet.webp"],
+		images: [
+			"/images/products/velvet-eid-1.webp",
+			"/images/products/velvet-eid-2.webp",
+		],
 		availability: "pre-order",
 		price: 29.99,
 	},

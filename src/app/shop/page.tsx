@@ -33,11 +33,7 @@ function ShopPageContent() {
 			serialize: (value: string[]) => value.join(","),
 			default: [] as string[],
 		},
-		materials: {
-			parse: (value: string) => value.split(",").filter(Boolean),
-			serialize: (value: string[]) => value.join(","),
-			default: [] as string[],
-		},
+
 		availability: {
 			parse: (value: string) => value.split(",").filter(Boolean),
 			serialize: (value: string[]) => value.join(","),
@@ -50,7 +46,7 @@ function ShopPageContent() {
 		setFilters({
 			collections: [],
 			colors: [],
-			materials: [],
+
 			availability: [],
 		});
 		setPriceRange([0, 1000]);
@@ -72,13 +68,6 @@ function ShopPageContent() {
 		if (filters.colors && filters.colors.length > 0) {
 			filtered = filtered.filter((product) =>
 				product.colors.some((color) => filters.colors!.includes(color))
-			);
-		}
-
-		// Filter by materials
-		if (filters.materials && filters.materials.length > 0) {
-			filtered = filtered.filter((product) =>
-				filters.materials!.includes(product.material)
 			);
 		}
 
@@ -110,7 +99,7 @@ function ShopPageContent() {
 	}, [
 		filters.collections,
 		filters.colors,
-		filters.materials,
+
 		filters.availability,
 		priceRange,
 		selectedSort,

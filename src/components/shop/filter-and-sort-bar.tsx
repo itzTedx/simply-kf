@@ -30,14 +30,12 @@ interface FilterAndSortBarProps {
 		categories?: string[] | null;
 		collections?: string[] | null;
 		colors?: string[] | null;
-		materials?: string[] | null;
 		availability?: string[] | null;
 	};
 	setFilters: (filters: {
 		categories?: string[] | null;
 		collections?: string[] | null;
 		colors?: string[] | null;
-		materials?: string[] | null;
 		availability?: string[] | null;
 	}) => void;
 }

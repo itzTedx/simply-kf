@@ -67,7 +67,7 @@ export default async function ProductPage({ params }: PageProps) {
 						className="font-body text-foreground/55 text-xs tracking-wide transition-colors hover:text-foreground/90"
 						href="/shop"
 					>
-						← Back to {product.collection}
+						← Back to Shop
 					</Link>
 				</div>
 

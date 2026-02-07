@@ -14,7 +14,6 @@ import { PRODUCTS } from "@/constants/products";
 // Extract unique values from products
 const UNIQUE_COLLECTIONS = ["current", "upcoming", "all"];
 const UNIQUE_COLORS = Array.from(new Set(PRODUCTS.flatMap((p) => p.colors)));
-const UNIQUE_MATERIALS = Array.from(new Set(PRODUCTS.map((p) => p.material)));
 const UNIQUE_AVAILABILITY = Array.from(
 	new Set(PRODUCTS.map((p) => p.availability))
 );
@@ -25,13 +24,13 @@ interface FilterSectionProps {
 	filters: {
 		collections?: string[] | null;
 		colors?: string[] | null;
-		materials?: string[] | null;
+
 		availability?: string[] | null;
 	};
 	setFilters: (filters: {
 		collections?: string[] | null;
 		colors?: string[] | null;
-		materials?: string[] | null;
+
 		availability?: string[] | null;
 	}) => void;
 }
@@ -144,49 +143,6 @@ export function FilterSection({
 									<label
 										className="cursor-pointer font-body text-foreground/70 text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 										htmlFor={`color-${item}`}
-									>
-										{item}
-									</label>
-								</div>
-							))}
-						</div>
-					</AccordionContent>
-				</AccordionItem>
-
-				<AccordionItem
-					className="border-0 border-border/40 border-b"
-					value="material"
-				>
-					<AccordionTrigger className="py-4 font-body text-foreground/80 text-xs uppercase tracking-wide hover:no-underline">
-						Material
-					</AccordionTrigger>
-					<AccordionContent>
-						<div className="space-y-3 pt-2">
-							{UNIQUE_MATERIALS.map((item) => (
-								<div className="flex items-center space-x-3" key={item}>
-									<Checkbox
-										checked={filters.materials?.includes(item) || false}
-										className="border-border data-[state=checked]:border-primary data-[state=checked]:bg-primary"
-										id={`material-${item}`}
-										onCheckedChange={(checked) => {
-											if (checked) {
-												setFilters({
-													...filters,
-													materials: [...(filters.materials || []), item],
-												});
-											} else {
-												setFilters({
-													...filters,
-													materials: (filters.materials || []).filter(
-														(c) => c !== item
-													),
-												});
-											}
-										}}
-									/>
-									<label
-										className="cursor-pointer font-body text-foreground/70 text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-										htmlFor={`material-${item}`}
 									>
 										{item}
 									</label>
