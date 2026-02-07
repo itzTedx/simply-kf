@@ -6,7 +6,9 @@ import sharp from "sharp";
 import { fileURLToPath } from "url";
 
 import { Media } from "./collections/Media";
+import { Products } from "./collections/products";
 import { Users } from "./collections/Users";
+import { plugins } from "./lib/payload/plugins";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -18,7 +20,7 @@ export default buildConfig({
 			baseDir: path.resolve(dirname),
 		},
 	},
-	collections: [Users, Media],
+	collections: [Users, Media, Products],
 	editor: lexicalEditor(),
 	secret: process.env.PAYLOAD_SECRET || "",
 	typescript: {
@@ -30,5 +32,5 @@ export default buildConfig({
 		},
 	}),
 	sharp,
-	plugins: [],
+	plugins,
 });
