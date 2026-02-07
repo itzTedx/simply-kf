@@ -81,11 +81,20 @@ export const PRODUCTS: Product[] = [
 			},
 			{
 				color: "Golden Beige",
-				images: ["/images/products/sheikha-7.webp"],
+				images: [
+					"/images/products/sheikha-7.webp",
+					"/images/products/sheikha-beige-2.webp",
+					"/images/products/sheikha-beige-3.webp",
+				],
 			},
 			{
 				color: "Chocolate brown",
-				images: ["/images/products/sheikha-8.webp"],
+				images: [
+					"/images/products/sheikha-8.webp",
+					"/images/products/sheikha-brown-2.webp",
+					"/images/products/sheikha-brown-3.webp",
+					"/images/products/sheikha-brown-4.webp",
+				],
 			},
 		],
 		size: "One size fits all",
