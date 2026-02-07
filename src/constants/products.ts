@@ -126,15 +126,15 @@ export const PRODUCTS: Product[] = [
 				],
 			},
 			{
-				color: "Electric Blue",
+				color: " Olive Green",
 				images: ["/images/products/qamar-5.webp"],
 			},
 			{
-				color: "Olive Green",
+				color: "Silver Grey",
 				images: ["/images/products/qamar-6.webp"],
 			},
 			{
-				color: "Silver Grey",
+				color: "Electric Blue",
 				images: ["/images/products/qamar-7.webp"],
 			},
 		],
