@@ -1,10 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import Image from "next/image";
 
 import Autoplay from "embla-carousel-autoplay";
+import { parseAsString, useQueryStates } from "nuqs";
 import { toast } from "sonner";
 
 import {
@@ -51,19 +52,34 @@ export function ProductView({ product }: ProductViewProps) {
 	const addItem = useCartStore((state) => state.addItem);
 
 	const colors = getProductColors(product);
-	const [selectedColor, setSelectedColor] = useState<string>(colors[0]);
+	const [queryState, setQueryState] = useQueryStates({
+		color: parseAsString,
+		size: parseAsString,
+	});
+
+	const selectedColor = useMemo(
+		() =>
+			queryState.color && colors.includes(queryState.color)
+				? queryState.color
+				: colors[0],
+		[queryState.color, colors]
+	);
+	const selectedSize = useMemo(() => {
+		if (!Array.isArray(product.size)) return null;
+		if (queryState.size == null || queryState.size === "")
+			return product.size[0];
+		const parsed = Number(queryState.size);
+		return Number.isNaN(parsed) || !product.size.includes(parsed)
+			? product.size[0]
+			: parsed;
+	}, [product.size, queryState.size]);
+
 	const currentImages = getProductImagesForColor(product, selectedColor);
 	const [carouselApi, setCarouselApi] = useState<CarouselApi | undefined>();
 	const [thumbCarouselApi, setThumbCarouselApi] = useState<
 		CarouselApi | undefined
 	>();
 	const [selectedIndex, setSelectedIndex] = useState(0);
-	const initialSelectedSize = Array.isArray(product.size)
-		? product.size[0]
-		: null;
-	const [selectedSize, setSelectedSize] = useState<number | null>(
-		initialSelectedSize
-	);
 	const [isImageLoading, setIsImageLoading] = useState(true);
 	const [preOrderForm, setPreOrderForm] = useState({
 		name: "",
@@ -262,7 +278,7 @@ export function ProductView({ product }: ProductViewProps) {
 												: "border-border/80 text-foreground/70 hover:border-foreground/25 hover:text-foreground"
 										)}
 										key={color}
-										onClick={() => setSelectedColor(color)}
+										onClick={() => setQueryState({ color })}
 									>
 										{color}
 									</button>
@@ -295,7 +311,9 @@ export function ProductView({ product }: ProductViewProps) {
 													: "border-border/80 text-foreground/70 hover:border-foreground/25 hover:text-foreground"
 											)}
 											key={sizeOption}
-											onClick={() => setSelectedSize(sizeOption)}
+											onClick={() =>
+												setQueryState({ size: String(sizeOption) })
+											}
 											type="button"
 										>
 											{sizeOption}
