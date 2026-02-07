@@ -19,7 +19,7 @@ import {
 import { PRODUCTS } from "@/constants/products";
 
 function ShopPageContent() {
-	const [priceRange, setPriceRange] = useState([0, 1000]);
+	const [priceRange, setPriceRange] = useState([0, 100]);
 	const [selectedSort, setSelectedSort] = useState("newest");
 
 	const [filters, setFilters] = useQueryStates({
@@ -49,7 +49,7 @@ function ShopPageContent() {
 
 			availability: [],
 		});
-		setPriceRange([0, 1000]);
+		setPriceRange([0, 100]);
 		setSelectedSort("newest");
 	};
 
