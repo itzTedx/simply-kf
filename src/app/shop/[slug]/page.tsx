@@ -60,9 +60,9 @@ export default async function ProductPage({ params }: PageProps) {
 	).slice(0, 4);
 
 	return (
-		<main className="min-h-screen pt-20 pb-24 md:pb-28">
+		<main className="min-h-screen pt-16 pb-24 md:pt-20 md:pb-28">
 			<div className="container mx-auto max-w-6xl px-4 md:px-6">
-				<div className="mb-10 md:mb-14">
+				<div className="mb-4 sm:mb-10 md:mb-14">
 					<Link
 						className="font-body text-foreground/55 text-xs tracking-wide transition-colors hover:text-foreground/90"
 						href="/shop"

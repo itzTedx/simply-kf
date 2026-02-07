@@ -133,7 +133,7 @@ export function ProductView({ product }: ProductViewProps) {
 	const isPreOrder = product.availability === "pre-order";
 
 	return (
-		<div className="grid grid-cols-1 gap-x-10 gap-y-14 lg:grid-cols-2 lg:gap-x-20 lg:gap-y-16">
+		<div className="grid grid-cols-1 gap-x-10 gap-y-10 md:gap-y-14 lg:grid-cols-2 lg:gap-x-20 lg:gap-y-16">
 			<div className="flex flex-col gap-5">
 				<Carousel
 					className="w-full"
@@ -208,21 +208,11 @@ export function ProductView({ product }: ProductViewProps) {
 							</CarouselItem>
 						))}
 					</CarouselContent>
-					{/* <CarouselPrevious
-						className={cn(
-							"top-1/2 -left-2 size-7 -translate-y-1/2 rounded-full border-border/80 bg-background/90 opacity-80 shadow-sm transition-opacity hover:opacity-100 md:size-8"
-						)}
-					/>
-					<CarouselNext
-						className={cn(
-							"top-1/2 -right-2 size-7 -translate-y-1/2 rounded-full border-border/80 bg-background/90 opacity-80 shadow-sm transition-opacity hover:opacity-100 md:size-8"
-						)}
-					/> */}
 				</Carousel>
 			</div>
 
 			<div className="flex flex-col">
-				<div className="sticky top-28 space-y-8">
+				<div className="sticky top-28 flex flex-col gap-8">
 					<div className="space-y-5 border-border/40 border-b pb-8">
 						<h1 className="font-normal font-sans text-3xl text-foreground leading-tight md:text-4xl lg:text-[2.75rem]">
 							{product.name}
@@ -237,11 +227,11 @@ export function ProductView({ product }: ProductViewProps) {
 						</div>
 					</div>
 
-					<p className="font-body text-base text-foreground/75 leading-relaxed md:text-lg">
+					<p className="order-3 font-body text-base text-foreground/75 leading-relaxed md:text-lg lg:order-2">
 						{product.description}
 					</p>
 
-					<div className="space-y-6 pt-1">
+					<div className="order-2 space-y-6 pt-1 lg:order-3">
 						<div className="space-y-3">
 							<p className="font-body text-foreground/60 text-xs uppercase tracking-wider">
 								Colour: <span className="text-foreground">{selectedColor}</span>
@@ -300,7 +290,7 @@ export function ProductView({ product }: ProductViewProps) {
 						</div>
 					</div>
 
-					<div className="pt-4">
+					<div className="order-2 pt-4 lg:order-3">
 						{isPreOrder ? (
 							<Dialog onOpenChange={setPreOrderOpen} open={preOrderOpen}>
 								<DialogTrigger
@@ -402,7 +392,7 @@ export function ProductView({ product }: ProductViewProps) {
 						)}
 					</div>
 
-					<div className="pt-6">
+					<div className="order-4 pt-6">
 						<Accordion className="w-full border-0">
 							<AccordionItem
 								className="border-0 border-border/40 border-b"
