@@ -13,7 +13,7 @@ export function ProductCard({ product }: ProductCardProps) {
 			{getProductDefaultImage(product) && (
 				<div className="relative aspect-3/4 w-full overflow-hidden rounded-sm bg-muted/40">
 					{product.availability === "pre-order" && (
-						<div className="absolute top-2 right-2 z-10 rounded-md bg-background/30 px-2 py-1 text-foreground text-xs">
+						<div className="absolute top-2 right-2 z-10 rounded-md bg-background/30 px-2 py-1 text-foreground text-xs backdrop-blur-lg">
 							Pre-order
 						</div>
 					)}

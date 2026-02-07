@@ -157,30 +157,28 @@ export const PRODUCTS: Product[] = [
 	},
 
 	{
-		id: "velvet-kaftan",
+		id: "velvet-kaftan-eid",
 		name: "Velvet Kaftan",
-		slug: "velvet-kaftan",
-		collection: "abaya",
+		slug: "velvet-kaftan-eid",
+		collection: "eid",
 		description:
-			"Introducing our velvet kaftan - a timeless piece designed for elegance and comfort. Featuring a batwing silhouette with detailed front and back work, this kaftan is perfect for special occasions, Eid wear, or evening gatherings.",
+			"Luxurious velvet kaftan with intricate embroidery. Perfect for special occasions and formal events.",
 		features: [
-			"Batwing design",
-			"Front and back detailing",
-			"Soft and luxurious velvet fabric",
-			"Comfortable and flattering fit",
+			"Premium silk fabric",
+			"Hand embroidery",
+			"Elegant drape",
+			"Luxurious feel",
 		],
 		variants: [
 			{
 				color: "Black",
 				images: [
-					"/images/products/velvet-kaftan.webp",
-					"/images/products/velvet-2.webp",
-					"/images/products/velvet-3.webp",
-					"/images/products/velvet-4.webp",
+					"/images/products/velvet-eid-1.webp",
+					"/images/products/velvet-eid-2.webp",
 				],
 			},
 		],
-		size: "One size fits all",
+		size: [54, 56],
 		availability: "sales",
 		price: 34.99,
 	},
@@ -215,29 +213,31 @@ export const PRODUCTS: Product[] = [
 	},
 
 	{
-		id: "velvet-kaftan-eid",
+		id: "velvet-kaftan",
 		name: "Velvet Kaftan",
-		slug: "velvet-kaftan-eid",
-		collection: "eid",
+		slug: "velvet-kaftan",
+		collection: "abaya",
 		description:
-			"Luxurious velvet kaftan with intricate embroidery. Perfect for special occasions and formal events.",
+			"Introducing our velvet kaftan - a timeless piece designed for elegance and comfort. Featuring a batwing silhouette with detailed front and back work, this kaftan is perfect for special occasions, Eid wear, or evening gatherings.",
 		features: [
-			"Premium silk fabric",
-			"Hand embroidery",
-			"Elegant drape",
-			"Luxurious feel",
+			"Batwing design",
+			"Front and back detailing",
+			"Soft and luxurious velvet fabric",
+			"Comfortable and flattering fit",
 		],
 		variants: [
 			{
 				color: "Black",
 				images: [
-					"/images/products/velvet-eid-1.webp",
-					"/images/products/velvet-eid-2.webp",
+					"/images/products/velvet-kaftan.webp",
+					"/images/products/velvet-2.webp",
+					"/images/products/velvet-3.webp",
+					"/images/products/velvet-4.webp",
 				],
 			},
 		],
-		size: [54, 56],
+		size: "One size fits all",
 		availability: "pre-order",
-		price: 29.99,
+		price: 34.99,
 	},
 ];
