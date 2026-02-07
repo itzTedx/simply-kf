@@ -48,15 +48,15 @@ export function Hero() {
 						>
 							Explore
 						</Button>
-						<Button
+						{/* <Button
 							className="h-12 min-h-12 w-full text-white md:h-11 md:w-auto md:min-w-[140px]"
 							nativeButton={false}
-							render={<Link href="/collections" />}
+							render={<Link href="/shop?availability=sales" />}
 							size="lg"
 							variant="outline"
 						>
 							Discover
-						</Button>
+						</Button> */}
 					</div>
 				</div>
 			</div>
