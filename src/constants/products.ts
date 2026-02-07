@@ -182,7 +182,7 @@ export const PRODUCTS: Product[] = [
 		],
 		size: "One size fits all",
 		availability: "sales",
-		price: 29.99,
+		price: 34.99,
 	},
 
 	{
