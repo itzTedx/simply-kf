@@ -126,16 +126,29 @@ export const PRODUCTS: Product[] = [
 				],
 			},
 			{
-				color: " Olive Green",
-				images: ["/images/products/qamar-5.webp"],
+				color: "Olive Green",
+				images: [
+					"/images/products/qamar-5.webp",
+					"/images/products/qamar-green-2.webp",
+					"/images/products/qamar-green-3.webp",
+					"/images/products/qamar-green-4.webp",
+				],
 			},
 			{
 				color: "Silver Grey",
-				images: ["/images/products/qamar-6.webp"],
+				images: [
+					"/images/products/qamar-6.webp",
+					"/images/products/qamar-silver-2.webp",
+					"/images/products/qamar-silver-3.webp",
+				],
 			},
 			{
 				color: "Electric Blue",
-				images: ["/images/products/qamar-7.webp"],
+				images: [
+					"/images/products/qamar-7.webp",
+					"/images/products/qamar-blue-2.webp",
+					"/images/products/qamar-blue-3.webp",
+				],
 			},
 		],
 		size: "One size fits all",
