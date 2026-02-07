@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import Image from "next/image";
 
+import Autoplay from "embla-carousel-autoplay";
 import { toast } from "sonner";
 
 import {
@@ -13,6 +14,14 @@ import {
 	AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import {
+	Carousel,
+	type CarouselApi,
+	CarouselContent,
+	CarouselItem,
+	CarouselNext,
+	CarouselPrevious,
+} from "@/components/ui/carousel";
 import {
 	Dialog,
 	DialogContent,
@@ -38,7 +47,11 @@ export function ProductView({ product }: ProductViewProps) {
 	const addItem = useCartStore((state) => state.addItem);
 
 	const [selectedColor, setSelectedColor] = useState<string>(product.colors[0]);
-	const [mainImage, setMainImage] = useState<string>(product.images[0]);
+	const [carouselApi, setCarouselApi] = useState<CarouselApi | undefined>();
+	const [thumbCarouselApi, setThumbCarouselApi] = useState<
+		CarouselApi | undefined
+	>();
+	const [selectedIndex, setSelectedIndex] = useState(0);
 	const initialSelectedSize = Array.isArray(product.size)
 		? product.size[0]
 		: null;
@@ -53,6 +66,31 @@ export function ProductView({ product }: ProductViewProps) {
 	});
 	const [isPreOrderSubmitting, setIsPreOrderSubmitting] = useState(false);
 	const [preOrderOpen, setPreOrderOpen] = useState(false);
+
+	const onSelect = useCallback((api: CarouselApi) => {
+		if (!api) return;
+		setSelectedIndex(api.selectedScrollSnap());
+	}, []);
+
+	useEffect(() => {
+		if (!carouselApi) return;
+		onSelect(carouselApi);
+		carouselApi.on("select", onSelect);
+		return () => {
+			carouselApi.off("select", onSelect);
+		};
+	}, [carouselApi, onSelect]);
+
+	useEffect(() => {
+		thumbCarouselApi?.scrollTo(selectedIndex);
+	}, [thumbCarouselApi, selectedIndex]);
+
+	const scrollToSlide = useCallback(
+		(index: number) => {
+			carouselApi?.scrollTo(index);
+		},
+		[carouselApi]
+	);
 
 	const handleAddToCart = () => {
 		const resolvedSize = Array.isArray(product.size)
@@ -97,45 +135,90 @@ export function ProductView({ product }: ProductViewProps) {
 	return (
 		<div className="grid grid-cols-1 gap-x-10 gap-y-14 lg:grid-cols-2 lg:gap-x-20 lg:gap-y-16">
 			<div className="flex flex-col gap-5">
-				<div className="relative aspect-3/4 w-full overflow-hidden rounded-sm bg-muted/40">
-					{isImageLoading && (
-						<Skeleton className="absolute inset-0 size-full" />
-					)}
-					<Image
-						alt={product.name}
+				<Carousel
+					className="w-full"
+					opts={{ align: "start", loop: true }}
+					plugins={[Autoplay({ delay: 5000 })]}
+					setApi={setCarouselApi}
+				>
+					<CarouselContent>
+						{product.images.map((img, idx) => (
+							<CarouselItem key={`${product.name}-${idx}`}>
+								<div className="relative aspect-3/4 w-full overflow-hidden rounded-sm bg-muted/40">
+									{idx === 0 && isImageLoading && (
+										<Skeleton className="absolute inset-0 size-full" />
+									)}
+									<Image
+										alt={`${product.name} view ${idx + 1}`}
+										className={cn(
+											"object-cover transition-opacity duration-500",
+											idx === 0 && isImageLoading ? "opacity-0" : "opacity-100"
+										)}
+										fill
+										onLoad={() => idx === 0 && setIsImageLoading(false)}
+										priority={idx === 0}
+										sizes="(max-width: 768px) 100vw, 50vw"
+										src={img}
+									/>
+								</div>
+							</CarouselItem>
+						))}
+					</CarouselContent>
+					<CarouselPrevious
 						className={cn(
-							"object-cover transition-opacity duration-500",
-							isImageLoading ? "opacity-0" : "opacity-100"
+							"top-1/2 -left-4 size-9 rounded-full border-border/80 bg-background/90 shadow-md transition-colors hover:bg-background md:-left-6 md:size-10"
 						)}
-						fill
-						onLoad={() => setIsImageLoading(false)}
-						priority
-						sizes="(max-width: 768px) 100vw, 50vw"
-						src={mainImage}
 					/>
-				</div>
-				<div className="grid grid-cols-4 gap-3">
-					{product.images.map((img, idx) => (
-						<button
-							className={cn(
-								"relative aspect-3/4 w-full overflow-hidden rounded-sm bg-muted/40 transition-all duration-200",
-								mainImage === img
-									? "ring-1 ring-foreground/30"
-									: "opacity-60 hover:opacity-90"
-							)}
-							key={`${product.name}-${idx}`}
-							onClick={() => setMainImage(img)}
-						>
-							<Image
-								alt={`${product.name} view ${idx + 1}`}
-								className="object-cover"
-								fill
-								sizes="(max-width: 768px) 25vw, 12vw"
-								src={img}
-							/>
-						</button>
-					))}
-				</div>
+					<CarouselNext
+						className={cn(
+							"top-1/2 -right-4 size-9 rounded-full border-border/80 bg-background/90 shadow-md transition-colors hover:bg-background md:-right-6 md:size-10"
+						)}
+					/>
+				</Carousel>
+				<Carousel
+					className="w-full"
+					opts={{ align: "start", containScroll: "trimSnaps" }}
+					setApi={setThumbCarouselApi}
+				>
+					<CarouselContent className="-ml-2">
+						{product.images.map((img, idx) => (
+							<CarouselItem
+								className="basis-1/4 pl-2 sm:basis-1/5"
+								key={`${product.name}-thumb-${idx}`}
+							>
+								<button
+									aria-label={`View image ${idx + 1}`}
+									className={cn(
+										"relative aspect-3/4 w-full overflow-hidden rounded-sm bg-muted/40 transition-all duration-200",
+										selectedIndex === idx
+											? "ring-1 ring-foreground/30"
+											: "opacity-60 hover:opacity-90"
+									)}
+									onClick={() => scrollToSlide(idx)}
+									type="button"
+								>
+									<Image
+										alt={`${product.name} thumbnail ${idx + 1}`}
+										className="object-cover"
+										fill
+										sizes="(max-width: 640px) 25vw, 20vw"
+										src={img}
+									/>
+								</button>
+							</CarouselItem>
+						))}
+					</CarouselContent>
+					{/* <CarouselPrevious
+						className={cn(
+							"top-1/2 -left-2 size-7 -translate-y-1/2 rounded-full border-border/80 bg-background/90 opacity-80 shadow-sm transition-opacity hover:opacity-100 md:size-8"
+						)}
+					/>
+					<CarouselNext
+						className={cn(
+							"top-1/2 -right-2 size-7 -translate-y-1/2 rounded-full border-border/80 bg-background/90 opacity-80 shadow-sm transition-opacity hover:opacity-100 md:size-8"
+						)}
+					/> */}
+				</Carousel>
 			</div>
 
 			<div className="flex flex-col">

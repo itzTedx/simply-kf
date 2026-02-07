@@ -60,7 +60,7 @@ export default async function ProductPage({ params }: PageProps) {
 	).slice(0, 4);
 
 	return (
-		<main className="min-h-screen pt-28 pb-24 md:pt-32 md:pb-28">
+		<main className="min-h-screen pt-20 pb-24 md:pb-28">
 			<div className="container mx-auto max-w-6xl px-4 md:px-6">
 				<div className="mb-10 md:mb-14">
 					<Link

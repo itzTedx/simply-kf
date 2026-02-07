@@ -41,10 +41,14 @@ export const PRODUCTS: Product[] = [
 		material: "Premium fabric with sequin work",
 
 		images: [
-			"/images/products/sheikha-abaya-1.webp",
-			"/images/products/sheikha-abaya-2.webp",
-			"/images/products/sheikha-abaya-3.webp",
-			"/images/products/sheikha-abaya-4.webp",
+			"/images/products/sheikha-1.webp",
+			"/images/products/sheikha-2.webp",
+			"/images/products/sheikha-3.webp",
+			"/images/products/sheikha-4.webp",
+			"/images/products/sheikha-5.webp",
+			"/images/products/sheikha-6.webp",
+			"/images/products/sheikha-7.webp",
+			"/images/products/sheikha-8.webp",
 		],
 		availability: "in-stock",
 		price: 24.99,
