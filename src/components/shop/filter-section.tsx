@@ -9,10 +9,12 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 
-import { PRODUCTS } from "@/constants/products";
+import { getProductColors, PRODUCTS } from "@/constants/products";
 
 // Extract unique values from products
-const UNIQUE_COLORS = Array.from(new Set(PRODUCTS.flatMap((p) => p.colors)));
+const UNIQUE_COLORS = Array.from(
+	new Set(PRODUCTS.flatMap((p) => getProductColors(p)))
+);
 const UNIQUE_AVAILABILITY = Array.from(
 	new Set(PRODUCTS.map((p) => p.availability))
 );

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { Product } from "@/constants/products";
+import { getProductDefaultImage, type Product } from "@/constants/products";
 
 interface ProductCardProps {
 	product: Product;
@@ -10,7 +10,7 @@ interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
 	return (
 		<Link className="group block space-y-4" href={`/shop/${product.slug}`}>
-			{product.images && (
+			{getProductDefaultImage(product) && (
 				<div className="relative aspect-3/4 w-full overflow-hidden rounded-sm bg-muted/40">
 					{product.availability === "pre-order" && (
 						<div className="absolute top-2 right-2 z-10 rounded-md bg-background/30 px-2 py-1 text-foreground text-xs">
@@ -22,7 +22,7 @@ export function ProductCard({ product }: ProductCardProps) {
 						className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
 						fill
 						sizes="(max-width: 768px) 50vw, 33vw"
-						src={product.images[0]}
+						src={getProductDefaultImage(product)}
 					/>
 				</div>
 			)}

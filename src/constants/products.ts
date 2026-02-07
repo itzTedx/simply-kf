@@ -1,3 +1,8 @@
+export type ColorVariant = {
+	color: string;
+	images: string[];
+};
+
 export type Product = {
 	id: string;
 	name: string;
@@ -5,13 +10,32 @@ export type Product = {
 	collection: "abaya" | "eid" | "all";
 	description: string;
 	features: string[];
-	colors: string[];
+	variants: ColorVariant[];
 	size: string | number[];
-
-	images: string[];
 	availability: "sales" | "pre-order";
 	price: number;
 };
+
+/** Get colors list from product variants */
+export function getProductColors(product: Product): string[] {
+	return product.variants.map((v) => v.color);
+}
+
+/** Get images for a color; falls back to first variant if color not found */
+export function getProductImagesForColor(
+	product: Product,
+	color: string
+): string[] {
+	const variant = product.variants.find(
+		(v) => v.color.toLowerCase() === color.toLowerCase()
+	);
+	return variant?.images ?? product.variants[0]?.images ?? [];
+}
+
+/** First image for a product (e.g. for cards, OG) – uses first variant */
+export function getProductDefaultImage(product: Product): string {
+	return product.variants[0]?.images[0] ?? "";
+}
 
 export const PRODUCTS: Product[] = [
 	{
@@ -28,25 +52,34 @@ export const PRODUCTS: Product[] = [
 			"Comes with a versatile white inner that can be paired with other outfits",
 			"Available in 5 colours with matching sequins",
 		],
-		colors: [
-			"Maroon",
-			"Navy Blue",
-			"Olive Green",
-			"Golden Beige",
-			"Chocolate brown",
+		variants: [
+			{
+				color: "Maroon",
+				images: [
+					"/images/products/sheikha-1.webp",
+					"/images/products/sheikha-2.webp",
+					"/images/products/sheikha-3.webp",
+					"/images/products/sheikha-4.webp",
+				],
+			},
+			{
+				color: "Navy Blue",
+				images: ["/images/products/sheikha-5.webp"],
+			},
+			{
+				color: "Olive Green",
+				images: ["/images/products/sheikha-6.webp"],
+			},
+			{
+				color: "Golden Beige",
+				images: ["/images/products/sheikha-7.webp"],
+			},
+			{
+				color: "Chocolate brown",
+				images: ["/images/products/sheikha-8.webp"],
+			},
 		],
 		size: "One size fits all",
-
-		images: [
-			"/images/products/sheikha-1.webp",
-			"/images/products/sheikha-2.webp",
-			"/images/products/sheikha-3.webp",
-			"/images/products/sheikha-4.webp",
-			"/images/products/sheikha-5.webp",
-			"/images/products/sheikha-6.webp",
-			"/images/products/sheikha-7.webp",
-			"/images/products/sheikha-8.webp",
-		],
 		availability: "sales",
 		price: 24.99,
 	},
@@ -64,18 +97,30 @@ export const PRODUCTS: Product[] = [
 			"Tieable long sleeves for adjustable fit",
 			"Elegant and versatile silhouette",
 		],
-		colors: ["Black", "Electric Blue", "Olive Green", "Silver Grey"],
-		size: "One size fits all",
-
-		images: [
-			"/images/products/qamar-1.webp",
-			"/images/products/qamar-2.webp",
-			"/images/products/qamar-3.webp",
-			"/images/products/qamar-4.webp",
-			"/images/products/qamar-5.webp",
-			"/images/products/qamar-6.webp",
-			"/images/products/qamar-7.webp",
+		variants: [
+			{
+				color: "Black",
+				images: [
+					"/images/products/qamar-1.webp",
+					"/images/products/qamar-2.webp",
+					"/images/products/qamar-3.webp",
+					"/images/products/qamar-4.webp",
+				],
+			},
+			{
+				color: "Electric Blue",
+				images: ["/images/products/qamar-5.webp"],
+			},
+			{
+				color: "Olive Green",
+				images: ["/images/products/qamar-6.webp"],
+			},
+			{
+				color: "Silver Grey",
+				images: ["/images/products/qamar-7.webp"],
+			},
 		],
+		size: "One size fits all",
 		availability: "sales",
 		price: 24.99,
 	},
@@ -93,15 +138,18 @@ export const PRODUCTS: Product[] = [
 			"Soft and luxurious velvet fabric",
 			"Comfortable and flattering fit",
 		],
-		colors: ["Black"],
-		size: "One size fits all",
-
-		images: [
-			"/images/products/velvet-kaftan.webp",
-			"/images/products/velvet-2.webp",
-			"/images/products/velvet-3.webp",
-			"/images/products/velvet-4.webp",
+		variants: [
+			{
+				color: "Black",
+				images: [
+					"/images/products/velvet-kaftan.webp",
+					"/images/products/velvet-2.webp",
+					"/images/products/velvet-3.webp",
+					"/images/products/velvet-4.webp",
+				],
+			},
 		],
+		size: "One size fits all",
 		availability: "sales",
 		price: 29.99,
 	},
@@ -119,15 +167,18 @@ export const PRODUCTS: Product[] = [
 			"Versatile styling",
 			"Comfortable fit",
 		],
-		colors: ["Black"],
-		size: "One size fits all",
-
-		images: [
-			"/images/products/elegant-abaya-1.jpeg",
-			"/images/products/elegant-abaya-2.jpeg",
-			"/images/products/elegant-abaya-3.jpeg",
-			"/images/products/elegant-abaya-4.jpeg",
+		variants: [
+			{
+				color: "Black",
+				images: [
+					"/images/products/elegant-abaya-1.jpeg",
+					"/images/products/elegant-abaya-2.jpeg",
+					"/images/products/elegant-abaya-3.jpeg",
+					"/images/products/elegant-abaya-4.jpeg",
+				],
+			},
 		],
+		size: "One size fits all",
 		availability: "pre-order",
 		price: 24.99,
 	},
@@ -145,13 +196,16 @@ export const PRODUCTS: Product[] = [
 			"Elegant drape",
 			"Luxurious feel",
 		],
-		colors: ["Black"],
-		size: [54, 56],
-
-		images: [
-			"/images/products/velvet-eid-1.webp",
-			"/images/products/velvet-eid-2.webp",
+		variants: [
+			{
+				color: "Black",
+				images: [
+					"/images/products/velvet-eid-1.webp",
+					"/images/products/velvet-eid-2.webp",
+				],
+			},
 		],
+		size: [54, 56],
 		availability: "pre-order",
 		price: 29.99,
 	},

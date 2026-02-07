@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { PRODUCTS } from "@/constants/products";
+import { getProductDefaultImage, PRODUCTS } from "@/constants/products";
 
 import { ProductView } from "./product-view";
 
@@ -25,9 +25,10 @@ export async function generateMetadata({
 	if (!product) return { title: "Product Not Found" };
 
 	const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://simplykf.com";
-	const imageUrl = product.images[0]?.startsWith("http")
-		? product.images[0]
-		: `${siteUrl}${product.images[0]}`;
+	const defaultImage = getProductDefaultImage(product);
+	const imageUrl = defaultImage?.startsWith("http")
+		? defaultImage
+		: `${siteUrl}${defaultImage}`;
 
 	return {
 		title: product.name,
@@ -35,7 +36,7 @@ export async function generateMetadata({
 		openGraph: {
 			title: `${product.name} | Simply KF`,
 			description: product.description,
-			images: [{ url: imageUrl, alt: product.name }],
+			images: defaultImage ? [{ url: imageUrl, alt: product.name }] : [],
 			type: "website",
 		},
 		twitter: {
@@ -115,7 +116,7 @@ export default async function ProductPage({ params }: PageProps) {
 											className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
 											fill
 											sizes="(max-width: 768px) 50vw, 25vw"
-											src={item.images[0]}
+											src={getProductDefaultImage(item)}
 										/>
 									</div>
 									<div className="space-y-1 text-center md:text-left">

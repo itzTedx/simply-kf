@@ -35,7 +35,11 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 
-import { Product } from "@/constants/products";
+import {
+	getProductColors,
+	getProductImagesForColor,
+	type Product,
+} from "@/constants/products";
 import { cn } from "@/lib/utils";
 import { useCartStore } from "@/stores/cart-store";
 
@@ -46,7 +50,9 @@ interface ProductViewProps {
 export function ProductView({ product }: ProductViewProps) {
 	const addItem = useCartStore((state) => state.addItem);
 
-	const [selectedColor, setSelectedColor] = useState<string>(product.colors[0]);
+	const colors = getProductColors(product);
+	const [selectedColor, setSelectedColor] = useState<string>(colors[0]);
+	const currentImages = getProductImagesForColor(product, selectedColor);
 	const [carouselApi, setCarouselApi] = useState<CarouselApi | undefined>();
 	const [thumbCarouselApi, setThumbCarouselApi] = useState<
 		CarouselApi | undefined
@@ -85,6 +91,13 @@ export function ProductView({ product }: ProductViewProps) {
 		thumbCarouselApi?.scrollTo(selectedIndex);
 	}, [thumbCarouselApi, selectedIndex]);
 
+	// When color changes, reset carousel to first slide and show new variant images
+	useEffect(() => {
+		carouselApi?.scrollTo(0);
+		setSelectedIndex(0);
+		thumbCarouselApi?.scrollTo(0);
+	}, [selectedColor, carouselApi, thumbCarouselApi]);
+
 	const scrollToSlide = useCallback(
 		(index: number) => {
 			carouselApi?.scrollTo(index);
@@ -104,7 +117,8 @@ export function ProductView({ product }: ProductViewProps) {
 			name: product.name,
 			price: product.price,
 			quantity: 1,
-			image: product.images[0],
+			image:
+				currentImages[0] ?? getProductImagesForColor(product, colors[0])[0],
 			color: selectedColor,
 			size: resolvedSize,
 		});
@@ -137,12 +151,13 @@ export function ProductView({ product }: ProductViewProps) {
 			<div className="flex flex-col gap-5">
 				<Carousel
 					className="w-full"
+					key={selectedColor}
 					opts={{ align: "start", loop: true }}
 					plugins={[Autoplay({ delay: 5000 })]}
 					setApi={setCarouselApi}
 				>
 					<CarouselContent>
-						{product.images.map((img, idx) => (
+						{currentImages.map((img, idx) => (
 							<CarouselItem key={`${product.name}-${idx}`}>
 								<div className="relative aspect-3/4 w-full overflow-hidden rounded-sm bg-muted/40">
 									{idx === 0 && isImageLoading && (
@@ -177,11 +192,12 @@ export function ProductView({ product }: ProductViewProps) {
 				</Carousel>
 				<Carousel
 					className="w-full"
+					key={`thumbs-${selectedColor}`}
 					opts={{ align: "start", containScroll: "trimSnaps" }}
 					setApi={setThumbCarouselApi}
 				>
 					<CarouselContent className="-ml-2">
-						{product.images.map((img, idx) => (
+						{currentImages.map((img, idx) => (
 							<CarouselItem
 								className="basis-1/4 pl-2 sm:basis-1/5"
 								key={`${product.name}-thumb-${idx}`}
@@ -237,7 +253,7 @@ export function ProductView({ product }: ProductViewProps) {
 								Colour: <span className="text-foreground">{selectedColor}</span>
 							</p>
 							<div className="flex flex-wrap gap-2">
-								{product.colors.map((color) => (
+								{colors.map((color) => (
 									<button
 										className={cn(
 											"h-8 rounded-full border px-4 font-body text-xs transition-colors duration-200",

@@ -18,6 +18,8 @@ interface CartItem {
 	price: number;
 	quantity: number;
 	image?: string;
+	color?: string;
+	size?: string;
 }
 
 interface CheckoutProps {
@@ -130,10 +132,21 @@ export default function Checkout({
 					<div className="space-y-4">
 						<h3 className="font-semibold text-lg">Order Summary</h3>
 						{items.map((item) => (
-							<div className="flex items-center justify-between" key={item.id}>
+							<div
+								className="flex items-center justify-between"
+								key={`${item.id}-${item.color ?? ""}-${item.size ?? ""}`}
+							>
 								<div>
 									<div className="font-medium">{item.name}</div>
 									<div className="text-gray-600 text-sm">
+										{item.color && <span>{item.color}</span>}
+										{item.size && (
+											<span>
+												{item.color ? ", " : ""}
+												{item.size}
+											</span>
+										)}
+										{(item.color || item.size) && " · "}
 										Qty: {item.quantity}
 									</div>
 								</div>

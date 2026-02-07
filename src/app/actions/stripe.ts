@@ -10,6 +10,8 @@ interface CheckoutItem {
 	name: string;
 	quantity: number;
 	image?: string;
+	color?: string;
+	size?: string;
 }
 
 export async function createPaymentIntent(
@@ -31,11 +33,38 @@ export async function createPaymentIntent(
 		const amountInPence = Math.round(amount * CENTS_PER_POUND);
 
 		const itemsSummary = items
-			.map((item) => `${item.name} x${item.quantity}`)
+			.map((item) => {
+				const variant = [item.color, item.size].filter(Boolean).join(", ");
+				const base = `${item.name}${variant ? ` (${variant})` : ""} x${item.quantity}`;
+				return base;
+			})
 			.join(", ")
 			.slice(0, 500);
 
 		const firstItemWithImage = items.find((item) => item.image);
+
+		const itemDetails = JSON.stringify(
+			items.map(({ id, name, quantity, color, size }) => ({
+				id,
+				name,
+				quantity,
+				color: color ?? null,
+				size: size ?? null,
+			}))
+		);
+
+		const metadata: Record<string, string> = {
+			order_reference: `order_${Date.now()}`,
+			items: itemsSummary,
+			...(firstItemWithImage?.image && {
+				first_item_image: firstItemWithImage.image,
+			}),
+		};
+
+		// Stripe metadata values max 500 chars; include item_details (color/size) when possible
+		if (itemDetails.length <= 500) {
+			metadata.item_details = itemDetails;
+		}
 
 		const paymentIntent = await stripe.paymentIntents.create({
 			amount: amountInPence,
@@ -44,13 +73,7 @@ export async function createPaymentIntent(
 				enabled: true,
 			},
 			description: itemsSummary || undefined,
-			metadata: {
-				order_reference: `order_${Date.now()}`,
-				items: itemsSummary,
-				...(firstItemWithImage?.image && {
-					first_item_image: firstItemWithImage.image,
-				}),
-			},
+			metadata,
 		});
 
 		return { clientSecret: paymentIntent.client_secret, error: null };

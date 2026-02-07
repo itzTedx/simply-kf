@@ -16,7 +16,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 
-import { PRODUCTS } from "@/constants/products";
+import { getProductColors, PRODUCTS } from "@/constants/products";
 
 function ShopPageContent() {
 	const [priceRange, setPriceRange] = useState([0, 100]);
@@ -54,7 +54,9 @@ function ShopPageContent() {
 		// Filter by colors
 		if (filters.colors && filters.colors.length > 0) {
 			filtered = filtered.filter((product) =>
-				product.colors.some((color) => filters.colors!.includes(color))
+				getProductColors(product).some((color) =>
+					filters.colors!.includes(color)
+				)
 			);
 		}
 
