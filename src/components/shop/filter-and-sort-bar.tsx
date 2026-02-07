@@ -86,13 +86,13 @@ export function FilterAndSortBar({
 				</SheetContent>
 			</Sheet>
 
-			<div className="w-[160px]">
+			<div className="w-[280px]">
 				<Select
 					onValueChange={(value) => setSelectedSort(value || "newest")}
 					value={selectedSort}
 				>
 					<SelectTrigger className="h-9 border-border/70 font-body text-foreground/80 text-xs tracking-wide">
-						<SelectValue placeholder="Sort by" />
+						<SelectValue className="capitalize" placeholder="Sort by" />
 					</SelectTrigger>
 					<SelectContent>
 						<SelectItem value="newest">Newest</SelectItem>

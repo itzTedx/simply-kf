@@ -1,15 +1,13 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import { PRODUCTS } from "@/constants/products";
 
-const FEATURED_COUNT = 6;
+import { ProductCard } from "../shop/product-card";
+
+// const FEATURED_COUNT = 6;
 
 export function FeaturedProducts() {
-	const featured = PRODUCTS.filter((p) => p.availability === "in-stock").slice(
-		0,
-		FEATURED_COUNT
-	);
+	const featured = PRODUCTS;
 
 	if (featured.length === 0) return null;
 
@@ -30,32 +28,7 @@ export function FeaturedProducts() {
 
 				<div className="grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-8 md:grid-cols-3 md:gap-y-16">
 					{featured.map((product) => (
-						<Link
-							className="group block"
-							href={`/shop/${product.slug}`}
-							key={product.id}
-						>
-							<div className="relative aspect-3/4 w-full overflow-hidden rounded-md bg-muted/40 active:opacity-95 md:rounded-sm">
-								<Image
-									alt={product.name}
-									className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
-									fill
-									sizes="(max-width: 768px) 50vw, 33vw"
-									src={product.images[0]}
-								/>
-							</div>
-							<div className="mt-3 space-y-0.5 text-center md:mt-5 md:space-y-1 md:text-left">
-								<h3 className="font-display font-normal text-[0.8125rem] text-foreground md:text-[0.9375rem]">
-									{product.name}
-								</h3>
-								<p className="font-body text-foreground/50 text-xs">
-									Designed in Dubai
-								</p>
-								<p className="font-body text-foreground text-sm">
-									£{product.price}
-								</p>
-							</div>
-						</Link>
+						<ProductCard key={product.id} product={product} />
 					))}
 				</div>
 
