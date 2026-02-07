@@ -83,17 +83,17 @@ export const PRODUCTS: Product[] = [
 		slug: "velvet-kaftan",
 		collection: "abaya",
 		description:
-			"Introducing our velvet kaftan — a timeless piece designed for elegance and comfort. Featuring a batwing silhouette with detailed front and back work, this kaftan is perfect for special occasions, Eid wear, or evening gatherings.",
+			"Introducing our velvet kaftan - a timeless piece designed for elegance and comfort. Featuring a batwing silhouette with detailed front and back work, this kaftan is perfect for special occasions, Eid wear, or evening gatherings.",
 		features: [
 			"Batwing design",
 			"Front and back detailing",
 			"Soft and luxurious velvet fabric",
 			"Comfortable and flattering fit",
 		],
-		colors: ["Black", "Deep Maroon", "Emerald Green"],
+		colors: ["Black"],
 		size: "One size fits all",
 		material: "Velvet",
-		length: "Approximately 54–56 inches",
+		length: "Approximately 54-56 inches",
 
 		images: ["/images/products/velvet-kaftan.webp"],
 		availability: "in-stock",
@@ -128,9 +128,9 @@ export const PRODUCTS: Product[] = [
 	},
 
 	{
-		id: "silk-kaftan",
+		id: "velvet-kaftan-eid",
 		name: "Velvet Kaftan",
-		slug: "silk-kaftan",
+		slug: "velvet-kaftan-eid",
 		collection: "eid",
 		description:
 			"Luxurious velvet kaftan with intricate embroidery. Perfect for special occasions and formal events.",
