@@ -26,7 +26,7 @@ export default function PaymentSuccessPage() {
 
 	return (
 		<main className="container mx-auto flex min-h-[60vh] items-center justify-center px-4 py-20 sm:px-6 md:py-28">
-			<div className="w-full max-w-md rounded-[var(--radius)] bg-card/50 px-8 py-12 text-center">
+			<div className="w-full max-w-md rounded-(--radius) bg-card/50 px-8 py-12 text-center">
 				<div className="mx-auto mb-6 flex size-14 items-center justify-center rounded-full bg-foreground/10">
 					<RiCheckLine className="size-7 text-foreground" />
 				</div>
@@ -38,7 +38,7 @@ export default function PaymentSuccessPage() {
 					shortly.
 				</p>
 				<Link href="/shop">
-					<Button className="w-full rounded-[var(--radius)]" size="lg">
+					<Button className="w-full rounded-(--radius)" size="lg">
 						Continue shopping
 					</Button>
 				</Link>

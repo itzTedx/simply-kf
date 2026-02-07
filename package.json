@@ -7,7 +7,12 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "biome check --write",
-		"format": "biome format --write"
+		"format": "biome format --write",
+		"db:generate": "drizzle-kit generate",
+		"db:migrate": "drizzle-kit migrate",
+		"db:studio": "drizzle-kit studio",
+		"generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
+		"generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types"
 	},
 	"dependencies": {
 		"@base-ui/react": "^1.1.0",
@@ -20,6 +25,7 @@
 		"@stripe/stripe-js": "^4.0.0",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
+		"cross-env": "^10.1.0",
 		"embla-carousel-autoplay": "^8.6.0",
 		"embla-carousel-react": "^8.6.0",
 		"embla-carousel-wheel-gestures": "^8.1.0",
