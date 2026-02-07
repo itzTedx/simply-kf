@@ -49,8 +49,8 @@ export function FilterSection({
 				</h3>
 				<Slider
 					className="py-4"
-					defaultValue={[0, 1000]}
-					max={1000}
+					defaultValue={[0, 100]}
+					max={100}
 					onValueChange={(value) => setPriceRange(value as number[])}
 					step={10}
 					value={priceRange}

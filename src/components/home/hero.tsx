@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 
@@ -62,24 +60,6 @@ export function Hero() {
 					</div>
 				</div>
 			</div>
-			{/* <Carousel
-				className="flex h-svh w-full"
-				opts={{
-					align: "start",
-				}}
-				plugins={[
-					Autoplay({
-						delay: 3000,
-					}),
-					WheelGesturesPlugin(),
-				]}
-			>
-				<CarouselContent className="h-full">
-					<CarouselItem className="relative h-full">
-						
-					</CarouselItem>
-				</CarouselContent>
-			</Carousel> */}
 		</section>
 	);
 }

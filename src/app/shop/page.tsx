@@ -106,7 +106,7 @@ function ShopPageContent() {
 	]);
 
 	return (
-		<main className="min-h-screen">
+		<main className="min-h-screen overflow-hidden">
 			{/* 1. Page Intro */}
 			<ShopHeader />
 
