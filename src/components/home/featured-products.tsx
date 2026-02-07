@@ -14,7 +14,7 @@ export function FeaturedProducts() {
 	if (featured.length === 0) return null;
 
 	return (
-		<section className="bg-background px-4 py-16 md:px-6 md:py-32">
+		<section className="bg-background px-4 py-16 md:px-6 md:py-24">
 			<div className="container mx-auto max-w-6xl">
 				<div className="mb-10 text-center md:mb-20">
 					<p className="font-body text-[0.6875rem] text-foreground/50 uppercase tracking-[0.2em]">

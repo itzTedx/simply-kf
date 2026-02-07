@@ -9,7 +9,7 @@ export type Product = {
 	size: string | number[];
 	material: string;
 	length?: string;
-	includes: string[];
+
 	images: string[];
 	availability: "in-stock" | "pre-order";
 	price: number;
@@ -30,10 +30,16 @@ export const PRODUCTS: Product[] = [
 			"Comes with a versatile white inner that can be paired with other outfits",
 			"Available in 5 colours with matching sequins",
 		],
-		colors: ["Cream", "Beauty Hold", "Black", "Grey", "Dusty Rose"],
+		colors: [
+			"Maroon",
+			"Navy Blue",
+			"Olive Green",
+			"Golden Beige",
+			"Chocolate brown",
+		],
 		size: "One size fits all",
 		material: "Premium fabric with sequin work",
-		includes: ["Matching belt", "Matching scarf", "White plain inner"],
+
 		images: [
 			"/images/products/sheikha-abaya-1.webp",
 			"/images/products/sheikha-abaya-2.webp",
@@ -57,11 +63,16 @@ export const PRODUCTS: Product[] = [
 			"Tieable long sleeves for adjustable fit",
 			"Elegant and versatile silhouette",
 		],
-		colors: ["Black"],
+		colors: ["Black", "Electric Blue", "Olive Green", "Silver Grey"],
 		size: "One size fits all",
 		material: "Chiffon",
-		includes: ["Matching belt", "Matching scarf"],
-		images: ["/images/products/qamar-abaya-1.webp"],
+
+		images: [
+			"/images/products/qamar-1.jpeg",
+			"/images/products/qamar-2.jpeg",
+			"/images/products/qamar-3.jpeg",
+			"/images/products/qamar-4.jpeg",
+		],
 		availability: "in-stock",
 		price: 24.99,
 	},
@@ -83,7 +94,7 @@ export const PRODUCTS: Product[] = [
 		size: "One size fits all",
 		material: "Velvet",
 		length: "Approximately 54–56 inches",
-		includes: [],
+
 		images: ["/images/products/velvet-kaftan.webp"],
 		availability: "in-stock",
 		price: 29.99,
@@ -102,10 +113,10 @@ export const PRODUCTS: Product[] = [
 			"Versatile styling",
 			"Comfortable fit",
 		],
-		colors: ["Black", "Navy", "Brown"],
+		colors: ["Black"],
 		size: "One size fits all",
 		material: "Premium crepe",
-		includes: ["Matching scarf"],
+
 		images: [
 			"/images/products/elegant-abaya-1.jpeg",
 			"/images/products/elegant-abaya-2.jpeg",
@@ -133,7 +144,7 @@ export const PRODUCTS: Product[] = [
 		size: [54, 46],
 		material: "Silk",
 		length: "Approximately 58 inches",
-		includes: ["Matching belt"],
+
 		images: ["/images/products/pre-order-velvet.webp"],
 		availability: "pre-order",
 		price: 29.99,

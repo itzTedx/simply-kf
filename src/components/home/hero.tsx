@@ -28,7 +28,7 @@ export function Hero() {
 			{/* Mobile: subtle radial gradient for depth (cream arch feel) */}
 			{/* <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_70%_at_50%_40%,var(--color-secondary)_0%,transparent_60%)] opacity-30 md:opacity-0" /> */}
 			<div className="container absolute inset-0 z-10 mx-auto flex items-center justify-center pb-[max(2rem,env(safe-area-inset-bottom))] text-center md:items-center md:justify-start md:px-10 md:pt-0 md:pb-0 md:text-left lg:px-12">
-				<div className="w-full max-w-xl space-y-5 px-5 md:space-y-10 md:px-0">
+				<div className="w-full max-w-2xl px-5 md:px-0">
 					<p className="font-body text-[0.6875rem] text-muted uppercase tracking-[0.25em] md:text-[0.6875rem]">
 						Designed in Dubai · For the UK
 					</p>
@@ -37,11 +37,11 @@ export function Hero() {
 						<br />
 						Thoughtfully Made.
 					</h1>
-					<p className="font-body text-[0.9375rem] text-card leading-relaxed sm:max-w-md sm:text-base md:text-lg">
+					<p className="mt-4 font-body text-[0.9375rem] text-card leading-relaxed sm:max-w-md sm:text-base md:text-lg lg:text-xl">
 						Elevated modest wear. Quiet luxury, refined for every day.
 					</p>
 
-					<div className="flex flex-col gap-3 pt-1 sm:flex-row sm:justify-center sm:pt-2 md:justify-start">
+					<div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center sm:pt-2 md:justify-start">
 						<Button
 							className="h-12 min-h-12 w-full md:h-11 md:w-auto md:min-w-[140px]"
 							nativeButton={false}

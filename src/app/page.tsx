@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { CraftQuality } from "@/components/home/craft-quality";
-import { FeaturedCollections } from "@/components/home/featured-collections";
 import { FeaturedProducts } from "@/components/home/featured-products";
 import { Hero } from "@/components/home/hero";
 import { Newsletter } from "@/components/home/newsletter";
@@ -24,7 +23,7 @@ export default function Home() {
 					/>
 				</Link>
 			</section>
-			<FeaturedCollections />
+			{/* <FeaturedCollections /> */}
 			<ProductHighlight />
 			<ReelsShowcase />
 			<CraftQuality />

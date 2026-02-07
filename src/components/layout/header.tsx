@@ -23,8 +23,8 @@ import { CartButton } from "../shop/cart-button";
 const NAV_LINKS = [
 	{ name: "Home", href: "/" },
 	{ name: "Shop", href: "/shop" },
-	{ name: "Collections", href: "/collections" },
-	{ name: "About", href: "/about" },
+	// { name: "Collections", href: "/collections" },
+	// { name: "About", href: "/about" },
 	{ name: "Contact", href: "/contact" },
 ] as const;
 
