@@ -2,12 +2,11 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import Image from "next/image";
-
 import Autoplay from "embla-carousel-autoplay";
 import { parseAsString, useQueryStates } from "nuqs";
 import { toast } from "sonner";
 
+import { Media } from "@/components/payload/media";
 import RichText from "@/components/payload/rich-text";
 import {
 	Accordion,
@@ -149,7 +148,14 @@ export function ProductView({ product }: ProductViewProps) {
 									{idx === 0 && isImageLoading && (
 										<Skeleton className="absolute inset-0 size-full" />
 									)}
-									<Image
+									<Media
+										alt={`${product.name} view ${idx + 1}`}
+										fill
+										onLoad={() => idx === 0 && setIsImageLoading(false)}
+										priority={idx === 0}
+										src={img}
+									/>
+									{/* <Image
 										alt={`${product.name} view ${idx + 1}`}
 										className={cn(
 											"object-cover transition-opacity duration-500",
@@ -160,7 +166,7 @@ export function ProductView({ product }: ProductViewProps) {
 										priority={idx === 0}
 										sizes="(max-width: 768px) 100vw, 50vw"
 										src={img}
-									/>
+									/> */}
 								</div>
 							</CarouselItem>
 						))}
@@ -199,13 +205,19 @@ export function ProductView({ product }: ProductViewProps) {
 									onClick={() => scrollToSlide(idx)}
 									type="button"
 								>
-									<Image
+									<Media
+										alt={`${product.name} thumbnail ${idx + 1}`}
+										className="object-cover"
+										fill
+										src={img}
+									/>
+									{/* <Image
 										alt={`${product.name} thumbnail ${idx + 1}`}
 										className="object-cover"
 										fill
 										sizes="(max-width: 640px) 25vw, 20vw"
 										src={img}
-									/>
+									/> */}
 								</button>
 							</CarouselItem>
 						))}
@@ -342,6 +354,12 @@ export function ProductView({ product }: ProductViewProps) {
 									Delivery & returns
 								</AccordionTrigger>
 								<AccordionContent className="pb-4 font-body text-foreground/75 text-sm leading-relaxed">
+									{/* <p>
+										Connect your shipment on <strong>G C C Express</strong>
+										<br />
+										Door delivery from China to U.A.E / K S A/ Oman / Qatar /
+										Bahrain / Kuwait
+									</p> */}
 									<p className="mb-2">UK & international shipping available.</p>
 									<p>Standard UK delivery: 2–3 working days.</p>
 								</AccordionContent>
