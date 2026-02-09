@@ -68,8 +68,11 @@ export interface Config {
   blocks: {};
   collections: {
     users: User;
-    media: Media;
     products: Product;
+    productCategories: ProductCategory;
+    reels: Reel;
+    media: Media;
+    videos: Video;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -78,8 +81,11 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
-    media: MediaSelect<false> | MediaSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
+    productCategories: ProductCategoriesSelect<false> | ProductCategoriesSelect<true>;
+    reels: ReelsSelect<false> | ReelsSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
+    videos: VideosSelect<false> | VideosSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -143,38 +149,20 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
-export interface Media {
-  id: number;
-  alt?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "products".
  */
 export interface Product {
   id: number;
+  name: string;
+  price: number;
+  description: string;
+  categories?: (number | null) | ProductCategory;
+  status: 'draft' | 'published';
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
   generateSlug?: boolean | null;
   slug: string;
-  status: 'draft' | 'published';
-  name: string;
-  price: number;
-  description: string;
   overview?: {
     root: {
       type: string;
@@ -192,9 +180,6 @@ export interface Product {
   } | null;
   features?:
     | {
-        /**
-         * One bullet point
-         */
         feature: string;
         id?: string | null;
       }[]
@@ -215,6 +200,10 @@ export interface Product {
          */
         color: string;
         /**
+         * Size (e.g. S, M, L, XL, One Size). Leave empty if not applicable.
+         */
+        size?: string | null;
+        /**
          * Override product price for this variant (leave empty to use base price)
          */
         price?: number | null;
@@ -231,6 +220,92 @@ export interface Product {
     | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "productCategories".
+ */
+export interface ProductCategory {
+  id: number;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  name: string;
+  /**
+   * Optional short description for the category.
+   */
+  description?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  alt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reels".
+ */
+export interface Reel {
+  id: number;
+  /**
+   * Short caption or title for the reel
+   */
+  caption?: string | null;
+  platform: 'tiktok' | 'instagram';
+  /**
+   * Thumbnail image for the reel (used before play)
+   */
+  thumbnail?: (number | null) | Media;
+  /**
+   * Video file for the reel (stored in uploads/videos)
+   */
+  video: number | Video;
+  /**
+   * Optional link to the original post (e.g. TikTok or Instagram URL)
+   */
+  link?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "videos".
+ */
+export interface Video {
+  id: number;
+  /**
+   * Alt text for the video
+   */
+  alt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -261,12 +336,24 @@ export interface PayloadLockedDocument {
         value: number | User;
       } | null)
     | ({
+        relationTo: 'products';
+        value: number | Product;
+      } | null)
+    | ({
+        relationTo: 'productCategories';
+        value: number | ProductCategory;
+      } | null)
+    | ({
+        relationTo: 'reels';
+        value: number | Reel;
+      } | null)
+    | ({
         relationTo: 'media';
         value: number | Media;
       } | null)
     | ({
-        relationTo: 'products';
-        value: number | Product;
+        relationTo: 'videos';
+        value: number | Video;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -334,6 +421,74 @@ export interface UsersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products_select".
+ */
+export interface ProductsSelect<T extends boolean = true> {
+  name?: T;
+  price?: T;
+  description?: T;
+  categories?: T;
+  status?: T;
+  generateSlug?: T;
+  slug?: T;
+  overview?: T;
+  features?:
+    | T
+    | {
+        feature?: T;
+        id?: T;
+      };
+  images?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  variants?:
+    | T
+    | {
+        color?: T;
+        size?: T;
+        price?: T;
+        stock?: T;
+        images?:
+          | T
+          | {
+              image?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "productCategories_select".
+ */
+export interface ProductCategoriesSelect<T extends boolean = true> {
+  generateSlug?: T;
+  slug?: T;
+  name?: T;
+  description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reels_select".
+ */
+export interface ReelsSelect<T extends boolean = true> {
+  caption?: T;
+  platform?: T;
+  thumbnail?: T;
+  video?: T;
+  link?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
@@ -352,44 +507,21 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "products_select".
+ * via the `definition` "videos_select".
  */
-export interface ProductsSelect<T extends boolean = true> {
-  generateSlug?: T;
-  slug?: T;
-  status?: T;
-  name?: T;
-  price?: T;
-  description?: T;
-  overview?: T;
-  features?:
-    | T
-    | {
-        feature?: T;
-        id?: T;
-      };
-  images?:
-    | T
-    | {
-        image?: T;
-        id?: T;
-      };
-  variants?:
-    | T
-    | {
-        color?: T;
-        price?: T;
-        stock?: T;
-        images?:
-          | T
-          | {
-              image?: T;
-              id?: T;
-            };
-        id?: T;
-      };
+export interface VideosSelect<T extends boolean = true> {
+  alt?: T;
   updatedAt?: T;
   createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

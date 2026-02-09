@@ -1,5 +1,4 @@
 import { postgresAdapter } from "@payloadcms/db-postgres";
-import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import path from "path";
 import { buildConfig } from "payload";
 import sharp from "sharp";
@@ -7,7 +6,11 @@ import { fileURLToPath } from "url";
 
 import { Media } from "./collections/Media";
 import { Products } from "./collections/products";
+import { ProductCategories } from "./collections/products/categories";
+import { Reels } from "./collections/reels";
 import { Users } from "./collections/Users";
+import { Videos } from "./collections/Videos";
+import { defaultLexical } from "./lib/payload/fields/defaultLexical";
 import { plugins } from "./lib/payload/plugins";
 
 const filename = fileURLToPath(import.meta.url);
@@ -20,8 +23,8 @@ export default buildConfig({
 			baseDir: path.resolve(dirname),
 		},
 	},
-	collections: [Users, Media, Products],
-	editor: lexicalEditor(),
+	collections: [Users, Products, ProductCategories, Reels, Media, Videos],
+	editor: defaultLexical,
 	secret: process.env.PAYLOAD_SECRET || "",
 	typescript: {
 		outputFile: path.resolve(dirname, "payload-types.ts"),
