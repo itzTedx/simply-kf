@@ -153,7 +153,7 @@ export function ProductView({ product }: ProductViewProps) {
 										fill
 										onLoad={() => idx === 0 && setIsImageLoading(false)}
 										priority={idx === 0}
-										src={img}
+										resource={img}
 									/>
 									{/* <Image
 										alt={`${product.name} view ${idx + 1}`}

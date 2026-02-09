@@ -36,19 +36,27 @@ export const Image: React.FC<MediaProps> = (props) => {
 	let alt = altFromProps;
 	let src: StaticImageData | string = srcFromProps || "";
 
-	if (!src && resource && typeof resource === "object") {
-		const {
-			alt: altFromResource,
-			height: fullHeight,
-			url,
-			width: fullWidth,
-		} = resource;
+	if (!src && resource) {
+		// Payload media object
+		if (typeof resource === "object") {
+			const {
+				alt: altFromResource,
+				height: fullHeight,
+				url,
+				width: fullWidth,
+			} = resource;
 
-		width = widthFromProps ?? fullWidth;
-		height = heightFromProps ?? fullHeight;
-		alt = altFromResource ?? alt;
+			width = widthFromProps ?? fullWidth;
+			height = heightFromProps ?? fullHeight;
+			alt = altFromResource ?? alt;
 
-		src = getMediaUrl(url);
+			src = getMediaUrl(url);
+		}
+
+		// Direct URL or path string
+		if (typeof resource === "string") {
+			src = getMediaUrl(resource);
+		}
 	}
 
 	// NOTE: this is used by the browser to determine which image to download at different screen sizes
