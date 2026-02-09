@@ -17,15 +17,13 @@ interface FilterSectionProps {
 	setPriceRange: (value: number[]) => void;
 	filters: {
 		colors?: string[] | null;
-
 		availability?: string[] | null;
 	};
 	setFilters: (filters: {
 		colors?: string[] | null;
-
 		availability?: string[] | null;
 	}) => void;
-	products: Product[];
+	products: Partial<Product>[];
 }
 
 export function FilterSection({
@@ -39,7 +37,11 @@ export function FilterSection({
 		new Set(products.flatMap((p) => getProductColors(p)))
 	);
 	const UNIQUE_AVAILABILITY = Array.from(
-		new Set(products.map((p) => p.availability))
+		new Set(
+			products
+				.map((p) => p.availability)
+				.filter((a): a is NonNullable<Product["availability"]> => a != null)
+		)
 	);
 	return (
 		<div className="space-y-8">

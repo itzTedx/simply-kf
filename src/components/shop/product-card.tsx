@@ -5,7 +5,7 @@ import { getProductDefaultImage } from "@/constants/products";
 import type { Product } from "@/payload-types";
 
 interface ProductCardProps {
-	product: Product;
+	product: Partial<Product>;
 }
 
 export function ProductCard({ product }: ProductCardProps) {
@@ -19,7 +19,7 @@ export function ProductCard({ product }: ProductCardProps) {
 						</div>
 					)}
 					<Image
-						alt={product.name}
+						alt={product.name ?? ""}
 						className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
 						fill
 						sizes="(max-width: 768px) 50vw, 33vw"

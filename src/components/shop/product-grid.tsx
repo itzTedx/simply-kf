@@ -5,7 +5,7 @@ import type { Product } from "@/payload-types";
 import { ProductCard } from "./product-card";
 
 interface ProductGridProps {
-	products: Product[];
+	products: Partial<Product>[];
 	onClearFilters?: () => void;
 }
 

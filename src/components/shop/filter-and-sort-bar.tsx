@@ -28,7 +28,7 @@ interface FilterAndSortBarProps {
 	setSelectedSort: (value: string) => void;
 	priceRange: number[];
 	setPriceRange: (value: number[]) => void;
-	products: Product[];
+	products: Partial<Product>[];
 	filters: {
 		categories?: string[] | null;
 		collections?: string[] | null;

@@ -6,9 +6,9 @@ import { FeaturedProducts } from "@/components/home/featured-products";
 import { Hero } from "@/components/home/hero";
 import { Newsletter } from "@/components/home/newsletter";
 import { ProductHighlight } from "@/components/home/product-highlight";
-import { ReelsShowcase } from "@/components/home/reels-showcase";
+import { ReelsShowcaseSection } from "@/components/home/reels-showcase-section";
 
-export default function Home() {
+export default async function Home() {
 	return (
 		<main className="min-h-screen">
 			<Hero />
@@ -25,7 +25,7 @@ export default function Home() {
 			</section>
 			{/* <FeaturedCollections /> */}
 			<ProductHighlight />
-			<ReelsShowcase />
+			<ReelsShowcaseSection />
 			<CraftQuality />
 			{/* <JournalPreview /> */}
 			<Newsletter />

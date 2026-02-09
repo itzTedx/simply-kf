@@ -12,7 +12,7 @@ import { getProductColors } from "@/constants/products";
 import { Product } from "@/payload-types";
 
 type ShopPageContentProps = {
-	initialProducts: Product[];
+	initialProducts: Partial<Product>[];
 };
 
 export function ShopPageContent({ initialProducts }: ShopPageContentProps) {
@@ -58,15 +58,19 @@ export function ShopPageContent({ initialProducts }: ShopPageContentProps) {
 
 		// Filter by availability
 		if (filters.availability && filters.availability.length > 0) {
-			filtered = filtered.filter((product) =>
-				filters.availability!.includes(product.availability)
+			filtered = filtered.filter(
+				(product) =>
+					product.availability !== undefined &&
+					filters.availability!.includes(String(product.availability))
 			);
 		}
 
 		// Filter by price range
 		filtered = filtered.filter(
 			(product) =>
-				product.price >= priceRange[0] && product.price <= priceRange[1]
+				typeof product.price === "number" &&
+				product.price >= priceRange[0] &&
+				product.price <= priceRange[1]
 		);
 
 		return filtered;

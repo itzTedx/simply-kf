@@ -4,6 +4,7 @@ import { buildConfig } from "payload";
 import sharp from "sharp";
 import { fileURLToPath } from "url";
 
+import { Homepage } from "./collections/global/homepage";
 import { Media } from "./collections/Media";
 import { Products } from "./collections/products";
 import { Collections } from "./collections/products/collections";
@@ -24,6 +25,7 @@ export default buildConfig({
 		},
 	},
 	collections: [Users, Products, Collections, Reels, Media, Videos],
+	globals: [Homepage],
 	editor: defaultLexical,
 	secret: process.env.PAYLOAD_SECRET || "",
 	typescript: {
