@@ -1,8 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import { getProductDefaultImage } from "@/constants/products";
 import type { Product } from "@/payload-types";
+
+import { Media } from "../payload/media";
 
 interface ProductCardProps {
 	product: Partial<Product>;
@@ -18,13 +19,19 @@ export function ProductCard({ product }: ProductCardProps) {
 							Pre-order
 						</div>
 					)}
-					<Image
+					<Media
+						alt={product.name ?? ""}
+						className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+						fill
+						src={getProductDefaultImage(product)}
+					/>
+					{/* <Image
 						alt={product.name ?? ""}
 						className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
 						fill
 						sizes="(max-width: 768px) 50vw, 33vw"
 						src={getProductDefaultImage(product)}
-					/>
+					/> */}
 				</div>
 			)}
 			<div className="space-y-1 text-center md:text-left">

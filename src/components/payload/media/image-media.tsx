@@ -5,7 +5,6 @@ import React from "react";
 import type { StaticImageData } from "next/image";
 import NextImage from "next/image";
 
-import { getMediaUrl } from "@/lib/payload/utils/getMediaUrl";
 import { cn } from "@/lib/utils";
 
 import { cssVariables } from "./css-variables";
@@ -22,41 +21,31 @@ export const Image: React.FC<MediaProps> = (props) => {
 		onClick,
 		onLoad: onLoadFromProps,
 		priority,
-		quality,
 		resource,
 		size: sizeFromProps,
 		src: srcFromProps,
 		width: widthFromProps,
 	} = props;
 
-	const [, setIsLoading] = React.useState(true);
-
 	let width: number | undefined | null;
 	let height: number | undefined | null;
 	let alt = altFromProps;
 	let src: StaticImageData | string = srcFromProps || "";
 
-	if (!src && resource) {
-		// Payload media object
-		if (typeof resource === "object") {
-			const {
-				alt: altFromResource,
-				height: fullHeight,
-				url,
-				width: fullWidth,
-			} = resource;
+	if (!src && resource && typeof resource === "object") {
+		const {
+			alt: altFromResource,
+			filename,
+			height: fullHeight,
+			url,
+			width: fullWidth,
+		} = resource;
 
-			width = widthFromProps ?? fullWidth;
-			height = heightFromProps ?? fullHeight;
-			alt = altFromResource ?? alt;
+		width = widthFromProps ?? fullWidth;
+		height = heightFromProps ?? fullHeight;
+		alt = altFromResource ?? "";
 
-			src = getMediaUrl(url);
-		}
-
-		// Direct URL or path string
-		if (typeof resource === "string") {
-			src = getMediaUrl(resource);
-		}
+		src = `${process.env.NEXT_PUBLIC_SERVER_URL}${url}`;
 	}
 
 	// NOTE: this is used by the browser to determine which image to download at different screen sizes
@@ -68,19 +57,17 @@ export const Image: React.FC<MediaProps> = (props) => {
 
 	return (
 		<NextImage
-			alt={alt || ""}
+			alt={alt ?? "Image"}
 			className={cn(imgClassName)}
 			fill={fill}
 			height={!fill ? height || heightFromProps : undefined}
 			onClick={onClick}
 			onLoad={() => {
-				setIsLoading(false);
 				if (typeof onLoadFromProps === "function") {
 					onLoadFromProps();
 				}
 			}}
 			priority={priority}
-			quality={quality}
 			sizes={sizes}
 			src={src}
 			width={!fill ? width || widthFromProps : undefined}

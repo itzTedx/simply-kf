@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+
+import { ProductCard } from "@/components/shop/product-card";
 
 import { getProductDefaultImage } from "@/constants/products";
 import { getProductBySlug, getProducts } from "@/modules/products/query";
@@ -110,29 +111,7 @@ export default async function ProductPage({ params }: PageProps) {
 
 						<div className="grid grid-cols-2 gap-x-5 gap-y-14 md:grid-cols-4 md:gap-x-8 md:gap-y-16">
 							{relatedProducts.map((item) => (
-								<Link
-									className="group block"
-									href={`/shop/${item.slug}`}
-									key={item.id}
-								>
-									<div className="relative mb-4 aspect-3/4 overflow-hidden rounded-sm bg-muted/40">
-										<Image
-											alt={item.name ?? "Product Image"}
-											className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
-											fill
-											sizes="(max-width: 768px) 50vw, 25vw"
-											src={getProductDefaultImage(item)}
-										/>
-									</div>
-									<div className="space-y-1 text-center md:text-left">
-										<h4 className="font-display font-normal text-foreground text-sm md:text-base">
-											{item.name}
-										</h4>
-										<p className="font-body text-foreground/65 text-sm">
-											£{item.price}
-										</p>
-									</div>
-								</Link>
+								<ProductCard key={item.id} product={item} />
 							))}
 						</div>
 					</section>
