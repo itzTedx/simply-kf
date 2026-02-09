@@ -35,7 +35,6 @@ export const Image: React.FC<MediaProps> = (props) => {
 	if (!src && resource && typeof resource === "object") {
 		const {
 			alt: altFromResource,
-			filename,
 			height: fullHeight,
 			url,
 			width: fullWidth,
@@ -45,7 +44,7 @@ export const Image: React.FC<MediaProps> = (props) => {
 		height = heightFromProps ?? fullHeight;
 		alt = altFromResource ?? "";
 
-		src = `${process.env.NEXT_PUBLIC_SERVER_URL}${url}`;
+		src = `${process.env.NEXT_PUBLIC_SITE_URL}${url}`;
 	}
 
 	// NOTE: this is used by the browser to determine which image to download at different screen sizes
