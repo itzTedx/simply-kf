@@ -1,21 +1,36 @@
+import {
+	MetaDescriptionField,
+	MetaImageField,
+	MetaTitleField,
+	OverviewField,
+	PreviewField,
+} from "@payloadcms/plugin-seo/fields";
 import type { CollectionConfig, Where } from "payload";
 import { slugField } from "payload";
 
-import { revalidateAfterChange, revalidateAfterDelete } from "./hooks";
+import { generatePreviewPath } from "@/lib/payload/utils/generatePreviewPath";
+import { slugify } from "@/lib/utils";
+
+import { revalidateDeleteProduct, revalidateProduct } from "./hooks";
 
 export const Products: CollectionConfig = {
 	slug: "products",
 	admin: {
 		useAsTitle: "name",
-		defaultColumns: ["name", "price", "collections", "status", "updatedAt"],
+		defaultColumns: ["name", "price", "collections", "_status", "updatedAt"],
 		group: "Products",
+		preview: (data, { req }) =>
+			generatePreviewPath({
+				slug: data?.slug as string,
+				req,
+			}),
 	},
 	access: {
 		read: () => true,
 	},
 	hooks: {
-		afterChange: [revalidateAfterChange],
-		afterDelete: [revalidateAfterDelete],
+		afterChange: [revalidateProduct],
+		afterDelete: [revalidateDeleteProduct],
 	},
 	fields: [
 		// Sidebar fields (outside tabs so they always show)
@@ -71,19 +86,6 @@ export const Products: CollectionConfig = {
 		},
 
 		{
-			name: "status",
-			type: "select",
-			required: true,
-			defaultValue: "draft",
-			options: [
-				{ label: "Draft", value: "draft" },
-				{ label: "Published", value: "published" },
-			],
-			admin: {
-				position: "sidebar",
-			},
-		},
-		{
 			name: "availability",
 			type: "select",
 			required: true,
@@ -98,6 +100,7 @@ export const Products: CollectionConfig = {
 		},
 		slugField({
 			useAsSlug: "name",
+			slugify: ({ valueToSlugify }) => slugify(valueToSlugify),
 			name: "slug",
 			required: true,
 			position: "sidebar",
@@ -220,7 +223,43 @@ export const Products: CollectionConfig = {
 						},
 					],
 				},
+				{
+					name: "meta",
+					label: "SEO",
+					fields: [
+						OverviewField({
+							titlePath: "meta.title",
+							descriptionPath: "meta.description",
+							imagePath: "meta.image",
+						}),
+						MetaTitleField({
+							hasGenerateFn: true,
+						}),
+						MetaImageField({
+							relationTo: "media",
+						}),
+
+						MetaDescriptionField({}),
+						PreviewField({
+							// if the `generateUrl` function is configured
+							hasGenerateFn: true,
+
+							// field paths to match the target field for data
+							titlePath: "meta.title",
+							descriptionPath: "meta.description",
+						}),
+					],
+				},
 			],
 		},
 	],
+	versions: {
+		drafts: {
+			autosave: {
+				interval: 100, // We set this interval for optimal live preview
+			},
+			schedulePublish: true,
+		},
+		maxPerDoc: 50,
+	},
 };

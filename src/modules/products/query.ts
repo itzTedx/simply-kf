@@ -5,9 +5,6 @@ export async function getProducts(): Promise<Partial<Product>[]> {
 	const result = await payload.find({
 		collection: "products",
 		draft: false,
-		where: {
-			status: { equals: "published" },
-		},
 		sort: ["availability", "-createdAt"],
 		select: {
 			name: true,
@@ -29,7 +26,6 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 		draft: false,
 		where: {
 			slug: { equals: slug },
-			status: { equals: "published" },
 		},
 		limit: 1,
 		depth: 2,

@@ -65,7 +65,7 @@ export default async function ProductPage({ params }: PageProps) {
 	// Related products: use product.relatedProducts when set, otherwise fall back to other published products
 	const resolvedRelated =
 		product.relatedProducts?.filter(
-			(r): r is Product => typeof r === "object" && r?.status === "published"
+			(r): r is Product => typeof r === "object" && r?._status === "published"
 		) ?? [];
 	const relatedProducts =
 		resolvedRelated.length > 0
