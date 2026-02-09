@@ -1,9 +1,9 @@
 import { create } from "zustand";
 
-import { createPaymentIntent as createPaymentIntentAction } from "@/app/(app)/actions/stripe";
+import { createPaymentIntent as createPaymentIntentAction } from "@/modules/checkout/actions";
 
 interface CheckoutItem {
-	id: string;
+	id: number;
 	name: string;
 	price: number;
 	quantity: number;

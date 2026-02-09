@@ -13,7 +13,7 @@ import { usePaymentStore } from "@/stores/payment-store";
 import StripeElements from "./stripe-elements";
 
 interface CartItem {
-	id: string;
+	id: number;
 	name: string;
 	price: number;
 	quantity: number;

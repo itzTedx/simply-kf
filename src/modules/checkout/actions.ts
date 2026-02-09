@@ -6,7 +6,7 @@ const MIN_AMOUNT_GBP = 0.5; // Stripe minimum ~50p for GBP
 const CENTS_PER_POUND = 100;
 
 interface CheckoutItem {
-	id: string;
+	id: number;
 	name: string;
 	quantity: number;
 	image?: string;

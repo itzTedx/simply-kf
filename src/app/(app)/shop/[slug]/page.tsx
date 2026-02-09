@@ -117,7 +117,7 @@ export default async function ProductPage({ params }: PageProps) {
 								>
 									<div className="relative mb-4 aspect-3/4 overflow-hidden rounded-sm bg-muted/40">
 										<Image
-											alt={item.name}
+											alt={item.name ?? "Product Image"}
 											className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
 											fill
 											sizes="(max-width: 768px) 50vw, 25vw"
