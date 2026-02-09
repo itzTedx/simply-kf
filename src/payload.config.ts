@@ -6,7 +6,7 @@ import { fileURLToPath } from "url";
 
 import { Media } from "./collections/Media";
 import { Products } from "./collections/products";
-import { ProductCategories } from "./collections/products/categories";
+import { Collections } from "./collections/products/collections";
 import { Reels } from "./collections/reels";
 import { Users } from "./collections/Users";
 import { Videos } from "./collections/Videos";
@@ -23,7 +23,7 @@ export default buildConfig({
 			baseDir: path.resolve(dirname),
 		},
 	},
-	collections: [Users, Products, ProductCategories, Reels, Media, Videos],
+	collections: [Users, Products, Collections, Reels, Media, Videos],
 	editor: defaultLexical,
 	secret: process.env.PAYLOAD_SECRET || "",
 	typescript: {

@@ -69,7 +69,7 @@ export interface Config {
   collections: {
     users: User;
     products: Product;
-    productCategories: ProductCategory;
+    collections: Collection;
     reels: Reel;
     media: Media;
     videos: Video;
@@ -82,7 +82,7 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
-    productCategories: ProductCategoriesSelect<false> | ProductCategoriesSelect<true>;
+    collections: CollectionsSelect<false> | CollectionsSelect<true>;
     reels: ReelsSelect<false> | ReelsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     videos: VideosSelect<false> | VideosSelect<true>;
@@ -156,8 +156,13 @@ export interface Product {
   name: string;
   price: number;
   description: string;
-  categories?: (number | null) | ProductCategory;
+  collections?: (number | null) | Collection;
+  /**
+   * Products to show in "You may also like" section. Leave empty to show other published products.
+   */
+  relatedProducts?: (number | Product)[] | null;
   status: 'draft' | 'published';
+  availability: 'sales' | 'pre-order';
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
@@ -223,9 +228,9 @@ export interface Product {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "productCategories".
+ * via the `definition` "collections".
  */
-export interface ProductCategory {
+export interface Collection {
   id: number;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
@@ -234,7 +239,7 @@ export interface ProductCategory {
   slug: string;
   name: string;
   /**
-   * Optional short description for the category.
+   * Optional short description for the collection.
    */
   description?: string | null;
   updatedAt: string;
@@ -340,8 +345,8 @@ export interface PayloadLockedDocument {
         value: number | Product;
       } | null)
     | ({
-        relationTo: 'productCategories';
-        value: number | ProductCategory;
+        relationTo: 'collections';
+        value: number | Collection;
       } | null)
     | ({
         relationTo: 'reels';
@@ -427,8 +432,10 @@ export interface ProductsSelect<T extends boolean = true> {
   name?: T;
   price?: T;
   description?: T;
-  categories?: T;
+  collections?: T;
+  relatedProducts?: T;
   status?: T;
+  availability?: T;
   generateSlug?: T;
   slug?: T;
   overview?: T;
@@ -464,9 +471,9 @@ export interface ProductsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "productCategories_select".
+ * via the `definition` "collections_select".
  */
-export interface ProductCategoriesSelect<T extends boolean = true> {
+export interface CollectionsSelect<T extends boolean = true> {
   generateSlug?: T;
   slug?: T;
   name?: T;

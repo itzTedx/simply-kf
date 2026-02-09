@@ -19,6 +19,8 @@ import {
 	SheetTrigger,
 } from "@/components/ui/sheet";
 
+import { Product } from "@/payload-types";
+
 import { FilterSection } from "./filter-section";
 
 interface FilterAndSortBarProps {
@@ -26,6 +28,7 @@ interface FilterAndSortBarProps {
 	setSelectedSort: (value: string) => void;
 	priceRange: number[];
 	setPriceRange: (value: number[]) => void;
+	products: Product[];
 	filters: {
 		categories?: string[] | null;
 		collections?: string[] | null;
@@ -45,6 +48,7 @@ export function FilterAndSortBar({
 	setSelectedSort,
 	priceRange,
 	setPriceRange,
+	products,
 	filters,
 	setFilters,
 }: FilterAndSortBarProps) {
@@ -79,6 +83,7 @@ export function FilterAndSortBar({
 						<FilterSection
 							filters={filters}
 							priceRange={priceRange}
+							products={products}
 							setFilters={setFilters}
 							setPriceRange={setPriceRange}
 						/>

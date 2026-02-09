@@ -3,7 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { getProductDefaultImage, PRODUCTS } from "@/constants/products";
+import { getProductDefaultImage } from "@/constants/products";
+import { getProductBySlug, getProducts } from "@/modules/products/query";
+import type { Product } from "@/payload-types";
 
 import { ProductView } from "./product-view";
 
@@ -12,7 +14,9 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-	return PRODUCTS.map((product) => ({
+	const products = await getProducts();
+
+	return products.map((product) => ({
 		slug: product.slug,
 	}));
 }
@@ -21,14 +25,15 @@ export async function generateMetadata({
 	params,
 }: PageProps): Promise<Metadata> {
 	const { slug } = await params;
-	const product = PRODUCTS.find((p) => p.slug === slug);
+	const product = await getProductBySlug(slug);
 	if (!product) return { title: "Product Not Found" };
 
 	const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://simplykf.com";
 	const defaultImage = getProductDefaultImage(product);
-	const imageUrl = defaultImage?.startsWith("http")
-		? defaultImage
-		: `${siteUrl}${defaultImage}`;
+	const imageUrl =
+		defaultImage && !defaultImage.startsWith("http")
+			? `${siteUrl}${defaultImage}`
+			: defaultImage;
 
 	return {
 		title: product.name,
@@ -36,7 +41,8 @@ export async function generateMetadata({
 		openGraph: {
 			title: `${product.name} | Simply KF`,
 			description: product.description,
-			images: defaultImage ? [{ url: imageUrl, alt: product.name }] : [],
+			images:
+				defaultImage && imageUrl ? [{ url: imageUrl, alt: product.name }] : [],
 			type: "website",
 		},
 		twitter: {
@@ -49,16 +55,21 @@ export async function generateMetadata({
 
 export default async function ProductPage({ params }: PageProps) {
 	const { slug } = await params;
-	const product = PRODUCTS.find((p) => p.slug === slug);
+	const product = await getProductBySlug(slug);
 
 	if (!product) {
 		notFound();
 	}
 
-	// Related products logic: same category, exclude current, limit to 4
-	const relatedProducts = PRODUCTS.filter(
-		(p) => p.collection === product.collection && p.slug !== product.slug
-	).slice(0, 4);
+	// Related products: use product.relatedProducts when set, otherwise fall back to other published products
+	const resolvedRelated =
+		product.relatedProducts?.filter(
+			(r): r is Product => typeof r === "object" && r?.status === "published"
+		) ?? [];
+	const relatedProducts =
+		resolvedRelated.length > 0
+			? resolvedRelated.slice(0, 4)
+			: (await getProducts()).filter((p) => p.id !== product.id).slice(0, 4);
 
 	return (
 		<main className="min-h-screen pt-16 pb-24 md:pt-20 md:pb-28">
@@ -72,7 +83,7 @@ export default async function ProductPage({ params }: PageProps) {
 					</Link>
 				</div>
 
-				<ProductView product={product} />
+				<ProductView product={product as Product} />
 
 				<section className="mx-auto mt-28 max-w-2xl space-y-6 text-center md:mt-36">
 					<span className="font-body text-[0.6875rem] text-foreground/45 uppercase tracking-[0.15em]">
@@ -93,14 +104,8 @@ export default async function ProductPage({ params }: PageProps) {
 					<section className="mt-28 border-border/30 border-t pt-20 md:mt-36 md:pt-24">
 						<div className="mb-12 flex flex-col items-center justify-between gap-4 md:flex-row">
 							<h3 className="font-display font-normal text-foreground text-xl md:text-2xl">
-								More from {product.collection}
+								You may also like
 							</h3>
-							<Link
-								className="hidden font-body text-foreground/55 text-xs tracking-wide transition-colors hover:text-foreground/85 md:block"
-								href={`/shop?collection=${product.collection}`}
-							>
-								View all
-							</Link>
 						</div>
 
 						<div className="grid grid-cols-2 gap-x-5 gap-y-14 md:grid-cols-4 md:gap-x-8 md:gap-y-16">
@@ -129,15 +134,6 @@ export default async function ProductPage({ params }: PageProps) {
 									</div>
 								</Link>
 							))}
-						</div>
-
-						<div className="mt-10 text-center md:hidden">
-							<Link
-								className="font-body text-foreground/55 text-xs tracking-wide transition-colors hover:text-foreground/85"
-								href={`/shop?collection=${product.collection}`}
-							>
-								View all {product.collection}
-							</Link>
 						</div>
 					</section>
 				)}

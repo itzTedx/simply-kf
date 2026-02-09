@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 
-import { Product } from "@/constants/products";
+import type { Product } from "@/payload-types";
 
 import { ProductCard } from "./product-card";
 

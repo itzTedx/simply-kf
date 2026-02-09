@@ -8,6 +8,7 @@ import Autoplay from "embla-carousel-autoplay";
 import { parseAsString, useQueryStates } from "nuqs";
 import { toast } from "sonner";
 
+import RichText from "@/components/payload/rich-text";
 import {
 	Accordion,
 	AccordionContent,
@@ -29,9 +30,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import {
 	getProductColors,
 	getProductImagesForColor,
-	type Product,
 } from "@/constants/products";
 import { cn } from "@/lib/utils";
+import type { Product } from "@/payload-types";
 import { useCartStore } from "@/stores/cart-store";
 
 interface ProductViewProps {
@@ -54,15 +55,17 @@ export function ProductView({ product }: ProductViewProps) {
 				: colors[0],
 		[queryState.color, colors]
 	);
+	// For Payload products, size is stored per-variant as a string.
+	// We treat it as simple text and don't expose a separate size selector.
 	const selectedSize = useMemo(() => {
-		if (!Array.isArray(product.size)) return null;
-		if (queryState.size == null || queryState.size === "")
-			return product.size[0];
-		const parsed = Number(queryState.size);
-		return Number.isNaN(parsed) || !product.size.includes(parsed)
-			? product.size[0]
-			: parsed;
-	}, [product.size, queryState.size]);
+		if (!product.variants || product.variants.length === 0) return null;
+
+		const currentVariant =
+			product.variants.find((v) => v.color === selectedColor) ??
+			product.variants[0];
+
+		return currentVariant?.size ?? null;
+	}, [product.variants, selectedColor]);
 
 	const currentImages = getProductImagesForColor(product, selectedColor);
 	const [carouselApi, setCarouselApi] = useState<CarouselApi | undefined>();
@@ -106,11 +109,8 @@ export function ProductView({ product }: ProductViewProps) {
 	);
 
 	const handleAddToCart = () => {
-		const resolvedSize = Array.isArray(product.size)
-			? selectedSize !== null
-				? String(selectedSize)
-				: String(product.size[0])
-			: product.size;
+		const resolvedSize =
+			selectedSize != null ? String(selectedSize) : undefined;
 
 		addItem({
 			id: product.id,
@@ -118,7 +118,11 @@ export function ProductView({ product }: ProductViewProps) {
 			price: product.price,
 			quantity: 1,
 			image:
-				currentImages[0] ?? getProductImagesForColor(product, colors[0])[0],
+				currentImages[0] ??
+				(colors.length > 0
+					? getProductImagesForColor(product, colors[0])[0]
+					: undefined) ??
+				"",
 			color: selectedColor,
 			size: resolvedSize,
 		});
@@ -126,7 +130,7 @@ export function ProductView({ product }: ProductViewProps) {
 		toast.success(`${product.name} has been added to your bag.`);
 	};
 
-	// const isPreOrder = product.availability === "pre-order";
+	const isPreOrder = product.availability === "pre-order";
 
 	return (
 		<div className="grid grid-cols-1 gap-x-10 gap-y-10 md:gap-y-14 lg:grid-cols-2 lg:gap-x-20 lg:gap-y-16">
@@ -257,36 +261,15 @@ export function ProductView({ product }: ProductViewProps) {
 								<span className="font-body text-foreground/55 text-xs uppercase tracking-wider">
 									Size:{" "}
 									<span className="text-foreground">
-										{Array.isArray(product.size)
-											? (selectedSize ?? product.size[0])
-											: product.size}
+										{selectedSize ?? "One size"}
 									</span>
 								</span>
 								<button className="font-body text-foreground/45 text-xs underline-offset-2 transition-colors hover:text-foreground/75">
 									Size guide
 								</button>
 							</div>
-							{Array.isArray(product.size) && (
-								<div className="flex flex-wrap gap-2 pt-1">
-									{product.size.map((sizeOption) => (
-										<button
-											className={cn(
-												"h-8 rounded-full border px-4 font-body text-xs transition-colors duration-200",
-												selectedSize === sizeOption
-													? "border-primary bg-primary text-primary-foreground"
-													: "border-border/80 text-foreground/70 hover:border-foreground/25 hover:text-foreground"
-											)}
-											key={sizeOption}
-											onClick={() =>
-												setQueryState({ size: String(sizeOption) })
-											}
-											type="button"
-										>
-											{sizeOption}
-										</button>
-									))}
-								</div>
-							)}
+							{/* Payload variants currently use a single size string per variant,
+								so we don't render a multi-size selector here. */}
 						</div>
 					</div>
 
@@ -302,9 +285,11 @@ export function ProductView({ product }: ProductViewProps) {
 							onClick={handleAddToCart}
 							size="lg"
 						>
-							<Badge className="absolute -top-3 right-3 rounded-md bg-foreground/60 backdrop-blur-lg">
-								Pre-order
-							</Badge>
+							{isPreOrder && (
+								<Badge className="absolute -top-3 right-3 rounded-md bg-foreground/60 backdrop-blur-lg">
+									Pre-order
+								</Badge>
+							)}
 							Add to bag
 						</Button>
 					</div>
@@ -319,11 +304,17 @@ export function ProductView({ product }: ProductViewProps) {
 									Description
 								</AccordionTrigger>
 								<AccordionContent className="pb-4 font-body text-foreground/75 text-sm leading-relaxed">
-									{product.description}
-									<br />
-									<br />
-									Our {product.name} reflects the Simply KF philosophy —
-									craftsmanship meets contemporary design.
+									{product.overview ? (
+										<RichText data={product.overview as never} />
+									) : (
+										<>
+											{product.description}
+											<br />
+											<br />
+											Our {product.name} reflects the Simply KF philosophy —
+											craftsmanship meets contemporary design.
+										</>
+									)}
 								</AccordionContent>
 							</AccordionItem>
 							<AccordionItem
@@ -335,9 +326,9 @@ export function ProductView({ product }: ProductViewProps) {
 								</AccordionTrigger>
 								<AccordionContent className="pb-4 font-body text-foreground/75 text-sm leading-relaxed">
 									<ul className="list-inside list-disc space-y-1.5">
-										{product.features.map((feat) => (
-											<li className="text-lg" key={feat}>
-												{feat}
+										{product.features?.map((feat) => (
+											<li className="text-lg" key={feat.id ?? feat.feature}>
+												{feat.feature}
 											</li>
 										))}
 									</ul>

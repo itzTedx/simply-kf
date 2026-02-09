@@ -2,7 +2,7 @@ import { seoPlugin } from "@payloadcms/plugin-seo";
 import { GenerateTitle, GenerateURL } from "@payloadcms/plugin-seo/types";
 import { Plugin } from "payload";
 
-import { Product } from "@/constants/products";
+import type { Product } from "@/payload-types";
 
 import { getServerSideURL } from "../utils/get-url";
 

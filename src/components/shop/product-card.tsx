@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { getProductDefaultImage, type Product } from "@/constants/products";
+import { getProductDefaultImage } from "@/constants/products";
+import type { Product } from "@/payload-types";
 
 interface ProductCardProps {
 	product: Product;

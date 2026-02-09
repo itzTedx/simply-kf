@@ -1,11 +1,11 @@
 import type { CollectionConfig } from "payload";
 import { slugField } from "payload";
 
-export const ProductCategories: CollectionConfig = {
-	slug: "productCategories",
+export const Collections: CollectionConfig = {
+	slug: "collections",
 	labels: {
-		plural: "Categories",
-		singular: "Category",
+		plural: "Collections",
+		singular: "Collection",
 	},
 	admin: {
 		useAsTitle: "name",
@@ -30,7 +30,7 @@ export const ProductCategories: CollectionConfig = {
 			name: "description",
 			type: "textarea",
 			admin: {
-				description: "Optional short description for the category.",
+				description: "Optional short description for the collection.",
 			},
 		},
 	],

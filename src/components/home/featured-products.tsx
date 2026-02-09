@@ -1,15 +1,15 @@
 import Link from "next/link";
 
-import { PRODUCTS } from "@/constants/products";
+import { getProducts } from "@/modules/products/query";
 
 import { ProductCard } from "../shop/product-card";
 
 // const FEATURED_COUNT = 6;
 
-export function FeaturedProducts() {
-	const featured = PRODUCTS;
+export async function FeaturedProducts() {
+	const products = await getProducts();
 
-	if (featured.length === 0) return null;
+	if (products.length === 0) return null;
 
 	return (
 		<section className="bg-background px-4 py-16 md:px-6 md:py-24">
@@ -27,7 +27,7 @@ export function FeaturedProducts() {
 				</div>
 
 				<div className="grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-8 md:grid-cols-3 md:gap-y-16">
-					{featured.map((product) => (
+					{products.map((product) => (
 						<ProductCard key={product.id} product={product} />
 					))}
 				</div>

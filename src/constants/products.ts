@@ -16,25 +16,107 @@ export type Product = {
 	price: number;
 };
 
-/** Get colors list from product variants */
-export function getProductColors(product: Product): string[] {
-	return product.variants.map((v) => v.color);
+/**
+ * Get colors list from product variants.
+ *
+ * Supports both the static `Product` shape from this file and the
+ * Payload `Product` shape (from `@/payload-types`), which also exposes
+ * a `variants` array with a `color` field.
+ */
+export function getProductColors(
+	product: { variants?: { color?: string | null }[] | null }
+): string[] {
+	if (!product.variants) return [];
+	return product.variants
+		.map((v) => v?.color)
+		.filter((color): color is string => Boolean(color));
 }
 
-/** Get images for a color; falls back to first variant if color not found */
+/**
+ * Get images for a given color.
+ *
+ * - For static products, `images` is a `string[]`.
+ * - For Payload products, `images` is an array of `{ image: number | Media }`.
+ *   We resolve these to their `url` (falling back to `thumbnailURL` if needed).
+ */
 export function getProductImagesForColor(
-	product: Product,
+	product: {
+		variants?: {
+			color?: string | null;
+			images?: unknown;
+		}[] | null;
+		images?: unknown;
+	},
 	color: string
 ): string[] {
-	const variant = product.variants.find(
-		(v) => v.color.toLowerCase() === color.toLowerCase()
-	);
-	return variant?.images ?? product.variants[0]?.images ?? [];
+	const variants = product.variants ?? [];
+
+	const variant = variants.find((v) => {
+		const variantColor = (v?.color ?? "").toString();
+		return variantColor.toLowerCase() === color.toLowerCase();
+	});
+
+	const imagesSource: unknown =
+		(variant ?? variants[0])?.images ?? product.images ?? [];
+
+	// Static shape: string[]
+	if (Array.isArray(imagesSource) && typeof imagesSource[0] === "string") {
+		return imagesSource as string[];
+	}
+
+	// Payload shape: { image: number | Media }[]
+	if (Array.isArray(imagesSource)) {
+		const resolved = imagesSource
+			.map((entry) => {
+				const image = entry?.image ?? entry;
+				if (!image) return null;
+
+				// Already a URL string
+				if (typeof image === "string") return image;
+
+				// Media object from Payload
+				if (typeof image === "object") {
+					if (typeof image.url === "string") return image.url;
+					if (typeof image.thumbnailURL === "string")
+						return image.thumbnailURL;
+				}
+
+				return null;
+			})
+			.filter((url): url is string => Boolean(url));
+
+		if (resolved.length > 0) return resolved;
+	}
+
+	return [];
 }
 
-/** First image for a product (e.g. for cards, OG) – uses first variant */
-export function getProductDefaultImage(product: Product): string {
-	return product.variants[0]?.images[0] ?? "";
+/**
+ * First image for a product (e.g. for cards, OG).
+ *
+ * Uses the first variant image when available, and falls back to any
+ * top‑level product images in the Payload shape.
+ */
+export function getProductDefaultImage(product: {
+	variants?: {
+		color?: string | null;
+		images?: unknown;
+	}[] | null;
+	images?: unknown;
+}): string {
+	const variants = product.variants ?? [];
+	if (variants.length > 0) {
+		const firstVariantColor = variants[0]?.color ?? "";
+		const fromVariant = getProductImagesForColor(
+			product,
+			firstVariantColor.toString()
+		)[0];
+		if (fromVariant) return fromVariant;
+	}
+
+	// Fallback to any top‑level images
+	const topLevelImages = getProductImagesForColor(product, "");
+	return topLevelImages[0] ?? "";
 }
 
 export const PRODUCTS: Product[] = [

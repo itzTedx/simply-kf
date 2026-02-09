@@ -9,15 +9,8 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 
-import { getProductColors, PRODUCTS } from "@/constants/products";
-
-// Extract unique values from products
-const UNIQUE_COLORS = Array.from(
-	new Set(PRODUCTS.flatMap((p) => getProductColors(p)))
-);
-const UNIQUE_AVAILABILITY = Array.from(
-	new Set(PRODUCTS.map((p) => p.availability))
-);
+import { getProductColors } from "@/constants/products";
+import { Product } from "@/payload-types";
 
 interface FilterSectionProps {
 	priceRange: number[];
@@ -32,6 +25,7 @@ interface FilterSectionProps {
 
 		availability?: string[] | null;
 	}) => void;
+	products: Product[];
 }
 
 export function FilterSection({
@@ -39,7 +33,14 @@ export function FilterSection({
 	setPriceRange,
 	filters,
 	setFilters,
+	products,
 }: FilterSectionProps) {
+	const UNIQUE_COLORS = Array.from(
+		new Set(products.flatMap((p) => getProductColors(p)))
+	);
+	const UNIQUE_AVAILABILITY = Array.from(
+		new Set(products.map((p) => p.availability))
+	);
 	return (
 		<div className="space-y-8">
 			<div className="space-y-4">

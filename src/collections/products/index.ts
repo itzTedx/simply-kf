@@ -1,15 +1,21 @@
-import type { CollectionConfig } from "payload";
+import type { CollectionConfig, Where } from "payload";
 import { slugField } from "payload";
+
+import { revalidateAfterChange, revalidateAfterDelete } from "./hooks";
 
 export const Products: CollectionConfig = {
 	slug: "products",
 	admin: {
 		useAsTitle: "name",
-		defaultColumns: ["name", "price", "status", "updatedAt"],
+		defaultColumns: ["name", "price", "collections", "status", "updatedAt"],
 		group: "Products",
 	},
 	access: {
 		read: () => true,
+	},
+	hooks: {
+		afterChange: [revalidateAfterChange],
+		afterDelete: [revalidateAfterDelete],
 	},
 	fields: [
 		// Sidebar fields (outside tabs so they always show)
@@ -43,13 +49,25 @@ export const Products: CollectionConfig = {
 			required: true,
 		},
 		{
-			name: "categories",
+			name: "collections",
 			type: "relationship",
-			relationTo: "productCategories",
-
+			relationTo: "collections",
 			admin: {
 				position: "sidebar",
 			},
+		},
+		{
+			name: "relatedProducts",
+			type: "relationship",
+			relationTo: "products",
+			hasMany: true,
+			admin: {
+				position: "sidebar",
+				description:
+					'Products to show in "You may also like" section. Leave empty to show other published products.',
+			},
+			filterOptions: ({ id }): Where =>
+				id != null ? { id: { not_equals: id } } : ({} as Where),
 		},
 
 		{
@@ -60,6 +78,19 @@ export const Products: CollectionConfig = {
 			options: [
 				{ label: "Draft", value: "draft" },
 				{ label: "Published", value: "published" },
+			],
+			admin: {
+				position: "sidebar",
+			},
+		},
+		{
+			name: "availability",
+			type: "select",
+			required: true,
+			defaultValue: "sales",
+			options: [
+				{ label: "Sales", value: "sales" },
+				{ label: "Pre-order", value: "pre-order" },
 			],
 			admin: {
 				position: "sidebar",
