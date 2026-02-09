@@ -23,9 +23,9 @@ export type Product = {
  * Payload `Product` shape (from `@/payload-types`), which also exposes
  * a `variants` array with a `color` field.
  */
-export function getProductColors(
-	product: { variants?: { color?: string | null }[] | null }
-): string[] {
+export function getProductColors(product: {
+	variants?: { color?: string | null }[] | null;
+}): string[] {
 	if (!product.variants) return [];
 	return product.variants
 		.map((v) => v?.color)
@@ -41,10 +41,12 @@ export function getProductColors(
  */
 export function getProductImagesForColor(
 	product: {
-		variants?: {
-			color?: string | null;
-			images?: unknown;
-		}[] | null;
+		variants?:
+			| {
+					color?: string | null;
+					images?: unknown;
+			  }[]
+			| null;
 		images?: unknown;
 	},
 	color: string
@@ -77,8 +79,7 @@ export function getProductImagesForColor(
 				// Media object from Payload
 				if (typeof image === "object") {
 					if (typeof image.url === "string") return image.url;
-					if (typeof image.thumbnailURL === "string")
-						return image.thumbnailURL;
+					if (typeof image.thumbnailURL === "string") return image.thumbnailURL;
 				}
 
 				return null;
@@ -98,10 +99,12 @@ export function getProductImagesForColor(
  * top‑level product images in the Payload shape.
  */
 export function getProductDefaultImage(product: {
-	variants?: {
-		color?: string | null;
-		images?: unknown;
-	}[] | null;
+	variants?:
+		| {
+				color?: string | null;
+				images?: unknown;
+		  }[]
+		| null;
 	images?: unknown;
 }): string {
 	const variants = product.variants ?? [];

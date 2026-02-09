@@ -44,6 +44,7 @@ export function ShopPageContent({ initialProducts }: ShopPageContentProps) {
 	};
 
 	// Filter products based on selected filters
+	// biome-ignore lint/correctness/useExhaustiveDependencies: no need to re-run the filter when the filters change
 	const filteredProducts = useMemo(() => {
 		let filtered = initialProducts;
 

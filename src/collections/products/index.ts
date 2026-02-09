@@ -11,7 +11,11 @@ import { slugField } from "payload";
 import { generatePreviewPath } from "@/lib/payload/utils/generatePreviewPath";
 import { slugify } from "@/lib/utils";
 
-import { revalidateDeleteProduct, revalidateProduct } from "./hooks";
+import {
+	ensureUniqueSlug,
+	revalidateDeleteProduct,
+	revalidateProduct,
+} from "./hooks";
 
 export const Products: CollectionConfig = {
 	slug: "products",
@@ -19,16 +23,16 @@ export const Products: CollectionConfig = {
 		useAsTitle: "name",
 		defaultColumns: ["name", "price", "collections", "_status", "updatedAt"],
 		group: "Products",
-		preview: (data, { req }) =>
+		preview: (data) =>
 			generatePreviewPath({
 				slug: data?.slug as string,
-				req,
 			}),
 	},
 	access: {
 		read: () => true,
 	},
 	hooks: {
+		beforeValidate: [ensureUniqueSlug],
 		afterChange: [revalidateProduct],
 		afterDelete: [revalidateDeleteProduct],
 	},
