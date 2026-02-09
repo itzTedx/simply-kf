@@ -13,15 +13,17 @@ export default async function Home() {
 		<main className="min-h-screen">
 			<Hero />
 			<FeaturedProducts />
-			<section className="container relative mx-auto aspect-16/5 max-w-6xl overflow-hidden rounded-md">
-				<Link href="/shop?availability=sales">
-					<Image
-						alt="Hero"
-						className="object-cover"
-						fill
-						src="/images/banner-1.webp"
-					/>
-				</Link>
+			<section className="md:pb-28">
+				<div className="container relative mx-auto aspect-16/5 max-w-6xl overflow-hidden rounded-md">
+					<Link href="/shop?availability=sales">
+						<Image
+							alt="Hero"
+							className="object-cover"
+							fill
+							src="/images/banner-1.webp"
+						/>
+					</Link>
+				</div>
 			</section>
 			{/* <FeaturedCollections /> */}
 			<ProductHighlight />

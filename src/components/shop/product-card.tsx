@@ -21,8 +21,8 @@ export function ProductCard({ product }: ProductCardProps) {
 					)}
 					<Media
 						alt={product.name ?? ""}
-						className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
 						fill
+						imgClassName="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
 						src={getProductDefaultImage(product)}
 					/>
 					{/* <Image

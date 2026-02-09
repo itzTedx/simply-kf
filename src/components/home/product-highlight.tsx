@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 export function ProductHighlight() {
 	return (
-		<section className="bg-secondary/30 py-16 md:py-0 md:pt-28">
+		<section className="bg-secondary/30 py-16 md:py-0">
 			<div className="grid grid-cols-1 md:grid-cols-2">
 				<div className="relative aspect-square w-full bg-muted/40 md:aspect-auto md:min-h-[580px]">
 					<Image
