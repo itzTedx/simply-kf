@@ -17,6 +17,14 @@ import { plugins } from "./lib/payload/plugins";
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
+if (!process.env.PAYLOAD_SECRET) {
+	throw new Error("PAYLOAD_SECRET is not set");
+}
+
+if (!process.env.DATABASE_URL) {
+	throw new Error("DATABASE_URL is not set");
+}
+
 export default buildConfig({
 	admin: {
 		user: Users.slug,
@@ -27,7 +35,7 @@ export default buildConfig({
 	collections: [Users, Products, Collections, Reels, Media, Videos],
 	globals: [Homepage],
 	editor: defaultLexical,
-	secret: process.env.PAYLOAD_SECRET || "",
+	secret: process.env.PAYLOAD_SECRET,
 	typescript: {
 		outputFile: path.resolve(dirname, "payload-types.ts"),
 	},
