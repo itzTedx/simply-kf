@@ -6,6 +6,7 @@ import { fileURLToPath } from "url";
 
 import { Homepage } from "./collections/global/homepage";
 import { Media } from "./collections/Media";
+import { Orders } from "./collections/orders";
 import { Products } from "./collections/products";
 import { Collections } from "./collections/products/collections";
 import { Reels } from "./collections/reels";
@@ -32,7 +33,7 @@ export default buildConfig({
 			baseDir: path.resolve(dirname),
 		},
 	},
-	collections: [Users, Products, Collections, Reels, Media, Videos],
+	collections: [Users, Products, Collections, Orders, Reels, Media, Videos],
 	globals: [Homepage],
 	editor: defaultLexical,
 	secret: process.env.PAYLOAD_SECRET,

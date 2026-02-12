@@ -93,6 +93,105 @@ export function getProductImagesForColor(
 }
 
 /**
+ * Size with stock information.
+ */
+export type SizeWithStock = {
+	size: string;
+	stock: number | null;
+	id?: string | null;
+};
+
+/**
+ * Get available sizes for a product based on the selected color/variant.
+ *
+ * - For variant products, returns sizes from the matching variant.
+ * - For non-variant products, returns top-level sizes.
+ * - Returns empty array if no sizes are defined.
+ */
+export function getProductSizes(
+	product: {
+		enableVariants?: boolean | null;
+		variants?:
+			| {
+					color?: string | null;
+					sizes?:
+						| {
+								size: string;
+								stock?: number | null;
+								id?: string | null;
+						  }[]
+						| null;
+			  }[]
+			| null;
+		sizes?:
+			| {
+					size: string;
+					stock?: number | null;
+					id?: string | null;
+			  }[]
+			| null;
+	},
+	selectedColor?: string
+): SizeWithStock[] {
+	// For variant products, get sizes from the selected variant
+	if (product.enableVariants && product.variants?.length) {
+		const variant =
+			product.variants.find(
+				(v) => v.color?.toLowerCase() === selectedColor?.toLowerCase()
+			) ?? product.variants[0];
+
+		if (variant?.sizes?.length) {
+			return variant.sizes.map((s) => ({
+				size: s.size,
+				stock: s.stock ?? null,
+				id: s.id ?? null,
+			}));
+		}
+		return [];
+	}
+
+	// For non-variant products, use top-level sizes
+	if (product.sizes?.length) {
+		return product.sizes.map((s) => ({
+			size: s.size,
+			stock: s.stock ?? null,
+			id: s.id ?? null,
+		}));
+	}
+
+	return [];
+}
+
+/**
+ * Check if a specific size is in stock for a product/variant.
+ */
+export function isSizeInStock(
+	product: Parameters<typeof getProductSizes>[0],
+	size: string,
+	selectedColor?: string
+): boolean {
+	const sizes = getProductSizes(product, selectedColor);
+	const sizeItem = sizes.find((s) => s.size === size);
+	// If stock is null/undefined, we assume it's available (no stock tracking)
+	// If stock is 0, it's out of stock
+	return sizeItem ? sizeItem.stock === null || sizeItem.stock > 0 : false;
+}
+
+/**
+ * Get the stock count for a specific size.
+ * Returns null if not tracking stock, or the number if tracked.
+ */
+export function getSizeStock(
+	product: Parameters<typeof getProductSizes>[0],
+	size: string,
+	selectedColor?: string
+): number | null {
+	const sizes = getProductSizes(product, selectedColor);
+	const sizeItem = sizes.find((s) => s.size === size);
+	return sizeItem?.stock ?? null;
+}
+
+/**
  * First image for a product (e.g. for cards, OG).
  *
  * Uses the first variant image when available, and falls back to any

@@ -1,6 +1,8 @@
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
+import config from "@payload-config";
+import { getPayload } from "payload";
 import Stripe from "stripe";
 
 import { stripe } from "@/lib/stripe";
@@ -88,16 +90,6 @@ export async function POST(req: NextRequest) {
 				break;
 			}
 
-			case "customer.subscription.created":
-			case "customer.subscription.updated":
-			case "customer.subscription.deleted": {
-				const subscription = event.data.object as Stripe.Subscription;
-				console.log(`Subscription ${event.type}:`, subscription.id);
-				// TODO: Handle subscription changes
-				await handleSubscriptionChange(event.type, subscription);
-				break;
-			}
-
 			default:
 				console.log(`Unhandled event type: ${event.type}`);
 		}
@@ -112,21 +104,344 @@ export async function POST(req: NextRequest) {
 	}
 }
 
+// Type for order items stored in Payload KV
+interface OrderItem {
+	productId: number;
+	name: string;
+	price: number;
+	quantity: number;
+	color: string | null;
+	size: string | null;
+}
+
+interface PendingOrderData {
+	items: OrderItem[];
+	subtotal: number;
+	shipping: number;
+	total: number;
+	createdAt: string;
+}
+
+// Generate a human-readable order number
+function generateOrderNumber(): string {
+	const date = new Date();
+	const year = date.getFullYear().toString().slice(-2);
+	const month = (date.getMonth() + 1).toString().padStart(2, "0");
+	const day = date.getDate().toString().padStart(2, "0");
+	const random = Math.random().toString(36).slice(2, 6).toUpperCase();
+	return `SKF-${year}${month}${day}-${random}`;
+}
+
 // Event handler functions
 async function handlePaymentSuccess(paymentIntent: Stripe.PaymentIntent) {
-	// TODO: Implement your business logic here
-	// Examples:
-	// - Update order status in database
-	// - Send confirmation email
-	// - Update inventory
-	// - Create shipping order
-
 	console.log("Processing successful payment:", {
 		paymentIntentId: paymentIntent.id,
 		amount: paymentIntent.amount,
 		currency: paymentIntent.currency,
 		metadata: paymentIntent.metadata,
 	});
+
+	const orderReference = paymentIntent.metadata?.order_reference;
+	if (!orderReference) {
+		console.warn(
+			"No order_reference in payment metadata, skipping order creation"
+		);
+		return;
+	}
+
+	// Retrieve order items from Payload KV
+	const payload = await getPayload({ config });
+
+	const kvKey = `pending_order:${orderReference}`;
+	const kvResults = await payload.find({
+		collection: "payload-kv",
+		where: {
+			key: { equals: kvKey },
+		},
+		limit: 1,
+	});
+
+	if (kvResults.docs.length === 0) {
+		console.warn(`Pending order not found for key: ${kvKey}`);
+		return;
+	}
+
+	const kvDoc = kvResults.docs[0];
+	const orderData = kvDoc.data as unknown as PendingOrderData;
+
+	if (!orderData?.items?.length) {
+		console.log("No items to process");
+		return;
+	}
+
+	// Get customer info from Stripe (from latest charge or payment method)
+	let customerName = "";
+	let customerEmail = "";
+	let customerPhone = "";
+	let shippingAddress = {
+		line1: "",
+		line2: "",
+		city: "",
+		state: "",
+		postalCode: "",
+		country: "United Kingdom",
+	};
+
+	// Try to get billing/shipping details from Stripe
+	try {
+		// Get the latest charge for this payment intent
+		const charges = await stripe.charges.list({
+			payment_intent: paymentIntent.id,
+			limit: 1,
+		});
+
+		if (charges.data.length > 0) {
+			const charge = charges.data[0];
+
+			// Get billing details
+			if (charge.billing_details) {
+				customerName = charge.billing_details.name ?? "";
+				customerEmail = charge.billing_details.email ?? "";
+				customerPhone = charge.billing_details.phone ?? "";
+
+				// Use billing address as shipping if no shipping provided
+				if (charge.billing_details.address) {
+					const addr = charge.billing_details.address;
+					shippingAddress = {
+						line1: addr.line1 ?? "",
+						line2: addr.line2 ?? "",
+						city: addr.city ?? "",
+						state: addr.state ?? "",
+						postalCode: addr.postal_code ?? "",
+						country: addr.country ?? "United Kingdom",
+					};
+				}
+			}
+
+			// Prefer shipping details if available
+			if (charge.shipping) {
+				if (charge.shipping.name) customerName = charge.shipping.name;
+				if (charge.shipping.phone) customerPhone = charge.shipping.phone;
+				if (charge.shipping.address) {
+					const addr = charge.shipping.address;
+					shippingAddress = {
+						line1: addr.line1 ?? "",
+						line2: addr.line2 ?? "",
+						city: addr.city ?? "",
+						state: addr.state ?? "",
+						postalCode: addr.postal_code ?? "",
+						country: addr.country ?? "United Kingdom",
+					};
+				}
+			}
+		}
+	} catch (err) {
+		console.error("Failed to get customer details from Stripe:", err);
+	}
+
+	// Create order in Payload
+	const orderNumber = generateOrderNumber();
+
+	try {
+		await payload.create({
+			collection: "orders",
+			data: {
+				orderNumber,
+				status: "pending",
+				customer: {
+					name: customerName || undefined,
+					email: customerEmail || undefined,
+					phone: customerPhone || undefined,
+				},
+				shippingAddress: {
+					line1: shippingAddress.line1 || undefined,
+					line2: shippingAddress.line2 || undefined,
+					city: shippingAddress.city || undefined,
+					state: shippingAddress.state || undefined,
+					postalCode: shippingAddress.postalCode || undefined,
+					country: shippingAddress.country,
+				},
+				items: orderData.items.map((item) => ({
+					product: item.productId,
+					productName: item.name,
+					color: item.color ?? undefined,
+					size: item.size ?? undefined,
+					quantity: item.quantity,
+					price: item.price,
+				})),
+				subtotal: orderData.subtotal,
+				shipping: orderData.shipping,
+				total: orderData.total,
+				stripePaymentIntentId: paymentIntent.id,
+				paymentStatus: "paid",
+				paidAt: new Date().toISOString(),
+			},
+		});
+
+		console.log(`Order ${orderNumber} created successfully`);
+	} catch (err) {
+		console.error("Failed to create order in Payload:", err);
+		// Continue with stock deduction even if order creation fails
+	}
+
+	// Deduct stock for each item
+	await deductStock(orderData.items);
+
+	// Mark order as processed by deleting the KV entry
+	await payload.delete({
+		collection: "payload-kv",
+		id: kvDoc.id,
+	});
+
+	console.log(`Order ${orderReference} processed and KV entry cleaned up`);
+}
+
+/**
+ * Deduct stock for purchased items.
+ * Handles both variant products (stock per color/size) and non-variant products.
+ */
+async function deductStock(items: OrderItem[]) {
+	const payload = await getPayload({ config });
+
+	for (const item of items) {
+		try {
+			// Fetch the current product
+			const product = await payload.findByID({
+				collection: "products",
+				id: item.productId,
+				draft: false,
+			});
+
+			if (!product) {
+				console.warn(
+					`Product ${item.productId} not found, skipping stock deduction`
+				);
+				continue;
+			}
+
+			// Determine if this is a variant product
+			if (product.enableVariants && product.variants?.length) {
+				// Find the matching variant by color
+				const variantIndex = product.variants.findIndex(
+					(v) => v.color?.toLowerCase() === item.color?.toLowerCase()
+				);
+
+				if (variantIndex === -1) {
+					console.warn(
+						`Variant with color "${item.color}" not found for product ${item.productId}`
+					);
+					continue;
+				}
+
+				const variant = product.variants[variantIndex];
+
+				// Find the matching size within the variant
+				if (variant.sizes?.length && item.size) {
+					const sizeIndex = variant.sizes.findIndex(
+						(s) => s.size === item.size
+					);
+
+					if (sizeIndex === -1) {
+						console.warn(
+							`Size "${item.size}" not found in variant "${item.color}" for product ${item.productId}`
+						);
+						continue;
+					}
+
+					const currentStock = variant.sizes[sizeIndex].stock;
+					if (currentStock === null || currentStock === undefined) {
+						console.log(
+							`Stock not tracked for size "${item.size}" in variant "${item.color}" of product ${item.productId}`
+						);
+						continue;
+					}
+
+					const newStock = Math.max(0, currentStock - item.quantity);
+
+					// Update the stock using deep path
+					const updatedVariants = [...product.variants];
+					const updatedSizes = [...(variant.sizes ?? [])];
+					updatedSizes[sizeIndex] = {
+						...updatedSizes[sizeIndex],
+						stock: newStock,
+					};
+					updatedVariants[variantIndex] = {
+						...variant,
+						sizes: updatedSizes,
+					};
+
+					await payload.update({
+						collection: "products",
+						id: item.productId,
+						data: {
+							variants: updatedVariants,
+						},
+					});
+
+					console.log(
+						`Updated stock for product ${item.productId} (${item.name}), variant "${item.color}", size "${item.size}": ${currentStock} -> ${newStock}`
+					);
+				} else if (!item.size) {
+					// Variant product without sizes (just colors)
+					console.log(
+						`Product ${item.productId} variant "${item.color}" has no sizes, no stock to deduct`
+					);
+				}
+			} else {
+				// Non-variant product - check top-level sizes
+				if (product.sizes?.length && item.size) {
+					const sizeIndex = product.sizes.findIndex(
+						(s) => s.size === item.size
+					);
+
+					if (sizeIndex === -1) {
+						console.warn(
+							`Size "${item.size}" not found for product ${item.productId}`
+						);
+						continue;
+					}
+
+					const currentStock = product.sizes[sizeIndex].stock;
+					if (currentStock === null || currentStock === undefined) {
+						console.log(
+							`Stock not tracked for size "${item.size}" of product ${item.productId}`
+						);
+						continue;
+					}
+
+					const newStock = Math.max(0, currentStock - item.quantity);
+
+					const updatedSizes = [...product.sizes];
+					updatedSizes[sizeIndex] = {
+						...updatedSizes[sizeIndex],
+						stock: newStock,
+					};
+
+					await payload.update({
+						collection: "products",
+						id: item.productId,
+						data: {
+							sizes: updatedSizes,
+						},
+					});
+
+					console.log(
+						`Updated stock for product ${item.productId} (${item.name}), size "${item.size}": ${currentStock} -> ${newStock}`
+					);
+				} else {
+					console.log(
+						`Product ${item.productId} has no sizes or size not specified, no stock to deduct`
+					);
+				}
+			}
+		} catch (error) {
+			console.error(
+				`Failed to deduct stock for product ${item.productId}:`,
+				error
+			);
+			// Continue processing other items even if one fails
+		}
+	}
 }
 
 async function handlePaymentFailure(paymentIntent: Stripe.PaymentIntent) {
@@ -178,18 +493,5 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
 		subscription: invoice.subscription,
 		amount: invoice.amount_due,
 		attemptCount: invoice.attempt_count,
-	});
-}
-
-async function handleSubscriptionChange(
-	eventType: string,
-	subscription: Stripe.Subscription
-) {
-	// TODO: Handle subscription changes
-	console.log("Processing subscription change:", {
-		eventType,
-		subscriptionId: subscription.id,
-		status: subscription.status,
-		customerId: subscription.customer,
 	});
 }

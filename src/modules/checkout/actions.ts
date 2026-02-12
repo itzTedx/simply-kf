@@ -1,17 +1,40 @@
 "use server";
 
+import config from "@payload-config";
+import { getPayload } from "payload";
+
 import { stripe } from "@/lib/stripe";
 
 const MIN_AMOUNT_GBP = 0.5; // Stripe minimum ~50p for GBP
 const CENTS_PER_POUND = 100;
+const SHIPPING_FEE = 4.5;
+const FREE_SHIPPING_THRESHOLD = 30;
 
 interface CheckoutItem {
 	id: number;
 	name: string;
+	price: number;
 	quantity: number;
 	image?: string;
 	color?: string;
 	size?: string;
+}
+
+export interface PendingOrderItem {
+	productId: number;
+	name: string;
+	price: number;
+	quantity: number;
+	color: string | null;
+	size: string | null;
+}
+
+export interface PendingOrderData {
+	items: PendingOrderItem[];
+	subtotal: number;
+	shipping: number;
+	total: number;
+	createdAt: string;
 }
 
 export async function createPaymentIntent(
@@ -43,28 +66,56 @@ export async function createPaymentIntent(
 
 		const firstItemWithImage = items.find((item) => item.image);
 
-		const itemDetails = JSON.stringify(
-			items.map(({ id, name, quantity, color, size }) => ({
-				id,
+		// Calculate subtotal and shipping
+		const subtotal = items.reduce(
+			(sum, item) => sum + item.price * item.quantity,
+			0
+		);
+		const shipping =
+			items.length > 0 && subtotal >= FREE_SHIPPING_THRESHOLD
+				? 0
+				: SHIPPING_FEE;
+
+		// Prepare order items for storage (including price)
+		const orderItems: PendingOrderItem[] = items.map(
+			({ id, name, price, quantity, color, size }) => ({
+				productId: id,
 				name,
+				price,
 				quantity,
 				color: color ?? null,
 				size: size ?? null,
-			}))
+			})
 		);
 
+		// Store pending order in Payload KV to handle large orders
+		// This avoids Stripe's 500 char metadata limit
+		const payload = await getPayload({ config });
+		const orderReference = `order_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+
+		const pendingOrderData: PendingOrderData = {
+			items: orderItems,
+			subtotal,
+			shipping,
+			total: amount,
+			createdAt: new Date().toISOString(),
+		};
+
+		await payload.create({
+			collection: "payload-kv",
+			data: {
+				key: `pending_order:${orderReference}`,
+				data: pendingOrderData as unknown as Record<string, unknown>,
+			},
+		});
+
 		const metadata: Record<string, string> = {
-			order_reference: `order_${Date.now()}`,
+			order_reference: orderReference,
 			items: itemsSummary,
 			...(firstItemWithImage?.image && {
 				first_item_image: firstItemWithImage.image,
 			}),
 		};
-
-		// Stripe metadata values max 500 chars; include item_details (color/size) when possible
-		if (itemDetails.length <= 500) {
-			metadata.item_details = itemDetails;
-		}
 
 		const paymentIntent = await stripe.paymentIntents.create({
 			amount: amountInPence,

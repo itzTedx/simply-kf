@@ -70,6 +70,7 @@ export interface Config {
     users: User;
     products: Product;
     collections: Collection;
+    orders: Order;
     reels: Reel;
     media: Media;
     videos: Video;
@@ -84,6 +85,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
     collections: CollectionsSelect<false> | CollectionsSelect<true>;
+    orders: OrdersSelect<false> | OrdersSelect<true>;
     reels: ReelsSelect<false> | ReelsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     videos: VideosSelect<false> | VideosSelect<true>;
@@ -200,15 +202,20 @@ export interface Product {
         id?: string | null;
       }[]
     | null;
-  /**
-   * Used when the product has no variants, or as fallback. For variant-specific images, add them on each variant.
-   */
   images?:
     | {
         image: number | Media;
         id?: string | null;
       }[]
     | null;
+  sizes?:
+    | {
+        size: string;
+        stock?: number | null;
+        id?: string | null;
+      }[]
+    | null;
+  enableVariants?: boolean | null;
   variants?:
     | {
         /**
@@ -216,21 +223,28 @@ export interface Product {
          */
         color: string;
         /**
-         * Size (e.g. S, M, L, XL, One Size). Leave empty if not applicable.
+         * Images for this color variant. First image is used as the thumbnail.
          */
-        size?: string | null;
-        /**
-         * Override product price for this variant (leave empty to use base price)
-         */
-        price?: number | null;
-        /**
-         * Quantity in stock
-         */
-        stock?: number | null;
         images: {
           image: number | Media;
           id?: string | null;
         }[];
+        /**
+         * Add sizes for this color. Leave empty if product has no size options.
+         */
+        sizes?:
+          | {
+              /**
+               * Size (e.g. One Size, 42, 44, 46)
+               */
+              size: string;
+              /**
+               * Quantity in stock
+               */
+              stock?: number | null;
+              id?: string | null;
+            }[]
+          | null;
         id?: string | null;
       }[]
     | null;
@@ -283,6 +297,77 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+}
+/**
+ * Customer orders from the shop
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders".
+ */
+export interface Order {
+  id: number;
+  orderNumber: string;
+  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled' | 'refunded';
+  customer?: {
+    name?: string | null;
+    email?: string | null;
+    phone?: string | null;
+  };
+  shippingAddress?: {
+    line1?: string | null;
+    line2?: string | null;
+    city?: string | null;
+    state?: string | null;
+    postalCode?: string | null;
+    country?: string | null;
+  };
+  items: {
+    product?: (number | null) | Product;
+    /**
+     * Stored separately in case product is deleted
+     */
+    productName?: string | null;
+    color?: string | null;
+    size?: string | null;
+    quantity: number;
+    /**
+     * Price per item in £
+     */
+    price: number;
+    id?: string | null;
+  }[];
+  /**
+   * Subtotal in £
+   */
+  subtotal?: number | null;
+  /**
+   * Shipping cost in £
+   */
+  shipping?: number | null;
+  /**
+   * Total in £
+   */
+  total: number;
+  /**
+   * Reference to Stripe payment
+   */
+  stripePaymentIntentId?: string | null;
+  paymentStatus?: ('paid' | 'pending' | 'failed' | 'refunded') | null;
+  paidAt?: string | null;
+  /**
+   * Internal notes about this order (not visible to customer)
+   */
+  notes?: string | null;
+  /**
+   * Shipping tracking number
+   */
+  trackingNumber?: string | null;
+  /**
+   * Link to track the shipment
+   */
+  trackingUrl?: string | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -461,6 +546,10 @@ export interface PayloadLockedDocument {
         value: number | Collection;
       } | null)
     | ({
+        relationTo: 'orders';
+        value: number | Order;
+      } | null)
+    | ({
         relationTo: 'reels';
         value: number | Reel;
       } | null)
@@ -562,17 +651,29 @@ export interface ProductsSelect<T extends boolean = true> {
         image?: T;
         id?: T;
       };
+  sizes?:
+    | T
+    | {
+        size?: T;
+        stock?: T;
+        id?: T;
+      };
+  enableVariants?: T;
   variants?:
     | T
     | {
         color?: T;
-        size?: T;
-        price?: T;
-        stock?: T;
         images?:
           | T
           | {
               image?: T;
+              id?: T;
+            };
+        sizes?:
+          | T
+          | {
+              size?: T;
+              stock?: T;
               id?: T;
             };
         id?: T;
@@ -597,6 +698,53 @@ export interface CollectionsSelect<T extends boolean = true> {
   slug?: T;
   name?: T;
   description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders_select".
+ */
+export interface OrdersSelect<T extends boolean = true> {
+  orderNumber?: T;
+  status?: T;
+  customer?:
+    | T
+    | {
+        name?: T;
+        email?: T;
+        phone?: T;
+      };
+  shippingAddress?:
+    | T
+    | {
+        line1?: T;
+        line2?: T;
+        city?: T;
+        state?: T;
+        postalCode?: T;
+        country?: T;
+      };
+  items?:
+    | T
+    | {
+        product?: T;
+        productName?: T;
+        color?: T;
+        size?: T;
+        quantity?: T;
+        price?: T;
+        id?: T;
+      };
+  subtotal?: T;
+  shipping?: T;
+  total?: T;
+  stripePaymentIntentId?: T;
+  paymentStatus?: T;
+  paidAt?: T;
+  notes?: T;
+  trackingNumber?: T;
+  trackingUrl?: T;
   updatedAt?: T;
   createdAt?: T;
 }

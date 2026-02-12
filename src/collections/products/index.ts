@@ -36,6 +36,18 @@ export const Products: CollectionConfig = {
 		afterChange: [revalidateProduct],
 		afterDelete: [revalidateDeleteProduct],
 	},
+	defaultPopulate: {
+		name: true,
+		price: true,
+		collections: true,
+		relatedProducts: true,
+		availability: true,
+		slug: true,
+		overview: true,
+		features: true,
+		images: true,
+		variants: true,
+	},
 	fields: [
 		// Sidebar fields (outside tabs so they always show)
 
@@ -136,90 +148,134 @@ export const Products: CollectionConfig = {
 				},
 				{
 					label: "Media",
-					description: "Product and variant images.",
 					fields: [
 						{
-							name: "images",
-							type: "array",
-							label: "Product images",
+							type: "group",
+							label: "Product Details",
 							admin: {
-								description:
-									"Used when the product has no variants, or as fallback. For variant-specific images, add them on each variant.",
+								description: "Product images and sizes.",
 							},
 							fields: [
-								{
-									name: "image",
-									type: "upload",
-									relationTo: "media",
-									required: true,
-								},
-							],
-						},
-						{
-							name: "variants",
-							type: "array",
-							label: "Variants",
-							admin: {
-								components: {
-									RowLabel:
-										"@/components/payload/VariantRowLabel#VariantRowLabel",
-								},
-							},
-							fields: [
-								{
-									type: "row",
-									fields: [
-										{
-											name: "color",
-											type: "text",
-											required: true,
-											admin: {
-												width: "25%",
-												description:
-													"Color or option name (e.g. Maroon, Navy Blue). Used for the frontend color selector.",
-											},
-										},
-										{
-											name: "size",
-											type: "text",
-											admin: {
-												width: "25%",
-												description:
-													"Size (e.g. S, M, L, XL, One Size). Leave empty if not applicable.",
-											},
-										},
-										{
-											name: "price",
-											type: "number",
-											min: 0,
-											admin: {
-												width: "25%",
-												description:
-													"Override product price for this variant (leave empty to use base price)",
-											},
-										},
-										{
-											name: "stock",
-											type: "number",
-											min: 0,
-											admin: {
-												width: "25%",
-												description: "Quantity in stock",
-											},
-										},
-									],
-								},
 								{
 									name: "images",
 									type: "array",
-									label: "Variant images",
-									required: true,
+									label: "Gallery",
 									fields: [
 										{
 											name: "image",
 											type: "upload",
 											relationTo: "media",
 											required: true,
+										},
+									],
+									admin: {
+										condition: (data) => !data?.enableVariants,
+									},
+								},
+								{
+									name: "sizes",
+									type: "array",
+
+									fields: [
+										{ name: "size", type: "text", required: true },
+										{ name: "stock", type: "number", min: 0 },
+									],
+									admin: {
+										condition: (data) => !data?.enableVariants,
+									},
+								},
+								{
+									name: "enableVariants",
+									type: "checkbox",
+									label: "Enable variants",
+								},
+							],
+						},
+						{
+							type: "group",
+							label: "Variants",
+							admin: {
+								description: "Add color variants for the product.",
+							},
+							fields: [
+								{
+									name: "variants",
+									type: "array",
+									label: "Color Variants",
+
+									admin: {
+										condition: (data) => Boolean(data?.enableVariants),
+										components: {
+											RowLabel:
+												"@/components/payload/VariantRowLabel#VariantRowLabel",
+										},
+									},
+									fields: [
+										{
+											name: "color",
+											type: "text",
+											required: true,
+											admin: {
+												description:
+													"Color or option name (e.g. Maroon, Navy Blue). Used for the frontend color selector.",
+											},
+										},
+										{
+											name: "images",
+											type: "array",
+											label: "Variant images",
+											required: true,
+											admin: {
+												description:
+													"Images for this color variant. First image is used as the thumbnail.",
+											},
+											fields: [
+												{
+													name: "image",
+													type: "upload",
+													relationTo: "media",
+													required: true,
+												},
+											],
+										},
+										{
+											name: "sizes",
+											type: "array",
+											label: "Sizes",
+											admin: {
+												description:
+													"Add sizes for this color. Leave empty if product has no size options.",
+												components: {
+													RowLabel:
+														"@/components/payload/SizeRowLabel#SizeRowLabel",
+												},
+											},
+											fields: [
+												{
+													type: "row",
+													fields: [
+														{
+															name: "size",
+															type: "text",
+															required: true,
+															admin: {
+																width: "33%",
+																description: "Size (e.g. One Size, 42, 44, 46)",
+															},
+														},
+
+														{
+															name: "stock",
+															type: "number",
+															min: 0,
+															admin: {
+																width: "33%",
+																description: "Quantity in stock",
+															},
+														},
+													],
+												},
+											],
 										},
 									],
 								},

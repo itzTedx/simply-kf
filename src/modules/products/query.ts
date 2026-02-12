@@ -6,6 +6,9 @@ export async function getProducts(): Promise<Partial<Product>[]> {
 		collection: "products",
 		draft: false,
 		sort: ["availability", "-createdAt"],
+		where: {
+			_status: { equals: "published" },
+		},
 		select: {
 			name: true,
 			price: true,

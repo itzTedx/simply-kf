@@ -14,6 +14,7 @@ import {
 	AccordionItem,
 	AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,6 +30,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import {
 	getProductColors,
 	getProductImagesForColor,
+	getProductSizes,
+	isSizeInStock,
 } from "@/constants/products";
 import { cn } from "@/lib/utils";
 import type { Product } from "@/payload-types";
@@ -54,17 +57,40 @@ export function ProductView({ product }: ProductViewProps) {
 				: colors[0],
 		[queryState.color, colors]
 	);
-	// For Payload products, size is stored per-variant as a string.
-	// We treat it as simple text and don't expose a separate size selector.
+
+	// Get available sizes for the current color/variant
+	const availableSizes = useMemo(
+		() => getProductSizes(product, selectedColor),
+		[product, selectedColor]
+	);
+
+	// Selected size from query state, defaulting to first available size
 	const selectedSize = useMemo(() => {
-		if (!product.variants || product.variants.length === 0) return null;
+		if (availableSizes.length === 0) return null;
+		const sizeFromQuery = queryState.size;
+		if (sizeFromQuery && availableSizes.some((s) => s.size === sizeFromQuery)) {
+			return sizeFromQuery;
+		}
+		// Default to first in-stock size, or first size if none in stock
+		const firstInStock = availableSizes.find(
+			(s) => s.stock === null || s.stock > 0
+		);
+		return firstInStock?.size ?? availableSizes[0]?.size ?? null;
+	}, [availableSizes, queryState.size]);
 
-		const currentVariant =
-			product.variants.find((v) => v.color === selectedColor) ??
-			product.variants[0];
+	// Check if selected size is in stock
+	const isSelectedSizeInStock = useMemo(
+		() =>
+			selectedSize ? isSizeInStock(product, selectedSize, selectedColor) : true,
+		[product, selectedSize, selectedColor]
+	);
 
-		return currentVariant?.size ?? null;
-	}, [product.variants, selectedColor]);
+	// Get stock count for selected size (for display)
+	const selectedSizeStock = useMemo(() => {
+		if (!selectedSize) return null;
+		const sizeItem = availableSizes.find((s) => s.size === selectedSize);
+		return sizeItem?.stock ?? null;
+	}, [availableSizes, selectedSize]);
 
 	const currentImages = getProductImagesForColor(product, selectedColor);
 	const [carouselApi, setCarouselApi] = useState<CarouselApi | undefined>();
@@ -108,6 +134,18 @@ export function ProductView({ product }: ProductViewProps) {
 	);
 
 	const handleAddToCart = () => {
+		// Validate size selection if sizes are available
+		if (availableSizes.length > 0 && !selectedSize) {
+			toast.error("Please select a size.");
+			return;
+		}
+
+		// Validate stock availability
+		if (!isSelectedSizeInStock) {
+			toast.error("Sorry, this size is currently out of stock.");
+			return;
+		}
+
 		const resolvedSize =
 			selectedSize != null ? String(selectedSize) : undefined;
 
@@ -133,7 +171,7 @@ export function ProductView({ product }: ProductViewProps) {
 
 	return (
 		<div className="grid grid-cols-1 gap-x-10 gap-y-10 md:gap-y-14 lg:grid-cols-2 lg:gap-x-20 lg:gap-y-16">
-			<div className="flex flex-col gap-5">
+			<div className="flex h-fit flex-col gap-5 md:sticky md:top-40">
 				<Carousel
 					className="w-full"
 					key={selectedColor}
@@ -155,18 +193,6 @@ export function ProductView({ product }: ProductViewProps) {
 										priority={idx === 0}
 										src={img}
 									/>
-									{/* <Image
-										alt={`${product.name} view ${idx + 1}`}
-										className={cn(
-											"object-cover transition-opacity duration-500",
-											idx === 0 && isImageLoading ? "opacity-0" : "opacity-100"
-										)}
-										fill
-										onLoad={() => idx === 0 && setIsImageLoading(false)}
-										priority={idx === 0}
-										sizes="(max-width: 768px) 100vw, 50vw"
-										src={img}
-									/> */}
 								</div>
 							</CarouselItem>
 						))}
@@ -211,13 +237,6 @@ export function ProductView({ product }: ProductViewProps) {
 										fill
 										src={img}
 									/>
-									{/* <Image
-										alt={`${product.name} thumbnail ${idx + 1}`}
-										className="object-cover"
-										fill
-										sizes="(max-width: 640px) 25vw, 20vw"
-										src={img}
-									/> */}
 								</button>
 							</CarouselItem>
 						))}
@@ -225,110 +244,191 @@ export function ProductView({ product }: ProductViewProps) {
 				</Carousel>
 			</div>
 
-			<div className="flex flex-col">
-				<div className="sticky top-28 flex flex-col gap-8">
-					<div className="space-y-5 border-border/40 border-b pb-8">
-						<h1 className="font-normal font-sans text-3xl text-foreground leading-tight md:text-4xl lg:text-[2.75rem]">
-							{product.name}
-						</h1>
-						<div className="flex items-center justify-between">
-							<p className="font-body text-foreground text-xl">
-								£{product.price}
-							</p>
-							<span className="font-body text-foreground/50 text-xs uppercase tracking-wider">
-								Designed in Dubai
-							</span>
-						</div>
+			<div className="flex flex-col gap-6">
+				<div className="space-y-5 border-border/40 border-b pb-8">
+					<h1 className="font-normal font-sans text-3xl text-yellow-900 leading-tight md:text-4xl lg:text-[2.75rem]">
+						{product.name}
+					</h1>
+					<div className="flex items-center justify-between">
+						<p className="font-body text-foreground text-xl">
+							£{product.price}
+						</p>
+						<span className="font-body text-foreground/50 text-xs uppercase tracking-wider">
+							Designed in Dubai
+						</span>
 					</div>
+				</div>
 
-					<p className="order-3 font-body text-base text-foreground/75 leading-relaxed md:text-lg lg:order-2">
-						{product.description}
-					</p>
+				<p className="order-3 font-body text-base text-foreground/75 leading-relaxed md:text-lg lg:order-2">
+					{product.description}
+				</p>
 
-					<div className="order-2 space-y-6 pt-1 lg:order-3">
-						<div className="space-y-3">
-							<p className="font-body text-foreground/60 text-xs uppercase tracking-wider">
-								Colour: <span className="text-foreground">{selectedColor}</span>
-							</p>
-							<div className="flex flex-wrap gap-2">
-								{colors.map((color) => (
-									<button
-										className={cn(
-											"h-8 rounded-full border px-4 font-body text-xs transition-colors duration-200",
-											selectedColor === color
-												? "border-primary bg-primary text-primary-foreground"
-												: "border-border/80 text-foreground/70 hover:border-foreground/25 hover:text-foreground"
-										)}
-										key={color}
-										onClick={() => setQueryState({ color })}
-									>
-										{color}
-									</button>
-								))}
-							</div>
-						</div>
-
-						<div className="space-y-2">
-							<div className="flex items-center justify-between">
-								<span className="font-body text-foreground/55 text-xs uppercase tracking-wider">
-									Size:{" "}
-									<span className="text-foreground">
-										{selectedSize ?? "One size"}
-									</span>
-								</span>
-								<button className="font-body text-foreground/45 text-xs underline-offset-2 transition-colors hover:text-foreground/75">
-									Size guide
-								</button>
-							</div>
-							{/* Payload variants currently use a single size string per variant,
-								so we don't render a multi-size selector here. */}
-						</div>
-					</div>
-
-					<div className="order-2 pt-4 lg:order-3">
-						{/* {isPreOrder && (
-							<p className="mb-3 font-body text-foreground/70 text-sm">
-								Pre-order: pay now and we&apos;ll make your item, then deliver
-								when it&apos;s ready.
-							</p>
-						)} */}
-						<Button
-							className="relative w-full"
-							onClick={handleAddToCart}
-							size="lg"
-						>
-							{isPreOrder && (
-								<Badge className="absolute -top-3 right-3 rounded-md bg-foreground/60 backdrop-blur-lg">
-									Pre-order
-								</Badge>
-							)}
-							Add to bag
-						</Button>
-					</div>
-
-					<div className="order-4 pt-6">
-						<Accordion className="w-full border-0">
-							<AccordionItem
-								className="border-0 border-border/40 border-b"
-								value="details"
-							>
-								<AccordionTrigger className="py-4 font-normal font-sans text-foreground hover:no-underline">
-									Description
-								</AccordionTrigger>
-								<AccordionContent className="pb-4 font-body text-foreground/75 text-sm leading-relaxed">
-									{product.overview ? (
-										<RichText data={product.overview as never} />
-									) : (
-										<>
-											{product.description}
-											<br />
-											<br />
-											Our {product.name} reflects the Simply KF philosophy —
-											craftsmanship meets contemporary design.
-										</>
+				<div className="order-2 space-y-6 pt-1 lg:order-3">
+					<div className="space-y-3">
+						<p className="font-body text-foreground/60 text-xs uppercase tracking-wider">
+							Colour: <span className="text-foreground">{selectedColor}</span>
+						</p>
+						<div className="flex flex-wrap gap-2">
+							{colors.map((color) => (
+								<button
+									className={cn(
+										"h-8 rounded-full border px-4 font-body text-xs transition-colors duration-200",
+										selectedColor === color
+											? "border-primary bg-primary text-primary-foreground"
+											: "border-border/80 text-foreground/70 hover:border-foreground/25 hover:text-foreground"
 									)}
-								</AccordionContent>
-							</AccordionItem>
+									key={color}
+									onClick={() => setQueryState({ color })}
+								>
+									{color}
+								</button>
+							))}
+						</div>
+					</div>
+
+					<div className="space-y-3">
+						<div className="flex items-center justify-between">
+							<span className="font-body text-foreground/55 text-xs uppercase tracking-wider">
+								Size:{" "}
+								<span className="text-foreground">
+									{selectedSize ?? "One size"}
+								</span>
+								{selectedSizeStock !== null &&
+									selectedSizeStock <= 5 &&
+									selectedSizeStock > 0 && (
+										<span className="ml-2 text-amber-600">
+											({selectedSizeStock} left)
+										</span>
+									)}
+							</span>
+							<button className="font-body text-foreground/45 text-xs underline-offset-2 transition-colors hover:text-foreground/75">
+								Size guide
+							</button>
+						</div>
+						{availableSizes.length > 0 && (
+							<div className="flex flex-wrap gap-2">
+								{availableSizes.map((sizeItem) => {
+									const isOutOfStock =
+										sizeItem.stock !== null && sizeItem.stock <= 0;
+									const isSelected = selectedSize === sizeItem.size;
+									const isLowStock =
+										sizeItem.stock !== null &&
+										sizeItem.stock > 0 &&
+										sizeItem.stock <= 3;
+
+									return (
+										<button
+											className={cn(
+												"relative h-10 min-w-12 rounded-md border px-4 font-body text-sm transition-colors duration-200",
+												isOutOfStock
+													? "cursor-not-allowed border-border/40 text-foreground/30 line-through"
+													: isSelected
+														? "border-primary bg-primary text-primary-foreground"
+														: "border-border/80 text-foreground/70 hover:border-foreground/25 hover:text-foreground"
+											)}
+											disabled={isOutOfStock}
+											key={sizeItem.id ?? sizeItem.size}
+											onClick={() => setQueryState({ size: sizeItem.size })}
+											title={
+												isOutOfStock
+													? "Out of stock"
+													: isLowStock
+														? `Only ${sizeItem.stock} left`
+														: undefined
+											}
+											type="button"
+										>
+											{sizeItem.size}
+											{isLowStock && !isOutOfStock && (
+												<span className="absolute -top-1 -right-1 size-2 rounded-full bg-amber-500" />
+											)}
+										</button>
+									);
+								})}
+							</div>
+						)}
+
+						{/* Low stock alert */}
+						{isSelectedSizeInStock &&
+							selectedSizeStock !== null &&
+							selectedSizeStock > 0 &&
+							selectedSizeStock <= 5 && (
+								<Alert
+									className="mb-3"
+									variant={selectedSizeStock <= 2 ? "destructive" : "default"}
+								>
+									<AlertDescription className="flex items-center gap-3 font-body">
+										<span className="relative flex size-2">
+											<span
+												className={cn(
+													"absolute inline-flex size-full animate-ping rounded-full opacity-75",
+													selectedSizeStock <= 2 ? "bg-red-400" : "bg-amber-400"
+												)}
+											/>
+											<span
+												className={cn(
+													"relative inline-flex size-2 rounded-full",
+													selectedSizeStock <= 2 ? "bg-red-500" : "bg-amber-500"
+												)}
+											/>
+										</span>
+										{selectedSizeStock === 1
+											? "Only 1 left in stock - order soon!"
+											: selectedSizeStock === 2
+												? "Only 2 left in stock - order soon!"
+												: `Low stock - only ${selectedSizeStock} left`}
+									</AlertDescription>
+								</Alert>
+							)}
+					</div>
+				</div>
+
+				<div className="order-2 pt-4 lg:order-3">
+					<Button
+						className="relative w-full"
+						disabled={!isSelectedSizeInStock && availableSizes.length > 0}
+						onClick={handleAddToCart}
+						size="lg"
+					>
+						{isPreOrder && isSelectedSizeInStock && (
+							<Badge className="absolute -top-3 right-3 rounded-md bg-foreground/60 backdrop-blur-lg">
+								Pre-order
+							</Badge>
+						)}
+						{!isSelectedSizeInStock && availableSizes.length > 0
+							? "Out of stock"
+							: "Add to bag"}
+					</Button>
+				</div>
+
+				<div className="order-4 pt-6">
+					<Accordion
+						className="w-full border-0"
+						defaultValue={["details"]}
+						multiple
+					>
+						<AccordionItem
+							className="border-0 border-border/40 border-b"
+							value="details"
+						>
+							<AccordionTrigger className="py-4 font-normal font-sans text-foreground hover:no-underline">
+								Description
+							</AccordionTrigger>
+							<AccordionContent className="pb-4 font-body text-foreground/75 text-sm leading-relaxed">
+								{product.overview ? (
+									<RichText data={product.overview as never} />
+								) : (
+									<>
+										{product.description}
+										<br />
+										<br />
+										Our {product.name} reflects the Simply KF philosophy —
+										craftsmanship meets contemporary design.
+									</>
+								)}
+							</AccordionContent>
+						</AccordionItem>
+						{product.features && product.features.length > 0 && (
 							<AccordionItem
 								className="border-0 border-border/40 border-b"
 								value="fabric"
@@ -346,26 +446,26 @@ export function ProductView({ product }: ProductViewProps) {
 									</ul>
 								</AccordionContent>
 							</AccordionItem>
-							<AccordionItem
-								className="border-0 border-border/40 border-b"
-								value="delivery"
-							>
-								<AccordionTrigger className="py-4 font-normal font-sans text-foreground hover:no-underline">
-									Delivery & returns
-								</AccordionTrigger>
-								<AccordionContent className="pb-4 font-body text-foreground/75 text-sm leading-relaxed">
-									{/* <p>
+						)}
+						<AccordionItem
+							className="border-0 border-border/40 border-b"
+							value="delivery"
+						>
+							<AccordionTrigger className="py-4 font-normal font-sans text-foreground hover:no-underline">
+								Delivery & returns
+							</AccordionTrigger>
+							<AccordionContent className="pb-4 font-body text-foreground/75 text-sm leading-relaxed">
+								{/* <p>
 										Connect your shipment on <strong>G C C Express</strong>
 										<br />
 										Door delivery from China to U.A.E / K S A/ Oman / Qatar /
 										Bahrain / Kuwait
 									</p> */}
-									<p className="mb-2">UK & international shipping available.</p>
-									<p>Standard UK delivery: 2–3 working days.</p>
-								</AccordionContent>
-							</AccordionItem>
-						</Accordion>
-					</div>
+								<p className="mb-2">UK & international shipping available.</p>
+								<p>Standard UK delivery: 2–3 working days.</p>
+							</AccordionContent>
+						</AccordionItem>
+					</Accordion>
 				</div>
 			</div>
 		</div>
