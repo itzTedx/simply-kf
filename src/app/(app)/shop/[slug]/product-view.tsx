@@ -199,7 +199,7 @@ export function ProductView({ product }: ProductViewProps) {
 
 	return (
 		<div className="grid grid-cols-1 gap-x-10 gap-y-10 md:gap-y-14 lg:grid-cols-2 lg:gap-x-20 lg:gap-y-16">
-			<div className="flex h-fit flex-col gap-5 md:sticky md:top-40">
+			<div className="flex h-fit flex-col gap-5 lg:sticky lg:top-40">
 				<Carousel
 					className="w-full"
 					key={selectedColor}
@@ -440,7 +440,7 @@ export function ProductView({ product }: ProductViewProps) {
 							<AccordionTrigger className="py-4 font-normal font-sans text-foreground hover:no-underline">
 								Description
 							</AccordionTrigger>
-							<AccordionContent className="pb-4 font-body text-foreground/75 text-sm leading-relaxed">
+							<AccordionContent className="pb-4 font-body text-foreground text-lg leading-relaxed">
 								{product.overview ? (
 									<RichText data={product.overview} enableGutter={false} />
 								) : (
@@ -462,7 +462,7 @@ export function ProductView({ product }: ProductViewProps) {
 								<AccordionTrigger className="py-4 font-normal font-sans text-foreground hover:no-underline">
 									Fabric & care
 								</AccordionTrigger>
-								<AccordionContent className="pb-4 font-body text-foreground/75 text-sm leading-relaxed">
+								<AccordionContent className="pb-4 font-body text-foreground leading-relaxed">
 									<ul className="list-inside list-disc space-y-1.5">
 										{product.features?.map((feat) => (
 											<li className="text-lg" key={feat.id ?? feat.feature}>
@@ -480,13 +480,7 @@ export function ProductView({ product }: ProductViewProps) {
 							<AccordionTrigger className="py-4 font-normal font-sans text-foreground hover:no-underline">
 								Delivery & returns
 							</AccordionTrigger>
-							<AccordionContent className="pb-4 font-body text-foreground/75 text-sm leading-relaxed">
-								{/* <p>
-										Connect your shipment on <strong>G C C Express</strong>
-										<br />
-										Door delivery from China to U.A.E / K S A/ Oman / Qatar /
-										Bahrain / Kuwait
-									</p> */}
+							<AccordionContent className="pb-4 font-body text-foreground text-lg leading-relaxed">
 								<p className="mb-2">UK & international shipping available.</p>
 								<p>Standard UK delivery: 2–3 working days.</p>
 							</AccordionContent>
