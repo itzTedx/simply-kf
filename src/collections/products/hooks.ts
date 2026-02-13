@@ -77,6 +77,7 @@ export const revalidateProduct: CollectionAfterChangeHook<Product> = ({
 
 			revalidatePath(path);
 			revalidatePath("/shop");
+			revalidatePath("/");
 			revalidateTag("products", "max");
 			revalidateTag(`product:${doc.slug}`, "max");
 		}
@@ -89,6 +90,7 @@ export const revalidateProduct: CollectionAfterChangeHook<Product> = ({
 
 			revalidatePath(oldPath);
 			revalidatePath("/shop");
+			revalidatePath("/");
 			revalidateTag("products", "max");
 			revalidateTag(`product:${previousDoc.slug}`, "max");
 		}
@@ -105,6 +107,7 @@ export const revalidateDeleteProduct: CollectionAfterDeleteHook<Product> = ({
 
 		revalidatePath(path);
 		revalidatePath("/shop");
+		revalidatePath("/");
 		revalidateTag("products", "max");
 		if (doc?.slug) {
 			revalidateTag(`product:${doc.slug}`, "max");
