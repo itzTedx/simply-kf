@@ -9,6 +9,8 @@ export interface CartItem {
 	image?: string;
 	color?: string;
 	size?: string;
+	/** Max quantity allowed from Payload CMS stock (undefined/null = no limit) */
+	stock?: number | null;
 }
 
 interface CartStore {
@@ -40,13 +42,26 @@ export const useCartStore = create<CartStore>()(
 							item.size === newItem.size
 					);
 
+					const maxQty =
+						typeof newItem.stock === "number" ? newItem.stock : undefined;
+
 					let newItems;
 
 					if (existingItemIndex > -1) {
 						newItems = [...state.items];
-						newItems[existingItemIndex].quantity += newItem.quantity;
+						const added = newItems[existingItemIndex].quantity + newItem.quantity;
+						newItems[existingItemIndex].quantity =
+							maxQty != null ? Math.min(added, maxQty) : added;
+						// Keep stock on item for cart page limits
+						if (maxQty != null) {
+							newItems[existingItemIndex].stock = maxQty;
+						}
 					} else {
-						newItems = [...state.items, newItem];
+						const quantity =
+							maxQty != null
+								? Math.min(newItem.quantity, maxQty)
+								: newItem.quantity;
+						newItems = [...state.items, { ...newItem, quantity }];
 					}
 
 					const cartCount = newItems.reduce(
@@ -79,13 +94,20 @@ export const useCartStore = create<CartStore>()(
 			) => {
 				if (quantity < 1) return;
 				set((state) => ({
-					items: state.items.map((item) =>
-						item.id === id &&
-						(color ? item.color === color : true) &&
-						(size ? item.size === size : true)
-							? { ...item, quantity }
-							: item
-					),
+					items: state.items.map((item) => {
+						if (
+							item.id !== id ||
+							(color ? item.color !== color : false) ||
+							(size ? item.size !== size : false)
+						) {
+							return item;
+						}
+						const capped =
+							typeof item.stock === "number"
+								? Math.min(quantity, item.stock)
+								: quantity;
+						return { ...item, quantity: capped };
+					}),
 				}));
 			},
 

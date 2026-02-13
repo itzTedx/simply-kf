@@ -149,6 +149,27 @@ export function ProductView({ product }: ProductViewProps) {
 		const resolvedSize =
 			selectedSize != null ? String(selectedSize) : undefined;
 
+		// If stock is tracked, check we're not already at max in cart
+		const maxStock =
+			selectedSizeStock != null && selectedSizeStock > 0
+				? selectedSizeStock
+				: null;
+		if (maxStock != null) {
+			const items = useCartStore.getState().items;
+			const inCart = items.find(
+				(item) =>
+					item.id === product.id &&
+					item.color === selectedColor &&
+					item.size === resolvedSize
+			);
+			if (inCart && inCart.quantity >= maxStock) {
+				toast.error(
+					`Maximum quantity (${maxStock}) already in your bag for this size.`
+				);
+				return;
+			}
+		}
+
 		addItem({
 			id: product.id,
 			name: product.name,
@@ -162,6 +183,7 @@ export function ProductView({ product }: ProductViewProps) {
 				"",
 			color: selectedColor,
 			size: resolvedSize,
+			stock: maxStock,
 		});
 
 		toast.success(`${product.name} has been added to your bag.`);

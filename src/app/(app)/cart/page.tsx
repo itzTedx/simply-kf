@@ -137,9 +137,19 @@ export default function CartPage() {
 												</Button>
 												<span className="min-w-8 text-center font-body text-foreground text-sm">
 													{item.quantity}
+													{typeof item.stock === "number" && (
+														<span className="font-body text-foreground/50 text-xs">
+															{" "}
+															/ {item.stock}
+														</span>
+													)}
 												</span>
 												<Button
 													aria-label="Increase quantity"
+													disabled={
+														typeof item.stock === "number" &&
+														item.quantity >= item.stock
+													}
 													onClick={() =>
 														updateQuantity(
 															item.id,
