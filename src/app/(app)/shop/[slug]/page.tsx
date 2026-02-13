@@ -6,7 +6,7 @@ import { ProductCard } from "@/components/shop/product-card";
 
 import { getProductDefaultImage } from "@/constants/products";
 import { getProductBySlug, getProducts } from "@/modules/products/query";
-import type { Product } from "@/payload-types";
+import type { Media, Product } from "@/payload-types";
 
 import { ProductView } from "./product-view";
 
@@ -30,26 +30,68 @@ export async function generateMetadata({
 	if (!product) return { title: "Product Not Found" };
 
 	const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://simplykf.com";
-	const defaultImage = getProductDefaultImage(product);
-	const imageUrl =
-		defaultImage && !defaultImage.startsWith("http")
-			? `${siteUrl}${defaultImage}`
-			: defaultImage;
+
+	// Prefer SEO fields from Payload (plugin-seo) when provided
+	const metaTitle =
+		product.meta?.title ??
+		`${product.name} | Premium Abaya by Simply KF`;
+
+	const metaDescription =
+		product.meta?.description ??
+		product.description ??
+		`Discover ${product.name}, a premium Gulf-style abaya from Simply KF, crafted for modest, elegant dressing.`;
+
+	// Resolve image: prefer meta.image, then fall back to default product image
+	const metaImage = product.meta?.image as Media | number | null | undefined;
+	let imageUrl: string | undefined;
+
+	if (metaImage && typeof metaImage === "object" && metaImage.url) {
+		imageUrl = metaImage.url.startsWith("http")
+			? metaImage.url
+			: `${siteUrl}${metaImage.url}`;
+	} else {
+		const defaultImage = getProductDefaultImage(product);
+		if (defaultImage) {
+			imageUrl = defaultImage.startsWith("http")
+				? defaultImage
+				: `${siteUrl}${defaultImage}`;
+		}
+	}
 
 	return {
-		title: product.name,
-		description: product.description,
+		metadataBase: new URL(siteUrl),
+		title: metaTitle,
+		description: metaDescription,
+		alternates: {
+			canonical: `/shop/${slug}`,
+		},
+		keywords: [
+			product.name,
+			"abaya",
+			"Gulf abaya",
+			"Khaleeji abaya",
+			"modest abaya",
+			"occasion abaya",
+			"everyday abaya",
+			"Simply KF",
+		],
 		openGraph: {
-			title: `${product.name} | Simply KF`,
-			description: product.description,
-			images:
-				defaultImage && imageUrl ? [{ url: imageUrl, alt: product.name }] : [],
+			title: metaTitle,
+			description: metaDescription,
+			url: `${siteUrl}/shop/${slug}`,
+			siteName: "Simply KF",
+			images: imageUrl ? [{ url: imageUrl, alt: product.name }] : [],
 			type: "website",
 		},
 		twitter: {
 			card: "summary_large_image",
-			title: `${product.name} | Simply KF`,
-			description: product.description,
+			title: metaTitle,
+			description: metaDescription,
+			images: imageUrl ? [imageUrl] : undefined,
+		},
+		robots: {
+			index: true,
+			follow: true,
 		},
 	};
 }
