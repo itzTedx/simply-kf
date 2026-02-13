@@ -5,6 +5,15 @@ import {
 	OverviewField,
 	PreviewField,
 } from "@payloadcms/plugin-seo/fields";
+import {
+	FixedToolbarFeature,
+	HeadingFeature,
+	HorizontalRuleFeature,
+	InlineToolbarFeature,
+	lexicalEditor,
+	OrderedListFeature,
+	UnorderedListFeature,
+} from "@payloadcms/richtext-lexical";
 import type { CollectionConfig, Where } from "payload";
 import { slugField } from "payload";
 
@@ -130,6 +139,24 @@ export const Products: CollectionConfig = {
 						{
 							name: "overview",
 							type: "richText",
+							editor: lexicalEditor({
+								features: [
+									HeadingFeature({
+										enabledHeadingSizes: ["h2", "h3", "h4"],
+									}),
+									UnorderedListFeature(),
+									OrderedListFeature(),
+									FixedToolbarFeature({
+										customGroups: {
+											text: {
+												type: "buttons",
+											},
+										},
+									}),
+									InlineToolbarFeature(),
+									HorizontalRuleFeature(),
+								],
+							}),
 						},
 						{
 							name: "features",
