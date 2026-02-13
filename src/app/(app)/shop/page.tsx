@@ -8,8 +8,6 @@ import { ShopPageContent } from "@/modules/views/shop-page";
 export default async function ShopPage() {
 	const products = await getProducts();
 
-	console.log("products :", products);
-
 	return (
 		<main className="min-h-screen overflow-hidden">
 			{/* 1. Page Intro */}
