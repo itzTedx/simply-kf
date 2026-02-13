@@ -442,11 +442,7 @@ export function ProductView({ product }: ProductViewProps) {
 							</AccordionTrigger>
 							<AccordionContent className="pb-4 font-body text-foreground/75 text-sm leading-relaxed">
 								{product.overview ? (
-									<RichText
-										className="prose-lg"
-										data={product.overview}
-										enableGutter={false}
-									/>
+									<RichText data={product.overview} enableGutter={false} />
 								) : (
 									<>
 										{product.description}
