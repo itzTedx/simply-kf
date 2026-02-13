@@ -440,17 +440,17 @@ export function ProductView({ product }: ProductViewProps) {
 							<AccordionTrigger className="py-4 font-normal font-sans text-foreground hover:no-underline">
 								Description
 							</AccordionTrigger>
-							<AccordionContent className="pb-4 font-body text-foreground text-lg leading-relaxed">
+							<AccordionContent className="pb-4 font-body text-foreground leading-relaxed">
 								{product.overview ? (
 									<RichText data={product.overview} enableGutter={false} />
 								) : (
-									<>
+									<p className="text-lg">
 										{product.description}
 										<br />
 										<br />
 										Our {product.name} reflects the Simply KF philosophy —
 										craftsmanship meets contemporary design.
-									</>
+									</p>
 								)}
 							</AccordionContent>
 						</AccordionItem>
