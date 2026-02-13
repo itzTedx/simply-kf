@@ -173,12 +173,31 @@ export const Products: CollectionConfig = {
 									},
 								},
 								{
+									name: "stock",
+									type: "number",
+									min: 0,
+									admin: {
+										condition: (data) =>
+											!data?.enableVariants &&
+											(!data?.sizes || data?.sizes?.length === 0),
+										description:
+											"Quantity in stock (when product has no size options)",
+									},
+								},
+								{
 									name: "sizes",
 									type: "array",
 
 									fields: [
 										{ name: "size", type: "text", required: true },
-										{ name: "stock", type: "number", min: 0 },
+										{
+											name: "stock",
+											type: "number",
+											min: 0,
+											admin: {
+												description: "Quantity in stock for this size",
+											},
+										},
 									],
 									admin: {
 										condition: (data) => !data?.enableVariants,
@@ -218,6 +237,17 @@ export const Products: CollectionConfig = {
 											admin: {
 												description:
 													"Color or option name (e.g. Maroon, Navy Blue). Used for the frontend color selector.",
+											},
+										},
+										{
+											name: "stock",
+											type: "number",
+											min: 0,
+											admin: {
+												condition: (data) =>
+													!data?.sizes || data?.sizes?.length === 0,
+												description:
+													"Quantity in stock (when variant has no size options)",
 											},
 										},
 										{
@@ -270,7 +300,7 @@ export const Products: CollectionConfig = {
 															min: 0,
 															admin: {
 																width: "33%",
-																description: "Quantity in stock",
+																description: "Quantity in stock for this size",
 															},
 														},
 													],

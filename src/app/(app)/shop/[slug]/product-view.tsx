@@ -30,7 +30,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import {
 	getProductColors,
 	getProductImagesForColor,
+	getProductOrVariantStock,
 	getProductSizes,
+	isProductOrVariantInStock,
 	isSizeInStock,
 } from "@/constants/products";
 import { cn } from "@/lib/utils";
@@ -78,19 +80,23 @@ export function ProductView({ product }: ProductViewProps) {
 		return firstInStock?.size ?? availableSizes[0]?.size ?? null;
 	}, [availableSizes, queryState.size]);
 
-	// Check if selected size is in stock
+	// Check if selected size is in stock (or product/variant stock when no sizes)
 	const isSelectedSizeInStock = useMemo(
 		() =>
-			selectedSize ? isSizeInStock(product, selectedSize, selectedColor) : true,
+			selectedSize
+				? isSizeInStock(product, selectedSize, selectedColor)
+				: isProductOrVariantInStock(product, selectedColor),
 		[product, selectedSize, selectedColor]
 	);
 
-	// Get stock count for selected size (for display)
+	// Get stock count for selected size (or product/variant stock when no sizes)
 	const selectedSizeStock = useMemo(() => {
-		if (!selectedSize) return null;
-		const sizeItem = availableSizes.find((s) => s.size === selectedSize);
-		return sizeItem?.stock ?? null;
-	}, [availableSizes, selectedSize]);
+		if (selectedSize) {
+			const sizeItem = availableSizes.find((s) => s.size === selectedSize);
+			return sizeItem?.stock ?? null;
+		}
+		return getProductOrVariantStock(product, selectedColor);
+	}, [availableSizes, product, selectedColor, selectedSize]);
 
 	const currentImages = getProductImagesForColor(product, selectedColor);
 	const [carouselApi, setCarouselApi] = useState<CarouselApi | undefined>();
@@ -408,7 +414,7 @@ export function ProductView({ product }: ProductViewProps) {
 				<div className="order-2 pt-4 lg:order-3">
 					<Button
 						className="relative w-full"
-						disabled={!isSelectedSizeInStock && availableSizes.length > 0}
+						disabled={!isSelectedSizeInStock}
 						onClick={handleAddToCart}
 						size="lg"
 					>
@@ -417,9 +423,7 @@ export function ProductView({ product }: ProductViewProps) {
 								Pre-order
 							</Badge>
 						)}
-						{!isSelectedSizeInStock && availableSizes.length > 0
-							? "Out of stock"
-							: "Add to bag"}
+						{!isSelectedSizeInStock ? "Out of stock" : "Add to bag"}
 					</Button>
 				</div>
 

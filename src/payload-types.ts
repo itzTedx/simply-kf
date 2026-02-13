@@ -208,9 +208,16 @@ export interface Product {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Quantity in stock (when product has no size options)
+   */
+  stock?: number | null;
   sizes?:
     | {
         size: string;
+        /**
+         * Quantity in stock for this size
+         */
         stock?: number | null;
         id?: string | null;
       }[]
@@ -222,6 +229,10 @@ export interface Product {
          * Color or option name (e.g. Maroon, Navy Blue). Used for the frontend color selector.
          */
         color: string;
+        /**
+         * Quantity in stock (when variant has no size options)
+         */
+        stock?: number | null;
         /**
          * Images for this color variant. First image is used as the thumbnail.
          */
@@ -239,7 +250,7 @@ export interface Product {
                */
               size: string;
               /**
-               * Quantity in stock
+               * Quantity in stock for this size
                */
               stock?: number | null;
               id?: string | null;
@@ -651,6 +662,7 @@ export interface ProductsSelect<T extends boolean = true> {
         image?: T;
         id?: T;
       };
+  stock?: T;
   sizes?:
     | T
     | {
@@ -663,6 +675,7 @@ export interface ProductsSelect<T extends boolean = true> {
     | T
     | {
         color?: T;
+        stock?: T;
         images?:
           | T
           | {

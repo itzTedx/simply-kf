@@ -93,6 +93,50 @@ export function getProductImagesForColor(
 }
 
 /**
+ * Get product-level or variant-level stock when no sizes are defined.
+ * Returns null when sizes exist (use getSizeStock) or when stock is not tracked.
+ */
+export function getProductOrVariantStock(
+	product: {
+		enableVariants?: boolean | null;
+		stock?: number | null;
+		variants?:
+			| {
+					color?: string | null;
+					stock?: number | null;
+					sizes?: { size: string; stock?: number | null }[] | null;
+			  }[]
+			| null;
+		sizes?: { size: string; stock?: number | null }[] | null;
+	},
+	selectedColor?: string
+): number | null {
+	// Must have no sizes to use product/variant-level stock
+	if (product.enableVariants && product.variants?.length) {
+		const variant =
+			product.variants.find(
+				(v) => v.color?.toLowerCase() === selectedColor?.toLowerCase()
+			) ?? product.variants[0];
+		if (variant?.sizes?.length) return null;
+		return variant?.stock ?? null;
+	}
+	if (product.sizes?.length) return null;
+	return product.stock ?? null;
+}
+
+/**
+ * Check if product/variant is in stock when no sizes are defined.
+ * Returns true when stock is not tracked (null) or stock > 0.
+ */
+export function isProductOrVariantInStock(
+	product: Parameters<typeof getProductOrVariantStock>[0],
+	selectedColor?: string
+): boolean {
+	const stock = getProductOrVariantStock(product, selectedColor);
+	return stock === null || stock > 0;
+}
+
+/**
  * Size with stock information.
  */
 export type SizeWithStock = {

@@ -381,10 +381,29 @@ async function deductStock(items: OrderItem[]) {
 					console.log(
 						`Updated stock for product ${item.productId} (${item.name}), variant "${item.color}", size "${item.size}": ${currentStock} -> ${newStock}`
 					);
-				} else if (!item.size) {
-					// Variant product without sizes (just colors)
+				} else if (!item.size && variant.stock != null) {
+					// Variant product without sizes — deduct from variant-level stock
+					const currentStock = variant.stock;
+					const newStock = Math.max(0, currentStock - item.quantity);
+
+					const updatedVariants = [...product.variants];
+					updatedVariants[variantIndex] = {
+						...variant,
+						stock: newStock,
+					};
+
+					await payload.update({
+						collection: "products",
+						id: item.productId,
+						data: { variants: updatedVariants },
+					});
+
 					console.log(
-						`Product ${item.productId} variant "${item.color}" has no sizes, no stock to deduct`
+						`Updated stock for product ${item.productId} (${item.name}), variant "${item.color}" (no sizes): ${currentStock} -> ${newStock}`
+					);
+				} else if (!item.size) {
+					console.log(
+						`Product ${item.productId} variant "${item.color}" has no sizes and no variant-level stock to deduct`
 					);
 				}
 			} else {
@@ -427,6 +446,20 @@ async function deductStock(items: OrderItem[]) {
 
 					console.log(
 						`Updated stock for product ${item.productId} (${item.name}), size "${item.size}": ${currentStock} -> ${newStock}`
+					);
+				} else if (!item.size && product.stock != null) {
+					// Non-variant product without sizes — deduct from product-level stock
+					const currentStock = product.stock;
+					const newStock = Math.max(0, currentStock - item.quantity);
+
+					await payload.update({
+						collection: "products",
+						id: item.productId,
+						data: { stock: newStock },
+					});
+
+					console.log(
+						`Updated stock for product ${item.productId} (${item.name}) (no sizes): ${currentStock} -> ${newStock}`
 					);
 				} else {
 					console.log(
