@@ -140,22 +140,25 @@ export const Products: CollectionConfig = {
 							name: "overview",
 							type: "richText",
 							editor: lexicalEditor({
-								features: [
-									HeadingFeature({
-										enabledHeadingSizes: ["h2", "h3", "h4"],
-									}),
-									UnorderedListFeature(),
-									OrderedListFeature(),
-									FixedToolbarFeature({
-										customGroups: {
-											text: {
-												type: "buttons",
+								features: ({ rootFeatures }) => {
+									return [
+										...rootFeatures,
+										HeadingFeature({
+											enabledHeadingSizes: ["h2", "h3", "h4"],
+										}),
+										UnorderedListFeature(),
+										OrderedListFeature(),
+										FixedToolbarFeature({
+											customGroups: {
+												text: {
+													type: "buttons",
+												},
 											},
-										},
-									}),
-									InlineToolbarFeature(),
-									HorizontalRuleFeature(),
-								],
+										}),
+										InlineToolbarFeature(),
+										HorizontalRuleFeature(),
+									];
+								},
 							}),
 						},
 						{
