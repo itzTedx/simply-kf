@@ -101,7 +101,7 @@ export default function Checkout({
 
 	if (showPaymentForm && clientSecret) {
 		return (
-			<div className="mx-auto max-w-4xl py-28">
+			<div className="mx-auto max-w-4xl">
 				<Card>
 					<CardHeader>
 						<CardTitle className="font-bold text-2xl">
@@ -143,7 +143,7 @@ export default function Checkout({
 	}
 
 	return (
-		<div className="mx-auto max-w-4xl py-28">
+		<div className="mx-auto max-w-4xl">
 			<Card>
 				<CardHeader>
 					<CardTitle className="font-semibold text-2xl">Checkout</CardTitle>

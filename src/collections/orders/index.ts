@@ -204,8 +204,6 @@ export const Orders: CollectionConfig = {
 											admin: {
 												width: "60%",
 												readOnly: true,
-												description:
-													"Stored separately in case product is deleted",
 											},
 										},
 									],

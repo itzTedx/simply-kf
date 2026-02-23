@@ -15,7 +15,6 @@ import { Controller, useForm } from "react-hook-form";
 import {
 	Field,
 	FieldContent,
-	FieldDescription,
 	FieldError,
 	FieldLabel,
 } from "@/components/ui/field";
@@ -190,9 +189,6 @@ function CheckoutForm({ onSuccess, onError }: CheckoutFormProps) {
 						</>
 					)}
 				/>
-				<FieldDescription>
-					We’ll send order confirmation and status updates to this address.
-				</FieldDescription>
 			</Field>
 
 			<AddressElement

@@ -334,9 +334,6 @@ export interface Order {
   };
   items: {
     product?: (number | null) | Product;
-    /**
-     * Stored separately in case product is deleted
-     */
     productName?: string | null;
     color?: string | null;
     size?: string | null;
