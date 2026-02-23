@@ -24,6 +24,7 @@
 		"@payloadcms/plugin-seo": "^3.75.0",
 		"@payloadcms/richtext-lexical": "^3.75.0",
 		"@payloadcms/ui": "^3.75.0",
+		"@react-email/components": "^1.0.8",
 		"@remixicon/react": "^4.9.0",
 		"@stripe/react-stripe-js": "^3.0.0",
 		"@stripe/stripe-js": "^4.0.0",
