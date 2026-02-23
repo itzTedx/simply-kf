@@ -5,6 +5,10 @@ import config from "@payload-config";
 import { getPayload } from "payload";
 import Stripe from "stripe";
 
+import {
+	normalizeAndValidateEmail,
+	sendOrderConfirmationEmail,
+} from "@/lib/notifications/order-emails";
 import { stripe } from "@/lib/stripe";
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -174,10 +178,13 @@ async function handlePaymentSuccess(paymentIntent: Stripe.PaymentIntent) {
 		return;
 	}
 
-	// Get customer info from Stripe (from latest charge or payment method)
+	// Customer info: email is the one collected in checkout (Stripe Elements form)
+	// and sent via confirmPayment (receipt_email + billing_details.email). We use
+	// only billing_details.email as the single source for order confirmation emails.
 	let customerName = "";
 	let customerEmail = "";
 	let customerPhone = "";
+	let paymentMethodDescription = "Card";
 	let shippingAddress = {
 		line1: "",
 		line2: "",
@@ -197,6 +204,13 @@ async function handlePaymentSuccess(paymentIntent: Stripe.PaymentIntent) {
 
 		if (charges.data.length > 0) {
 			const charge = charges.data[0];
+
+			// Payment method for receipt (e.g. "Visa ending in 4242")
+			const card = charge.payment_method_details?.card;
+			if (card?.last4) {
+				const brand = card.brand ? card.brand.charAt(0).toUpperCase() + card.brand.slice(1) : "Card";
+				paymentMethodDescription = `${brand} ending in ${card.last4}`;
+			}
 
 			// Get billing details
 			if (charge.billing_details) {
@@ -238,6 +252,9 @@ async function handlePaymentSuccess(paymentIntent: Stripe.PaymentIntent) {
 	} catch (err) {
 		console.error("Failed to get customer details from Stripe:", err);
 	}
+
+	// Normalize email (same as checkout form) for storage and notifications
+	customerEmail = normalizeAndValidateEmail(customerEmail) ?? "";
 
 	// Create order in Payload
 	const orderNumber = generateOrderNumber();
@@ -292,6 +309,72 @@ async function handlePaymentSuccess(paymentIntent: Stripe.PaymentIntent) {
 		collection: "payload-kv",
 		id: kvDoc.id,
 	});
+
+	// Send order confirmation to the email collected in Stripe Elements (stripe-elements.tsx)
+	if (customerEmail) {
+		const baseUrl =
+			process.env.NEXT_PUBLIC_SITE_URL ||
+			(process.env.VERCEL_URL
+				? `https://${process.env.VERCEL_URL}`
+				: "https://simplykf.com");
+		const orderDate = new Date().toLocaleDateString("en-GB", {
+			day: "numeric",
+			month: "long",
+			year: "numeric",
+		});
+		const estimatedDelivery = new Date();
+		estimatedDelivery.setDate(estimatedDelivery.getDate() + 5);
+		const estimatedDeliveryDate = estimatedDelivery.toLocaleDateString(
+			"en-GB",
+			{ day: "numeric", month: "long", year: "numeric" }
+		);
+		const customerFirstName =
+			customerName?.trim().split(/\s+/)[0] || "Customer";
+
+		try {
+			await sendOrderConfirmationEmail(
+				{
+					customerFirstName,
+					orderNumber,
+					orderDate,
+					paymentMethod: paymentMethodDescription,
+					orderItems: orderData.items.map((item) => {
+						const variant = [item.color, item.size]
+							.filter(Boolean)
+							.join(", ");
+						const lineTotal = (item.price * item.quantity).toFixed(2);
+						return {
+							name: item.name,
+							variant: variant || "—",
+							quantity: String(item.quantity),
+							price: item.price.toFixed(2),
+							lineTotal,
+						};
+					}),
+					orderSubtotal: orderData.subtotal.toFixed(2),
+					orderShipping: orderData.shipping.toFixed(2),
+					orderDiscount: "",
+					orderTotal: orderData.total.toFixed(2),
+					shippingName: customerName || "Customer",
+					shippingAddressLine1: shippingAddress.line1,
+					shippingAddressLine2: shippingAddress.line2,
+					shippingCity: shippingAddress.city,
+					shippingPostcode: shippingAddress.postalCode,
+					shippingCountry: shippingAddress.country,
+					shippingMethod: "Standard UK Delivery",
+					estimatedDeliveryDate,
+					orderUrl: `${baseUrl}/shop`,
+					supportEmail: process.env.SUPPORT_EMAIL || "hello@simplykf.com",
+					instagramUrl: "https://instagram.com/simplykfabayas",
+					currentYear: String(new Date().getFullYear()),
+				},
+				customerEmail
+			);
+		} catch (emailErr) {
+			console.error("Failed to send order confirmation email:", emailErr);
+			// Don't fail the webhook; order was already created
+		}
+	}
 
 	console.log(`Order ${orderReference} processed and KV entry cleaned up`);
 }

@@ -16,7 +16,7 @@ import {
 	Text,
 } from "@react-email/components";
 
-interface OrderConfirmationEmailProps {
+export interface OrderConfirmationEmailProps {
 	customerFirstName: string;
 	orderNumber: string;
 	orderDate: string;
@@ -376,7 +376,7 @@ const OrderConfirmationEmail = (props: OrderConfirmationEmailProps) => {
 							<Text className="m-0 mt-[8px] text-center text-[#201f1d] text-[10px] leading-[14px]">
 								This email may contain confidential or promotional content for
 								the intended recipient. Product info may change without notice.
-								By reading, you agree to Foneflip's Terms and Policies. If
+								By reading, you agree to Simply KF's Terms and Policies. If
 								received in error, please delete and inform us.
 							</Text>
 						</Section>

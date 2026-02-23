@@ -90,6 +90,8 @@ function CheckoutForm({ onSuccess, onError }: CheckoutFormProps) {
 		}
 
 		setIsProcessing(true);
+		// Email is used for Stripe receipt and for order confirmation notification
+		// (webhook reads charge.billing_details.email and sends the confirmation email).
 		const email = parsed.data.email.trim();
 
 		// Collect shipping address from the AddressElement so it shows
@@ -135,7 +137,7 @@ function CheckoutForm({ onSuccess, onError }: CheckoutFormProps) {
 				receipt_email: email,
 				payment_method_data: {
 					billing_details: {
-						email,
+						email, // Required for order confirmation email (webhook uses this)
 					},
 				},
 				...(shipping ? { shipping } : {}),
