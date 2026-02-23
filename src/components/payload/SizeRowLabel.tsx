@@ -8,6 +8,12 @@ export const SizeRowLabel = () => {
 		stock?: number;
 	}>();
 	const label = data?.size || `Size ${rowNumber}`;
-	const stockInfo = data?.stock !== undefined ? ` (${data.stock} in stock)` : "";
-	return <span>{label}{stockInfo}</span>;
+	const stockInfo =
+		data?.stock !== undefined ? ` (${data.stock} in stock)` : "";
+	return (
+		<span>
+			{label}
+			{stockInfo}
+		</span>
+	);
 };

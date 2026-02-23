@@ -189,6 +189,7 @@ export function ProductView({ product }: ProductViewProps) {
 				"",
 			color: selectedColor,
 			size: resolvedSize,
+			slug: product.slug,
 			stock: maxStock,
 		});
 

@@ -17,6 +17,7 @@
 	},
 	"dependencies": {
 		"@base-ui/react": "^1.1.0",
+		"@number-flow/react": "^0.5.14",
 		"@payloadcms/db-postgres": "^3.75.0",
 		"@payloadcms/next": "^3.75.0",
 		"@payloadcms/plugin-seo": "^3.75.0",

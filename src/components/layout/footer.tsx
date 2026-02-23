@@ -14,7 +14,7 @@ export function Footer() {
 	];
 
 	return (
-		<footer className="mt-auto border-border/30 border-t bg-background pt-20 pb-10">
+		<footer className="mt-auto border-border/30 border-t bg-card pt-20 pb-10">
 			<div className="container mx-auto max-w-6xl px-4 md:px-6">
 				<div className="flex flex-col items-center gap-12 text-center md:items-start md:text-left">
 					<div className="flex w-full flex-col items-center gap-10 md:flex-row md:items-start md:justify-between">

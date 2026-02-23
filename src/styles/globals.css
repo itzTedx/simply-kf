@@ -51,7 +51,7 @@
 	--radius: 0.5rem;
 
 	/* Primary: cream / off-white / warm ivory */
-	--background: oklch(0.98 0.004 90);
+	--background: oklch(93.973% 0.00534 95);
 	--foreground: oklch(0.21 0.012 260);
 
 	/* Surfaces: layered neutrals */
@@ -82,7 +82,7 @@
 	--ring: oklch(0.35 0.02 70 / 0.2);
 
 	/* Status */
-	--destructive: oklch(0.48 0.08 18);
+	--destructive: oklch(45.943% 0.16855 25.867);
 	--destructive-foreground: oklch(0.99 0.004 90);
 }
 
@@ -117,8 +117,23 @@
 	.card {
 		@apply border-0 shadow-none;
 	}
+}
 
-	.skeleton {
-		@apply bg-muted/50;
+@utility container {
+	margin-inline: auto;
+	padding-inline: 1.5rem;
+
+	@media (width >= 64rem /* 1024px */) {
+		padding-inline: 2rem;
+		max-width: 68rem;
+	}
+
+	@media (width >= 80rem /* 1280px */) {
+		padding-inline: 2.5rem;
+		max-width: 82rem;
+	}
+	@media (width >= 96rem /* 1536px */) {
+		padding-inline: 3rem;
+		max-width: 98rem;
 	}
 }

@@ -9,6 +9,7 @@ export interface CartItem {
 	image?: string;
 	color?: string;
 	size?: string;
+	slug?: string;
 	/** Max quantity allowed from Payload CMS stock (undefined/null = no limit) */
 	stock?: number | null;
 }
@@ -49,7 +50,8 @@ export const useCartStore = create<CartStore>()(
 
 					if (existingItemIndex > -1) {
 						newItems = [...state.items];
-						const added = newItems[existingItemIndex].quantity + newItem.quantity;
+						const added =
+							newItems[existingItemIndex].quantity + newItem.quantity;
 						newItems[existingItemIndex].quantity =
 							maxQty != null ? Math.min(added, maxQty) : added;
 						// Keep stock on item for cart page limits

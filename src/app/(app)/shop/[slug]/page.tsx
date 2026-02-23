@@ -33,8 +33,7 @@ export async function generateMetadata({
 
 	// Prefer SEO fields from Payload (plugin-seo) when provided
 	const metaTitle =
-		product.meta?.title ??
-		`${product.name} | Premium Abaya by Simply KF`;
+		product.meta?.title ?? `${product.name} | Premium Abaya by Simply KF`;
 
 	const metaDescription =
 		product.meta?.description ??
