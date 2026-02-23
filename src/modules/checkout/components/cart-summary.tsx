@@ -54,7 +54,7 @@ export function CartSummary({
 					<div className="flex justify-between">
 						<span>Shipping</span>
 						<span>
-							<NumberFlow prefix="£" value={shipping} />
+							<NumberFlow prefix="£" value={Number(shipping.toFixed(2))} />
 						</span>
 					</div>
 				</div>
@@ -73,11 +73,15 @@ export function CartSummary({
 					>
 						Proceed to checkout
 					</Button>
-					<Link href="/shop">
-						<Button className="w-full rounded-lg" variant="outline">
-							Continue shopping
-						</Button>
-					</Link>
+
+					<Button
+						className="w-full rounded-lg"
+						nativeButton={false}
+						render={<Link href="/shop" />}
+						variant="outline"
+					>
+						Continue shopping
+					</Button>
 				</div>
 			</div>
 		</div>

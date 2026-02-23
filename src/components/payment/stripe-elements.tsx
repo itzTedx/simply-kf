@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
 	AddressElement,
@@ -10,6 +10,23 @@ import {
 	useStripe,
 } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import { Controller, useForm } from "react-hook-form";
+
+import {
+	Field,
+	FieldContent,
+	FieldDescription,
+	FieldError,
+	FieldLabel,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+
+import {
+	CheckoutEmailFormValues,
+	checkoutEmailSchema,
+} from "@/modules/checkout/schema";
+
+import { Button } from "../ui/button";
 
 const stripePromise = loadStripe(
 	process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
@@ -25,6 +42,10 @@ function CheckoutForm({ onSuccess, onError }: CheckoutFormProps) {
 	const elements = useElements();
 	const [isProcessing, setIsProcessing] = useState(false);
 	const [message, setMessage] = useState<string>("");
+
+	const form = useForm<CheckoutEmailFormValues>({
+		defaultValues: { email: "" },
+	});
 
 	useEffect(() => {
 		if (!stripe) return;
@@ -55,14 +76,22 @@ function CheckoutForm({ onSuccess, onError }: CheckoutFormProps) {
 		}
 	}, [stripe, onSuccess]);
 
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
+	const onSubmit = form.handleSubmit(async (values) => {
+		if (!stripe || !elements) return;
 
-		if (!stripe || !elements) {
+		const parsed = checkoutEmailSchema.safeParse(values);
+		if (!parsed.success) {
+			const first = parsed.error.issues[0];
+			const message =
+				first && typeof first.message === "string"
+					? first.message
+					: "Please enter a valid email address.";
+			form.setError("email", { message });
 			return;
 		}
 
 		setIsProcessing(true);
+		const email = parsed.data.email.trim();
 
 		// Collect shipping address from the AddressElement so it shows
 		// on the PaymentIntent / Charge in the Stripe dashboard.
@@ -87,8 +116,6 @@ function CheckoutForm({ onSuccess, onError }: CheckoutFormProps) {
 			const { value } = await addressElement.getValue();
 
 			shipping = {
-				// `Shipping.name` is required and expects `string`, so default
-				// to an empty string if the element hasn't collected it.
 				name: value.name ?? "",
 				phone: value.phone ?? undefined,
 				address: {
@@ -106,6 +133,12 @@ function CheckoutForm({ onSuccess, onError }: CheckoutFormProps) {
 			elements,
 			confirmParams: {
 				return_url: `${window.location.origin}/payment/success`,
+				receipt_email: email,
+				payment_method_data: {
+					billing_details: {
+						email,
+					},
+				},
 				...(shipping ? { shipping } : {}),
 			},
 		});
@@ -119,44 +152,72 @@ function CheckoutForm({ onSuccess, onError }: CheckoutFormProps) {
 				onError("An unexpected error occurred.");
 			}
 		} else {
-			// Payment completed without redirect (e.g. card without 3DS)
 			setMessage("Payment succeeded!");
 			onSuccess();
 		}
 
 		setIsProcessing(false);
-	};
+	});
 
 	return (
-		<form className="space-y-6" id="payment-form" onSubmit={handleSubmit}>
-			<div className="space-y-2">
-				<p className="font-medium text-sm">Shipping address</p>
-				<AddressElement
-					options={{
-						mode: "shipping",
-						allowedCountries: ["GB"],
-					}}
+		<form
+			className="space-y-6"
+			id="payment-form"
+			noValidate
+			onSubmit={onSubmit}
+		>
+			<Field data-invalid={!!form.formState.errors.email}>
+				<Controller
+					control={form.control}
+					name="email"
+					render={({ field, fieldState }) => (
+						<>
+							<FieldLabel htmlFor="checkout-email">Email address</FieldLabel>
+							<FieldContent>
+								<Input
+									{...field}
+									aria-invalid={!!fieldState.error}
+									autoComplete="email"
+									disabled={isProcessing}
+									id="checkout-email"
+									placeholder="you@example.com"
+									type="email"
+								/>
+								<FieldError
+									errors={fieldState.error ? [fieldState.error] : undefined}
+								/>
+							</FieldContent>
+						</>
+					)}
 				/>
-			</div>
+				<FieldDescription>
+					We’ll send order confirmation and status updates to this address.
+				</FieldDescription>
+			</Field>
+
+			<AddressElement
+				options={{
+					mode: "shipping",
+					allowedCountries: ["GB"],
+				}}
+			/>
 
 			<PaymentElement
 				options={{
 					layout: "tabs",
 					fields: {
-						// Collect and attach customer billing details
-						// (including email and phone) to the payment.
 						billingDetails: "auto",
 					},
 				}}
 			/>
 
-			<button
-				className="w-full rounded-lg bg-black px-4 py-3 font-medium text-white transition-colors hover:bg-gray-900 disabled:cursor-not-allowed disabled:opacity-50"
+			<Button
+				className="w-full"
 				disabled={isProcessing || !stripe || !elements}
 				type="submit"
 			>
 				{isProcessing ? "Processing..." : "Pay now"}
-			</button>
+			</Button>
 
 			{message && (
 				<div

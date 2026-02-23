@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from "react";
 
+import { useQueryState } from "nuqs";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
+import { checkoutStepParser } from "@/modules/checkout/checkout-step";
 import { usePaymentStore } from "@/stores/payment-store";
 
 import StripeElements from "./stripe-elements";
@@ -42,8 +44,12 @@ export default function Checkout({
 	const isProcessing = usePaymentStore((state) => state.isProcessing);
 	const error = usePaymentStore((state) => state.error);
 	const clearError = usePaymentStore((state) => state.clearError);
+
+	const [step, setStep] = useQueryState("step", checkoutStepParser);
 	const [clientSecret, setClientSecret] = useState<string | null>(null);
-	const [showPaymentForm, setShowPaymentForm] = useState(false);
+
+	// Only show payment form when URL says payment and we have a secret (e.g. clear step if user refreshed)
+	const showPaymentForm = step === "payment" && !!clientSecret;
 
 	const subtotal = items.reduce(
 		(sum, item) => sum + item.price * item.quantity,
@@ -52,6 +58,13 @@ export default function Checkout({
 	const shipping =
 		items.length > 0 && subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_FEE;
 	const total = subtotal + shipping;
+
+	// Clear URL step to checkout if we're on payment but have no secret (e.g. after refresh)
+	useEffect(() => {
+		if (step === "payment" && !clientSecret) {
+			setStep("checkout");
+		}
+	}, [step, clientSecret, setStep]);
 
 	useEffect(() => {
 		if (error) {
@@ -63,12 +76,20 @@ export default function Checkout({
 		const secret = await createPaymentIntent(total, items);
 		if (secret) {
 			setClientSecret(secret);
-			setShowPaymentForm(true);
+			setStep("payment");
 		}
 	};
 
 	const handlePaymentSuccess = () => {
+		setStep("cart");
+		setClientSecret(null);
 		onPaymentSuccess();
+	};
+
+	const handleBackToCart = () => {
+		setStep("checkout");
+		setClientSecret(null);
+		onBack();
 	};
 
 	const handlePaymentError = (errorMessage: string) => {
@@ -125,7 +146,7 @@ export default function Checkout({
 		<div className="mx-auto max-w-4xl py-28">
 			<Card>
 				<CardHeader>
-					<CardTitle className="font-bold text-2xl">Checkout</CardTitle>
+					<CardTitle className="font-semibold text-2xl">Checkout</CardTitle>
 				</CardHeader>
 				<CardContent className="space-y-6">
 					{/* Order Summary */}
@@ -186,7 +207,7 @@ export default function Checkout({
 						<Button
 							className="flex-1"
 							disabled={isProcessing}
-							onClick={onBack}
+							onClick={handleBackToCart}
 							variant="outline"
 						>
 							Back to Cart

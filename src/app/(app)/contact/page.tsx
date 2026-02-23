@@ -42,7 +42,7 @@ export default function ContactPage() {
 				</p>
 			</div>
 
-			<form className="mb-16" onSubmit={handleSubmit}>
+			<form className="mb-16 rounded-lg bg-card p-6" onSubmit={handleSubmit}>
 				<FieldGroup className="space-y-6">
 					<Field>
 						<FieldLabel
@@ -129,7 +129,7 @@ export default function ContactPage() {
 					)}
 
 					<Button
-						className="h-11 w-full rounded-(--radius)"
+						className="h-11 w-full rounded-lg"
 						disabled={isPending}
 						size="lg"
 						type="submit"

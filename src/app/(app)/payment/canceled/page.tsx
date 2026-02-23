@@ -1,13 +1,19 @@
-"use client";
-
+import { Metadata } from "next";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 
+export const metadata: Metadata = {
+	title: "Payment Canceled",
+	description:
+		"Your payment was canceled. No charges were made. Return to shop to try again.",
+	robots: { index: false, follow: false },
+};
+
 export default function PaymentCanceled() {
 	return (
 		<main className="flex min-h-[60vh] items-center justify-center bg-background px-4 py-20 md:py-28">
-			<div className="w-full max-w-md rounded-(--radius) bg-card/50 px-8 py-12 text-center">
+			<div className="w-full max-w-md rounded-lg bg-card/50 px-8 py-12 text-center">
 				<div className="mx-auto mb-6 flex size-14 items-center justify-center rounded-full bg-destructive/10">
 					<svg
 						className="size-7 text-destructive"
@@ -32,12 +38,12 @@ export default function PaymentCanceled() {
 				</p>
 				<div className="space-y-3">
 					<Link href="/shop">
-						<Button className="w-full rounded-(--radius)" size="lg">
+						<Button className="w-full rounded-lg" size="lg">
 							Try again
 						</Button>
 					</Link>
 					<Link href="/">
-						<Button className="w-full rounded-(--radius)" variant="outline">
+						<Button className="w-full rounded-lg" variant="outline">
 							Return home
 						</Button>
 					</Link>

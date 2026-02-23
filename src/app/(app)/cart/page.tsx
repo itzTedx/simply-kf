@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
-
 import { useRouter } from "next/navigation";
+
+import { useQueryState } from "nuqs";
 
 import Checkout from "@/components/payment/checkout";
 
 import { CartItem } from "@/modules/checkout/components/cart-item";
 import { CartSummary } from "@/modules/checkout/components/cart-summary";
+import { checkoutStepParser } from "@/modules/checkout/checkout-step";
 import { EmptyCart } from "@/modules/checkout/components/empty-cart";
 import { useCartStore } from "@/stores/cart-store";
 
@@ -21,7 +22,10 @@ export default function CartPage() {
 	const removeItem = useCartStore((state) => state.removeItem);
 	const updateQuantity = useCartStore((state) => state.updateQuantity);
 	const clearCart = useCartStore((state) => state.clearCart);
-	const [showCheckout, setShowCheckout] = useState(false);
+
+	const [step, setStep] = useQueryState("step", checkoutStepParser);
+
+	const showCheckout = step === "checkout" || step === "payment";
 
 	const handlePaymentSuccess = () => {
 		clearCart();
@@ -29,7 +33,7 @@ export default function CartPage() {
 	};
 
 	const handleBackToCart = () => {
-		setShowCheckout(false);
+		setStep("cart");
 	};
 
 	const hasItems = items.length > 0;
@@ -86,7 +90,7 @@ export default function CartPage() {
 
 					<CartSummary
 						items={items}
-						onProceedToCheckout={() => setShowCheckout(true)}
+						onProceedToCheckout={() => setStep("checkout")}
 						orderTotal={orderTotal}
 						shipping={shipping}
 						subtotal={subtotal}

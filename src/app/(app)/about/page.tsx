@@ -142,7 +142,7 @@ export default function AboutPage() {
 
 			<section className="flex flex-col items-center gap-4 px-4 pb-28 sm:flex-row md:pb-32">
 				<Button
-					className="min-w-[200px] rounded-(--radius)"
+					className="min-w-[200px] rounded-lg"
 					nativeButton={false}
 					render={<Link href={"/shop" as Route} />}
 					size="lg"
@@ -150,7 +150,7 @@ export default function AboutPage() {
 					Explore the collection
 				</Button>
 				<Button
-					className="min-w-[200px] rounded-(--radius)"
+					className="min-w-[200px] rounded-lg"
 					nativeButton={false}
 					render={<Link href={"/shop" as Route} />}
 					size="lg"
