@@ -16,7 +16,7 @@ export interface OrderConfirmationPayload {
  * Called from the Stripe webhook when payment_intent.succeeded creates the order.
  */
 export async function sendOrderConfirmationEmail(
-	payload: OrderConfirmationPayload,
+	payload: OrderConfirmationPayload
 ): Promise<void> {
 	// TODO: Integrate with Resend, SendGrid, or your email provider.
 	// Example with Resend: await resend.emails.send({ from: '...', to: payload.customerEmail, subject: `Order ${payload.orderNumber} confirmed`, html: ... });
@@ -51,7 +51,7 @@ export interface OrderStatusUpdatePayload {
  * Called from the Orders collection afterChange hook.
  */
 export async function sendOrderStatusUpdateEmail(
-	payload: OrderStatusUpdatePayload,
+	payload: OrderStatusUpdatePayload
 ): Promise<void> {
 	if (!payload.customerEmail) return;
 

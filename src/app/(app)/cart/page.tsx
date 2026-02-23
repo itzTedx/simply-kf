@@ -6,9 +6,9 @@ import { useQueryState } from "nuqs";
 
 import Checkout from "@/components/payment/checkout";
 
+import { checkoutStepParser } from "@/modules/checkout/checkout-step";
 import { CartItem } from "@/modules/checkout/components/cart-item";
 import { CartSummary } from "@/modules/checkout/components/cart-summary";
-import { checkoutStepParser } from "@/modules/checkout/checkout-step";
 import { EmptyCart } from "@/modules/checkout/components/empty-cart";
 import { useCartStore } from "@/stores/cart-store";
 
