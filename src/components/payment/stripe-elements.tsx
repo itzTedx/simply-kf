@@ -43,7 +43,7 @@ function CheckoutForm({ onSuccess, onError }: CheckoutFormProps) {
 	const [message, setMessage] = useState<string>("");
 
 	const form = useForm<CheckoutEmailFormValues>({
-		defaultValues: { email: "" },
+		defaultValues: { email: "", phone: "" },
 	});
 
 	useEffect(() => {
@@ -81,11 +81,13 @@ function CheckoutForm({ onSuccess, onError }: CheckoutFormProps) {
 		const parsed = checkoutEmailSchema.safeParse(values);
 		if (!parsed.success) {
 			const first = parsed.error.issues[0];
+			const field =
+				(first?.path?.[0] as keyof CheckoutEmailFormValues) ?? "email";
 			const message =
 				first && typeof first.message === "string"
 					? first.message
-					: "Please enter a valid email address.";
-			form.setError("email", { message });
+					: "Please check your contact details.";
+			form.setError(field, { message });
 			return;
 		}
 
@@ -93,6 +95,7 @@ function CheckoutForm({ onSuccess, onError }: CheckoutFormProps) {
 		// Email is used for Stripe receipt and for order confirmation notification
 		// (webhook reads charge.billing_details.email and sends the confirmation email).
 		const email = parsed.data.email.trim();
+		const phone = parsed.data.phone.trim();
 
 		// Collect shipping address from the AddressElement so it shows
 		// on the PaymentIntent / Charge in the Stripe dashboard.
@@ -118,7 +121,7 @@ function CheckoutForm({ onSuccess, onError }: CheckoutFormProps) {
 
 			shipping = {
 				name: value.name ?? "",
-				phone: value.phone ?? undefined,
+				phone,
 				address: {
 					line1: value.address.line1 ?? "",
 					line2: value.address.line2 ?? undefined,
@@ -138,6 +141,7 @@ function CheckoutForm({ onSuccess, onError }: CheckoutFormProps) {
 				payment_method_data: {
 					billing_details: {
 						email, // Required for order confirmation email (webhook uses this)
+						phone,
 					},
 				},
 				...(shipping ? { shipping } : {}),
@@ -167,6 +171,34 @@ function CheckoutForm({ onSuccess, onError }: CheckoutFormProps) {
 			noValidate
 			onSubmit={onSubmit}
 		>
+			<Field data-invalid={!!form.formState.errors.phone}>
+				<Controller
+					control={form.control}
+					name="phone"
+					render={({ field, fieldState }) => (
+						<>
+							<FieldLabel htmlFor="checkout-phone">
+								Phone number
+							</FieldLabel>
+							<FieldContent>
+								<Input
+									{...field}
+									aria-invalid={!!fieldState.error}
+									autoComplete="tel"
+									disabled={isProcessing}
+									id="checkout-phone"
+									placeholder="+44 7123 456789"
+									type="tel"
+								/>
+								<FieldError
+									errors={fieldState.error ? [fieldState.error] : undefined}
+								/>
+							</FieldContent>
+						</>
+					)}
+				/>
+			</Field>
+
 			<Field data-invalid={!!form.formState.errors.email}>
 				<Controller
 					control={form.control}
