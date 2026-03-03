@@ -37,6 +37,19 @@ type OrderClient = {
 	createdAt: string;
 	trackingNumber?: string | null;
 	trackingUrl?: string | null;
+	customer: {
+		name?: string | null;
+		email?: string | null;
+		phone?: string | null;
+	} | null;
+	shippingAddress: {
+		line1?: string | null;
+		line2?: string | null;
+		city?: string | null;
+		state?: string | null;
+		postalCode?: string | null;
+		country?: string | null;
+	} | null;
 	items: OrderItemClient[];
 };
 
@@ -49,6 +62,14 @@ function sanitizeOrderForClient(order: Order): OrderClient {
 		createdAt: order.createdAt,
 		trackingNumber: order.trackingNumber ?? null,
 		trackingUrl: order.trackingUrl ?? null,
+		customer: order.customer
+			? {
+					name: order.customer.name ?? null,
+					email: order.customer.email ?? null,
+					phone: order.customer.phone ?? null,
+				}
+			: null,
+		shippingAddress: order.shippingAddress ?? null,
 		items: order.items.map((item) => ({
 			productName: item.productName ?? null,
 			color: item.color ?? null,
@@ -311,39 +332,109 @@ export default async function OrderPage({
 								</div>
 							</div>
 
-							<div className="rounded-xl border border-border/40 bg-background/80 p-4 shadow-sm">
-								<h2 className="mb-3 font-body font-semibold text-foreground text-sm uppercase tracking-wide">
-									Delivery updates
-								</h2>
-								{order.trackingNumber || order.trackingUrl ? (
-									<div className="space-y-2 font-body text-sm">
-										{order.trackingNumber && (
-											<p className="text-foreground">
-												Tracking number:{" "}
-												<span className="font-mono">
-													{order.trackingNumber}
-												</span>
+							<div className="space-y-4">
+								<div className="rounded-xl border border-border/40 bg-background/80 p-4 shadow-sm">
+									<h2 className="mb-3 font-body font-semibold text-foreground text-sm uppercase tracking-wide">
+										Delivery details
+									</h2>
+									<div className="space-y-3 font-body text-sm">
+										<div>
+											<p className="text-foreground/55 text-xs uppercase tracking-wide">
+												Customer
 											</p>
-										)}
-										{order.trackingUrl && (
-											<p>
-												<a
-													className="text-primary underline underline-offset-4"
-													href={order.trackingUrl}
-													rel="noreferrer"
-													target="_blank"
-												>
-													View detailed courier tracking
-												</a>
+											{order.customer ? (
+												<div className="mt-1 space-y-0.5 text-foreground">
+													{order.customer.name && (
+														<p className="font-medium">{order.customer.name}</p>
+													)}
+													{order.customer.email && (
+														<p className="text-foreground/80 text-xs">
+															{order.customer.email}
+														</p>
+													)}
+													{order.customer.phone && (
+														<p className="text-foreground/80 text-xs">
+															{order.customer.phone}
+														</p>
+													)}
+												</div>
+											) : (
+												<p className="mt-1 text-foreground/60 text-xs">
+													Customer details are not available for this order.
+												</p>
+											)}
+										</div>
+
+										<div className="border-border/40 border-t pt-3">
+											<p className="text-foreground/55 text-xs uppercase tracking-wide">
+												Delivery address
 											</p>
-										)}
+											{order.shippingAddress ? (
+												<div className="mt-1 text-foreground text-xs">
+													{order.shippingAddress.line1 && (
+														<p>{order.shippingAddress.line1}</p>
+													)}
+													{order.shippingAddress.line2 && (
+														<p>{order.shippingAddress.line2}</p>
+													)}
+													{(order.shippingAddress.city ||
+														order.shippingAddress.postalCode) && (
+														<p>
+															{[
+																order.shippingAddress.city,
+																order.shippingAddress.postalCode,
+															]
+																.filter(Boolean)
+																.join(", ")}
+														</p>
+													)}
+													{order.shippingAddress.country && (
+														<p>{order.shippingAddress.country}</p>
+													)}
+												</div>
+											) : (
+												<p className="mt-1 text-foreground/60 text-xs">
+													Delivery address is not available for this order yet.
+												</p>
+											)}
+										</div>
 									</div>
-								) : (
-									<p className="font-body text-foreground/60 text-sm">
-										Tracking details are not available yet. We&apos;ll email you
-										as soon as your order has shipped.
-									</p>
-								)}
+								</div>
+
+								<div className="rounded-xl border border-border/40 bg-background/80 p-4 shadow-sm">
+									<h2 className="mb-3 font-body font-semibold text-foreground text-sm uppercase tracking-wide">
+										Delivery updates
+									</h2>
+									{order.trackingNumber || order.trackingUrl ? (
+										<div className="space-y-2 font-body text-sm">
+											{order.trackingNumber && (
+												<p className="text-foreground">
+													Tracking number:{" "}
+													<span className="font-mono">
+														{order.trackingNumber}
+													</span>
+												</p>
+											)}
+											{order.trackingUrl && (
+												<p>
+													<a
+														className="text-primary underline underline-offset-4"
+														href={order.trackingUrl}
+														rel="noreferrer"
+														target="_blank"
+													>
+														View detailed courier tracking
+													</a>
+												</p>
+											)}
+										</div>
+									) : (
+										<p className="font-body text-foreground/60 text-sm">
+											Tracking details are not available yet. We&apos;ll email
+											you as soon as your order has shipped.
+										</p>
+									)}
+								</div>
 							</div>
 						</div>
 					</CardContent>
