@@ -75,30 +75,6 @@ function formatDate(value: string | null | undefined): string | null {
 	});
 }
 
-function getStatusVariant(
-	status: string
-): "default" | "secondary" | "destructive" {
-	const normalized = status.toLowerCase();
-	if (
-		normalized === "delivered" ||
-		normalized === "shipped" ||
-		normalized === "processing"
-	) {
-		return "default";
-	}
-	if (normalized === "pending") {
-		return "secondary";
-	}
-	if (
-		normalized === "cancelled" ||
-		normalized === "refunded" ||
-		normalized === "failed"
-	) {
-		return "destructive";
-	}
-	return "secondary";
-}
-
 function getProgressStep(status: string): number {
 	const normalized = status.toLowerCase();
 	if (normalized === "pending") return 1;
