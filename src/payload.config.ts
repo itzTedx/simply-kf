@@ -1,5 +1,4 @@
 import {
-	betterAuthCollections,
 	createBetterAuthPlugin,
 	payloadAdapter,
 } from "@delmaredigital/payload-better-auth";
@@ -38,7 +37,7 @@ if (!process.env.BETTER_AUTH_SECRET) {
 	throw new Error("BETTER_AUTH_SECRET is not set");
 }
 
-const baseUrl = getBaseUrl();
+const baseURL = getBaseUrl();
 
 export default buildConfig({
 	admin: {
@@ -71,19 +70,16 @@ export default buildConfig({
 	}),
 	sharp,
 	plugins: [
-		betterAuthCollections({
-			betterAuthOptions,
-			skipCollections: ["user"],
-		}),
 		createBetterAuthPlugin({
 			createAuth: (payload) =>
 				betterAuth({
 					...betterAuthOptions,
-					baseURL: baseUrl,
+					baseURL,
 					database: payloadAdapter({
 						payloadClient: payload,
 						adapterConfig: {
-							enableDebugLogs: process.env.NODE_ENV === "development",
+							enableDebugLogs: false,
+							idType: "number",
 						},
 					}),
 
@@ -93,24 +89,11 @@ export default buildConfig({
 						},
 					},
 					secret: process.env.BETTER_AUTH_SECRET!,
-					trustedOrigins: [
-						"http://localhost:3000",
-						"https://localhost:3000",
-						process.env.NEXT_PUBLIC_BASE_URL,
-						process.env.NEXT_PUBLIC_SITE_URL,
-						baseUrl,
-					].filter(Boolean) as string[],
-					// Ensure emailAndPassword config is preserved
-					emailAndPassword: betterAuthOptions.emailAndPassword,
+					trustedOrigins: [baseURL],
 				}),
 			admin: {
-				betterAuthOptions, // Required for management UI auto-detection
 				login: {
-					title: "Sign in to Simply KF",
-					enablePasskey: true,
-					afterLoginPath: "/admin",
-					requiredRole: ["admin"],
-					// enableSignUp: false,
+					enablePasskey: false,
 				},
 			},
 		}),

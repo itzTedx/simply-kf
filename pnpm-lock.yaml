@@ -15,8 +15,8 @@ importers:
         specifier: ^1.5.1
         version: 1.5.1(5b30515b78d01c69dd59fc881fadbf40)
       '@delmaredigital/payload-better-auth':
-        specifier: ^0.5.3
-        version: 0.5.4(1ef438f1ecbf2781ee38ef6582d4cb6d)
+        specifier: ^0.5.5
+        version: 0.5.5(1ef438f1ecbf2781ee38ef6582d4cb6d)
       '@hookform/resolvers':
         specifier: ^5.2.2
         version: 5.2.2(react-hook-form@7.71.2(react@19.2.3))
@@ -54,7 +54,7 @@ importers:
         specifier: ^4.0.0
         version: 4.10.0
       better-auth:
-        specifier: ^1.5.0
+        specifier: ^1.5.1
         version: 1.5.1(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.10)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.9.3))(typescript@5.9.3))(drizzle-kit@0.31.7)(drizzle-orm@0.44.7(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.10)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.9.3))(typescript@5.9.3))(@types/pg@8.10.2)(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.10)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.9.3)))(mongodb@7.1.0)(mysql2@3.15.3)(next@16.1.6(@babel/core@7.29.0)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.77.4))(pg@8.16.3)(prisma@7.4.2(@types/react@19.2.10)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.9.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       class-variance-authority:
         specifier: ^0.7.1
@@ -466,8 +466,8 @@ packages:
   '@date-fns/tz@1.2.0':
     resolution: {integrity: sha512-LBrd7MiJZ9McsOgxqWX7AaxrDjcFVjWH/tIKJd7pnR7McaslGYOP1QmmiBXdJH/H/yLCT+rcQ7FaPBUxRGUtrg==}
 
-  '@delmaredigital/payload-better-auth@0.5.4':
-    resolution: {integrity: sha512-qGiS8ghnEZ0BGI52vXev0ca1U1ldwXps2NZaFwoARnvKcl+GMCPeh+udHyyituwR0CgtdEB4tmysIGfC0pOieg==}
+  '@delmaredigital/payload-better-auth@0.5.5':
+    resolution: {integrity: sha512-p+0VOBKK96t3Zf0NQBTI5n7rP+UELbGOWn9tkNXk4Mtuy6AxY+Loa4KwI7jfzY0dE/8YLQeDqzJCEPy25ql+2g==}
     engines: {node: ^18.20.2 || >=20.9.0}
     peerDependencies:
       '@better-auth/api-key': '>=1.5.0'
@@ -5042,7 +5042,7 @@ snapshots:
 
   '@date-fns/tz@1.2.0': {}
 
-  '@delmaredigital/payload-better-auth@0.5.4(1ef438f1ecbf2781ee38ef6582d4cb6d)':
+  '@delmaredigital/payload-better-auth@0.5.5(1ef438f1ecbf2781ee38ef6582d4cb6d)':
     dependencies:
       '@payloadcms/next': 3.75.0(@types/react@19.2.10)(graphql@16.12.0)(monaco-editor@0.55.1)(next@16.1.6(@babel/core@7.29.0)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.77.4))(payload@3.75.0(graphql@16.12.0)(typescript@5.9.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.9.3)
       '@payloadcms/ui': 3.75.0(@types/react@19.2.10)(monaco-editor@0.55.1)(next@16.1.6(@babel/core@7.29.0)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.77.4))(payload@3.75.0(graphql@16.12.0)(typescript@5.9.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.9.3)

@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
 	/* config options here */
 	typedRoutes: true,
 	reactCompiler: true,
+
 	// Performance optimizations
 	experimental: {
 		// Enable filesystem caching for `next dev`
