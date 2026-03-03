@@ -1,4 +1,5 @@
 import {
+	betterAuthCollections,
 	createBetterAuthPlugin,
 	payloadAdapter,
 } from "@delmaredigital/payload-better-auth";
@@ -70,19 +71,29 @@ export default buildConfig({
 	}),
 	sharp,
 	plugins: [
+		betterAuthCollections({
+			betterAuthOptions,
+			skipCollections: ["users"],
+		}),
 		createBetterAuthPlugin({
 			createAuth: (payload) =>
 				betterAuth({
 					...betterAuthOptions,
+					logger: {
+						level:
+							process.env.NODE_ENV === "development" ||
+							process.env.NODE_ENV === "test"
+								? "debug"
+								: "warn",
+					},
 					baseURL,
 					database: payloadAdapter({
 						payloadClient: payload,
 						adapterConfig: {
-							enableDebugLogs: false,
+							enableDebugLogs: process.env.NODE_ENV !== "production",
 							idType: "number",
 						},
 					}),
-
 					advanced: {
 						database: {
 							generateId: "serial",
@@ -92,8 +103,13 @@ export default buildConfig({
 					trustedOrigins: [baseURL],
 				}),
 			admin: {
+				loginViewComponent: "@/components/admin/CustomLogin",
+				logoutButtonComponent: "@/components/admin/CustomLogout",
+				disableBeforeLogin: true,
 				login: {
 					enablePasskey: false,
+					afterLoginPath: "/admin", // Redirect to admin dashboard after login
+					requiredRole: ["admin"],
 				},
 			},
 		}),

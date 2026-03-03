@@ -1,3 +1,4 @@
+import { passkey } from "@better-auth/passkey";
 import type { BetterAuthOptions } from "better-auth";
 
 import { sendEmail } from "../emails";
@@ -27,4 +28,5 @@ export const betterAuthOptions: Partial<BetterAuthOptions> = {
 			}
 		},
 	},
+	plugins: [passkey()],
 };

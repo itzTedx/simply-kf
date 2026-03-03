@@ -7,6 +7,11 @@ export const Users: CollectionConfig = {
 		disableLocalStrategy: true,
 		strategies: [betterAuthStrategy()],
 	},
+	admin: {
+		defaultColumns: ["name", "email", "role"],
+		useAsTitle: "name",
+		group: "Auth",
+	},
 	access: {
 		read: ({ req }) => {
 			if (!req.user) return false;
@@ -30,4 +35,5 @@ export const Users: CollectionConfig = {
 			],
 		},
 	],
+	timestamps: true,
 };

@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useTransition } from "react";
 
 import Link from "next/link";
@@ -13,13 +14,14 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
-import { signIn } from "@/lib/auth/client";
+import { signUp } from "@/lib/auth/client";
 
-export default function LoginPage() {
+export default function SignupPage() {
 	const router = useRouter();
 	const [isPending, startTransition] = useTransition();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [confirmPassword, setConfirmPassword] = useState("");
 	const [error, setError] = useState<string | null>(null);
 
 	async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -28,25 +30,37 @@ export default function LoginPage() {
 
 		const trimmedEmail = email.trim();
 		const trimmedPassword = password.trim();
+		const trimmedConfirmPassword = confirmPassword.trim();
 
-		if (!trimmedEmail || !trimmedPassword) {
-			setError("Please enter both your email and password.");
+		if (!trimmedEmail || !trimmedPassword || !trimmedConfirmPassword) {
+			setError("Please fill in all fields to create your account.");
+			return;
+		}
+
+		if (trimmedPassword.length < 8) {
+			setError("Your password must be at least 8 characters long.");
+			return;
+		}
+
+		if (trimmedPassword !== trimmedConfirmPassword) {
+			setError("Your passwords do not match. Please try again.");
 			return;
 		}
 
 		startTransition(async () => {
 			try {
-				await signIn.email(
+				await signUp.email(
 					{
 						email: trimmedEmail,
 						password: trimmedPassword,
+						name: "Admin",
 						callbackURL: "/admin",
 					},
 					{
 						onError: (ctx: { error?: { message?: string } }) => {
 							const message =
 								ctx.error?.message ||
-								"Unable to sign you in. Please check your details and try again.";
+								"Unable to create your account. Please check your details and try again.";
 							setError(message);
 						},
 						onSuccess: () => {
@@ -55,9 +69,9 @@ export default function LoginPage() {
 					}
 				);
 			} catch (err) {
-				console.error("[login] Unexpected error", err);
+				console.error("[signup] Unexpected error", err);
 				setError(
-					"Something went wrong while signing you in. Please try again."
+					"Something went wrong while creating your account. Please try again."
 				);
 			}
 		});
@@ -67,11 +81,11 @@ export default function LoginPage() {
 		<main className="container mx-auto max-w-md px-4 py-20 sm:px-6 md:py-28">
 			<div className="mb-10 space-y-4 text-center">
 				<h1 className="font-display font-normal text-3xl text-foreground tracking-tight md:text-4xl">
-					Admin login
+					Create your admin login
 				</h1>
 				<p className="mx-auto max-w-md font-body text-foreground/65 text-sm leading-relaxed">
-					Sign in with your admin credentials to access the Simply KF Payload
-					admin dashboard.
+					Set up an admin login to securely access the Simply KF Payload admin
+					dashboard.
 				</p>
 			</div>
 
@@ -79,12 +93,12 @@ export default function LoginPage() {
 				<form className="space-y-6" onSubmit={handleSubmit}>
 					<FieldGroup className="space-y-4">
 						<Field>
-							<FieldLabel htmlFor="login-email">Email address</FieldLabel>
+							<FieldLabel htmlFor="signup-email">Email address</FieldLabel>
 							<FieldContent>
 								<Input
 									autoComplete="email"
 									disabled={isPending}
-									id="login-email"
+									id="signup-email"
 									onChange={(event) => setEmail(event.target.value)}
 									placeholder="you@example.com"
 									type="email"
@@ -94,16 +108,33 @@ export default function LoginPage() {
 						</Field>
 
 						<Field>
-							<FieldLabel htmlFor="login-password">Password</FieldLabel>
+							<FieldLabel htmlFor="signup-password">Password</FieldLabel>
 							<FieldContent>
 								<Input
-									autoComplete="current-password"
+									autoComplete="new-password"
 									disabled={isPending}
-									id="login-password"
+									id="signup-password"
 									onChange={(event) => setPassword(event.target.value)}
-									placeholder="Enter your password"
+									placeholder="Create a password"
 									type="password"
 									value={password}
+								/>
+							</FieldContent>
+						</Field>
+
+						<Field>
+							<FieldLabel htmlFor="signup-confirm-password">
+								Confirm password
+							</FieldLabel>
+							<FieldContent>
+								<Input
+									autoComplete="new-password"
+									disabled={isPending}
+									id="signup-confirm-password"
+									onChange={(event) => setConfirmPassword(event.target.value)}
+									placeholder="Re-enter your password"
+									type="password"
+									value={confirmPassword}
 								/>
 							</FieldContent>
 						</Field>
@@ -121,15 +152,15 @@ export default function LoginPage() {
 						size="lg"
 						type="submit"
 					>
-						{isPending ? "Signing in…" : "Sign in"}
+						{isPending ? "Creating account…" : "Create account"}
 					</Button>
 				</form>
 			</section>
 
 			<p className="text-center font-body text-foreground/55 text-xs">
-				Don&apos;t have an admin account yet?{" "}
-				<Link className="underline underline-offset-4" href="/signup">
-					Request an admin login
+				Already have an admin login?{" "}
+				<Link className="underline underline-offset-4" href="/login">
+					Sign in instead
 				</Link>
 				.
 			</p>
