@@ -1,4 +1,4 @@
-import { Route } from "next";
+import type { Route } from "next";
 import Link from "next/link";
 
 import { RiMenuLine, RiUserLine } from "@remixicon/react";
@@ -57,7 +57,7 @@ export function Header() {
 									<SheetClose key={link.name}>
 										<Link
 											className="rounded-md px-4 py-3 font-body text-foreground/80 text-sm transition-colors duration-200 hover:bg-foreground/5 hover:text-foreground"
-											href={link.href as Route}
+											href={link.href}
 										>
 											{link.name}
 										</Link>
@@ -80,7 +80,7 @@ export function Header() {
 						{NAV_LINKS.map((link) => (
 							<Link
 								className="font-body text-[0.8125rem] text-foreground/75 tracking-wide transition-colors duration-300 hover:text-foreground"
-								href={link.href as Route}
+								href={link.href}
 								key={link.name}
 							>
 								{link.name}
@@ -89,14 +89,13 @@ export function Header() {
 					</nav>
 
 					<div className="flex items-center gap-1">
-						<Button
-							className="text-foreground/70 hover:text-foreground"
-							size="icon-sm"
-							variant="ghost"
+						<Link
+							aria-label="Customer login"
+							className="flex size-8 items-center justify-center rounded-full text-foreground/70 transition-colors hover:text-foreground"
+							href={"/login" as Route}
 						>
 							<RiUserLine className="size-4" />
-							<span className="sr-only">Account</span>
-						</Button>
+						</Link>
 						<CartButton />
 					</div>
 				</div>
