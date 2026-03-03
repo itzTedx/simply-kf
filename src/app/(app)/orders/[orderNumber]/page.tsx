@@ -2,14 +2,18 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import config from "@payload-config";
+import {
+	RiCheckLine,
+	RiMapPinLine,
+	RiShoppingBag3Line,
+	RiTruckLine,
+} from "@remixicon/react";
 import { getPayload } from "payload";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
-	CardDescription,
 	CardFooter,
 	CardHeader,
 	CardTitle,
@@ -95,6 +99,24 @@ function getStatusVariant(
 	return "secondary";
 }
 
+function getProgressStep(status: string): number {
+	const normalized = status.toLowerCase();
+	if (normalized === "pending") return 1;
+	if (normalized === "processing") return 2;
+	if (normalized === "shipped") return 3;
+	if (normalized === "delivered") return 4;
+	return 0;
+}
+
+function isTerminalCancelled(status: string): boolean {
+	const normalized = status.toLowerCase();
+	return (
+		normalized === "cancelled" ||
+		normalized === "refunded" ||
+		normalized === "failed"
+	);
+}
+
 async function getOrder(orderNumber: string): Promise<OrderClient | null> {
 	const trimmed = orderNumber.trim();
 	if (!trimmed) return null;
@@ -135,104 +157,190 @@ export default async function OrderPage({
 	}
 
 	const placedOn = formatDate(order.createdAt) ?? order.createdAt;
+	const progressStep = getProgressStep(order.status);
+	const cancelled = isTerminalCancelled(order.status);
 
 	return (
-		<main className="container mx-auto max-w-3xl px-4 py-20 sm:px-6 md:py-28">
+		<main className="container mx-auto max-w-4xl px-4 py-20 sm:px-6 md:py-28">
 			<div className="mb-10 space-y-4 text-center">
 				<h1 className="font-display font-normal text-3xl text-foreground tracking-tight md:text-4xl">
 					Order tracking
 				</h1>
-				<p className="mx-auto max-w-md font-body text-foreground/65 text-sm leading-relaxed">
-					You&apos;re viewing live updates for order{" "}
-					<span className="font-mono">{order.orderNumber}</span>. This link
-					works without logging in, so keep it safe.
-				</p>
 			</div>
 
 			<section aria-label="Order tracking details">
 				<Card>
 					<CardHeader className="items-start gap-3 sm:flex sm:items-center sm:justify-between">
 						<div>
-							<CardTitle>Order {order.orderNumber}</CardTitle>
-							<CardDescription>
-								Placed on {placedOn}. You&apos;ll see updates here as your order
-								moves through our fulfilment and delivery steps.
-							</CardDescription>
-						</div>
-						<div className="flex flex-wrap gap-2">
-							<Badge variant={getStatusVariant(order.status)}>
-								Status: {order.status}
-							</Badge>
-							{order.paymentStatus && (
-								<Badge variant={getStatusVariant(order.paymentStatus)}>
-									Payment: {order.paymentStatus}
-								</Badge>
-							)}
+							<CardTitle className="flex items-center gap-2 text-xl sm:text-2xl">
+								<h2 className="font-semibold text-base sm:text-lg">
+									{order.orderNumber}
+								</h2>
+							</CardTitle>
+
+							<div className="mt-4 grid gap-3 text-foreground/70 text-xs sm:grid-cols-3">
+								<div className="rounded-md border border-border/40 bg-background/60 px-3 py-2">
+									<p className="font-medium text-foreground/55 uppercase tracking-wide">
+										Current status
+									</p>
+									<p className="mt-0.5 font-body text-foreground text-sm capitalize">
+										{order.status}
+									</p>
+								</div>
+								<div className="rounded-md border border-border/40 bg-background/60 px-3 py-2">
+									<p className="font-medium text-foreground/55 uppercase tracking-wide">
+										Total paid
+									</p>
+									<p className="mt-0.5 font-body text-foreground text-sm">
+										£{formatCurrency(order.total)}
+									</p>
+								</div>
+								<div className="rounded-md border border-border/40 bg-background/60 px-3 py-2">
+									<p className="font-medium text-foreground/55 uppercase tracking-wide">
+										Placed on
+									</p>
+									<p className="mt-0.5 font-body text-foreground text-sm">
+										{placedOn}
+									</p>
+								</div>
+							</div>
 						</div>
 					</CardHeader>
 
 					<CardContent className="space-y-6">
-						<div>
-							<h2 className="mb-3 font-body font-semibold text-foreground text-sm uppercase tracking-wide">
-								Items
-							</h2>
-							<div className="divide-y divide-border/50 rounded-md border border-border/40 bg-background/60">
-								{order.items.map((item, index) => {
-									const hasVariant = item.color || item.size;
-									const variant = [item.color, item.size]
-										.filter(Boolean)
-										.join(", ");
-
-									return (
-										<div
-											className="flex flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
-											key={`${item.productName ?? "item"}-${index}`}
-										>
-											<div>
-												<p className="font-body text-foreground text-sm">
-													{item.productName ?? "Item"}
-												</p>
-												<p className="font-body text-foreground/60 text-xs">
-													{hasVariant ? variant : "Standard option"} • Qty:{" "}
-													{item.quantity}
-												</p>
-											</div>
-											<div className="text-right font-body text-foreground text-sm">
-												<p>£{formatCurrency(item.price)}</p>
-												<p className="text-foreground/60 text-xs">
-													Line total: £
-													{formatCurrency(item.price * item.quantity)}
-												</p>
-											</div>
-										</div>
-									);
-								})}
+						{cancelled ? (
+							<div className="rounded-lg border border-destructive/30 bg-destructive/5 p-4 font-body text-destructive text-sm">
+								This order is{" "}
+								<span className="font-semibold lowercase">{order.status}</span>.
+								If you believe this is a mistake, please contact our support
+								team and share your order number.
 							</div>
-						</div>
+						) : (
+							<div className="rounded-lg border border-border/40 bg-muted/40 p-4">
+								<div className="mb-3 flex items-center gap-2">
+									<RiTruckLine className="size-5 text-primary" />
+									<p className="font-body font-medium text-foreground text-sm">
+										Delivery progress
+									</p>
+								</div>
+								<ol className="flex items-center justify-between gap-2 text-xs sm:text-sm">
+									{[
+										{
+											id: 1,
+											label: "Order placed",
+											icon: RiShoppingBag3Line,
+										},
+										{
+											id: 2,
+											label: "Processing",
+											icon: RiCheckLine,
+										},
+										{
+											id: 3,
+											label: "Shipped",
+											icon: RiTruckLine,
+										},
+										{
+											id: 4,
+											label: "Delivered",
+											icon: RiMapPinLine,
+										},
+									].map((step, index, all) => {
+										const isCompleted = progressStep > step.id;
+										const isCurrent = progressStep === step.id;
+										const Icon = step.icon;
 
-						<div className="grid gap-6 md:grid-cols-2">
-							<div>
-								<h2 className="mb-3 font-body font-semibold text-foreground text-sm uppercase tracking-wide">
-									Order summary
+										return (
+											<li
+												className="flex flex-1 items-center gap-2"
+												key={step.id}
+											>
+												<div className="flex items-center gap-2">
+													<div
+														className={`flex size-7 items-center justify-center rounded-full border font-medium text-[0.7rem] ${
+															isCompleted || isCurrent
+																? "border-primary bg-primary text-primary-foreground"
+																: "border-border bg-background text-foreground/60"
+														}`}
+													>
+														{isCompleted ? (
+															<RiCheckLine className="size-3.5" />
+														) : (
+															<Icon className="size-3.5" />
+														)}
+													</div>
+													<span
+														className={`hidden sm:inline ${
+															isCompleted || isCurrent
+																? "font-medium text-foreground"
+																: "text-foreground/60"
+														}`}
+													>
+														{step.label}
+													</span>
+												</div>
+												{index < all.length - 1 && (
+													<div
+														className={`h-px flex-1 ${
+															progressStep > step.id
+																? "bg-primary"
+																: "bg-border"
+														}`}
+													/>
+												)}
+											</li>
+										);
+									})}
+								</ol>
+							</div>
+						)}
+
+						<div className="grid gap-6 lg:grid-cols-[minmax(0,2.1fr)_minmax(0,1.4fr)]">
+							<div className="space-y-4">
+								<h2 className="font-body font-semibold text-foreground text-sm uppercase tracking-wide">
+									Order items
 								</h2>
-								<dl className="space-y-1 font-body text-sm">
-									<div className="mt-2 flex items-center justify-between border-border/40 border-t pt-2">
-										<dt className="font-semibold text-foreground">
-											Total paid
-										</dt>
-										<dd className="font-semibold text-foreground">
-											£{formatCurrency(order.total)}
-										</dd>
-									</div>
-								</dl>
+								<div className="divide-y divide-border/50 rounded-xl border border-border/40 bg-background/80 shadow-sm">
+									{order.items.map((item, index) => {
+										const hasVariant = item.color || item.size;
+										const variant = [item.color, item.size]
+											.filter(Boolean)
+											.join(", ");
+
+										return (
+											<div
+												className="flex flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+												key={`${item.productName ?? "item"}-${index}`}
+											>
+												<div>
+													<p className="font-body font-medium text-foreground text-sm">
+														{item.productName ?? "Item"}
+													</p>
+													<p className="font-body text-foreground/60 text-xs">
+														{hasVariant ? variant : "Standard option"} • Qty:{" "}
+														{item.quantity}
+													</p>
+												</div>
+												<div className="text-right font-body text-foreground text-sm">
+													<p className="font-medium">
+														£{formatCurrency(item.price * item.quantity)}
+													</p>
+													<p className="text-foreground/60 text-xs">
+														£{formatCurrency(item.price)} each
+													</p>
+												</div>
+											</div>
+										);
+									})}
+								</div>
 							</div>
 
-							<div>
+							<div className="rounded-xl border border-border/40 bg-background/80 p-4 shadow-sm">
 								<h2 className="mb-3 font-body font-semibold text-foreground text-sm uppercase tracking-wide">
 									Delivery updates
 								</h2>
 								{order.trackingNumber || order.trackingUrl ? (
-									<div className="rounded-md border border-border/40 bg-background/60 p-3 font-body text-sm">
+									<div className="space-y-2 font-body text-sm">
 										{order.trackingNumber && (
 											<p className="text-foreground">
 												Tracking number:{" "}
@@ -242,14 +350,14 @@ export default async function OrderPage({
 											</p>
 										)}
 										{order.trackingUrl && (
-											<p className="mt-2">
+											<p>
 												<a
-													className="underline underline-offset-4"
+													className="text-primary underline underline-offset-4"
 													href={order.trackingUrl}
 													rel="noreferrer"
 													target="_blank"
 												>
-													View carrier tracking updates
+													View detailed courier tracking
 												</a>
 											</p>
 										)}
