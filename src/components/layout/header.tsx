@@ -90,9 +90,9 @@ export function Header() {
 
 					<div className="flex items-center gap-1">
 						<Link
-							aria-label="Customer login"
+							aria-label="Track order"
 							className="flex size-8 items-center justify-center rounded-full text-foreground/70 transition-colors hover:text-foreground"
-							href={"/login" as Route}
+							href={"/track" as Route}
 						>
 							<RiUserLine className="size-4" />
 						</Link>
