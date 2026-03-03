@@ -1,7 +1,6 @@
 "use client";
 import { useState, useTransition } from "react";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
@@ -40,7 +39,7 @@ export default function LoginPage() {
 					{
 						email: trimmedEmail,
 						password: trimmedPassword,
-						callbackURL: "/admin",
+						callbackURL: "/",
 					},
 					{
 						onError: (ctx: { error?: { message?: string } }) => {
@@ -50,7 +49,7 @@ export default function LoginPage() {
 							setError(message);
 						},
 						onSuccess: () => {
-							router.push("/admin" as never);
+							router.push("/" as never);
 						},
 					}
 				);
@@ -67,11 +66,11 @@ export default function LoginPage() {
 		<main className="container mx-auto max-w-md px-4 py-20 sm:px-6 md:py-28">
 			<div className="mb-10 space-y-4 text-center">
 				<h1 className="font-display font-normal text-3xl text-foreground tracking-tight md:text-4xl">
-					Admin login
+					Customer login
 				</h1>
 				<p className="mx-auto max-w-md font-body text-foreground/65 text-sm leading-relaxed">
-					Sign in with your admin credentials to access the Simply KF Payload
-					admin dashboard.
+					Sign in with your email and password to access your Simply KF
+					customer account.
 				</p>
 			</div>
 
@@ -127,11 +126,8 @@ export default function LoginPage() {
 			</section>
 
 			<p className="text-center font-body text-foreground/55 text-xs">
-				Don&apos;t have an admin account yet?{" "}
-				<Link className="underline underline-offset-4" href="/signup">
-					Request an admin login
-				</Link>
-				.
+				Don&apos;t have a customer account yet? You can create one during
+				checkout.
 			</p>
 		</main>
 	);

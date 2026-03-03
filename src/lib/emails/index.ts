@@ -48,9 +48,9 @@ export const sendEmail = async (options: SendEmailOptions) => {
 
 	try {
 		const result = await transporter.sendMail({
-			from: `${email} <${process.env.SMTP_FROM}>`,
-			to: process.env.RECEIVER_EMAIL,
-			replyTo: email,
+			from: process.env.SMTP_FROM,
+			to: email ?? process.env.RECEIVER_EMAIL,
+			replyTo: email ?? process.env.RECEIVER_EMAIL,
 			subject,
 			text,
 			html: react ? await render(react) : undefined,

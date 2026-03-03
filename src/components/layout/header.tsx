@@ -90,7 +90,7 @@ export function Header() {
 
 					<div className="flex items-center gap-1">
 						<Link
-							aria-label="Admin login"
+							aria-label="Customer login"
 							className="flex size-8 items-center justify-center rounded-full text-foreground/70 transition-colors hover:text-foreground"
 							href={"/login" as Route}
 						>

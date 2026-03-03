@@ -1,5 +1,87 @@
 import type { CollectionConfig } from "payload";
 
+import { sendEmail } from "../../lib/emails";
+import OrderStatusEmail, {
+	OrderStatusPlainText,
+} from "../../lib/emails/templates/order-status";
+
+type Order = {
+	id: string;
+	orderNumber: string;
+	status: string;
+	customer?: {
+		name?: string;
+		email?: string;
+	};
+	trackingNumber?: string;
+	trackingUrl?: string;
+};
+
+const sendOrderStatusEmail = async ({
+	doc,
+	previousDoc,
+}: {
+	doc: Order;
+	previousDoc?: Order;
+}) => {
+	const newStatus = doc.status;
+	const previousStatus = previousDoc?.status;
+
+	const statusesToNotify: Array<Order["status"]> = [
+		"shipped",
+		"delivered",
+		"cancelled",
+		"refunded",
+	];
+
+	if (!statusesToNotify.includes(newStatus)) return;
+	if (previousStatus && previousStatus === newStatus) return;
+
+	const customerEmail = doc.customer?.email;
+	if (!customerEmail) return;
+
+	const customerName = doc.customer?.name ?? "there";
+
+	let subjectStatusLabel = newStatus[0].toUpperCase() + newStatus.slice(1);
+	const subject = `Your order ${doc.orderNumber} is ${subjectStatusLabel}`;
+
+	const trackingInfoLines: string[] = [];
+	if (doc.trackingNumber) {
+		trackingInfoLines.push(`Tracking number: ${doc.trackingNumber}`);
+	}
+	if (doc.trackingUrl) {
+		trackingInfoLines.push(`Track your order here: ${doc.trackingUrl}`);
+	}
+
+	try {
+		await sendEmail({
+			email: customerEmail,
+			subject,
+			react: OrderStatusEmail({
+				customerName,
+				orderNumber: doc.orderNumber,
+				status: newStatus,
+				trackingNumber: doc.trackingNumber,
+				trackingUrl: doc.trackingUrl,
+			}),
+			text: OrderStatusPlainText({
+				customerName,
+				orderNumber: doc.orderNumber,
+				status: newStatus,
+				trackingNumber: doc.trackingNumber,
+				trackingUrl: doc.trackingUrl,
+			}),
+		});
+	} catch (error) {
+		console.error(
+			"[DEBUG] Failed to send order status email",
+			doc.id,
+			newStatus,
+			error
+		);
+	}
+};
+
 export const Orders: CollectionConfig = {
 	slug: "orders",
 	admin: {
@@ -361,6 +443,8 @@ export const Orders: CollectionConfig = {
 			],
 		},
 	],
-	// No hooks needed - all order data is set by webhook and read-only
+	hooks: {
+		afterChange: [sendOrderStatusEmail],
+	},
 	timestamps: true,
 };
