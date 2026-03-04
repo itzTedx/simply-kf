@@ -4,6 +4,7 @@ import { getProductDefaultImage } from "@/constants/products";
 import type { Product } from "@/payload-types";
 
 import { Media } from "../payload/media";
+import { Badge } from "../ui/badge";
 
 type ProductSize = NonNullable<Product["sizes"]>[number];
 type ProductVariant = NonNullable<Product["variants"]>[number];
@@ -50,7 +51,20 @@ function isProductOutOfStock(product: Partial<Product>): boolean {
 		}
 	}
 
-	return anyTracked && !anyInStock;
+	const result = anyTracked && !anyInStock;
+
+	console.log("isProductOutOfStock debug", {
+		name: product.name,
+		slug: product.slug,
+		stock: product.stock,
+		sizes: product.sizes,
+		variants: product.variants,
+		anyTracked,
+		anyInStock,
+		result,
+	});
+
+	return result;
 }
 
 interface ProductCardProps {
@@ -61,16 +75,17 @@ export function ProductCard({ product }: ProductCardProps) {
 	const isOutOfStock =
 		isProductOutOfStock(product) && product.availability !== "pre-order";
 
-	console.log("isOutOfStock", isOutOfStock);
-
 	return (
 		<Link className="group block space-y-4" href={`/shop/${product.slug}`}>
 			{getProductDefaultImage(product) && (
 				<div className="relative aspect-3/4 w-full overflow-hidden rounded-sm bg-muted/40">
 					{isOutOfStock && (
-						<div className="absolute top-2 left-2 z-20 rounded-md bg-destructive/90 px-2 py-1 text-destructive-foreground text-xs">
+						<Badge
+							className="absolute top-2 right-2 z-10"
+							variant="destructive"
+						>
 							Out of stock
-						</div>
+						</Badge>
 					)}
 					{product.availability === "pre-order" && (
 						<div className="absolute top-2 right-2 z-10 rounded-md bg-background/30 px-2 py-1 text-foreground text-xs backdrop-blur-lg">

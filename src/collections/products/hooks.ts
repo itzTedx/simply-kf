@@ -98,6 +98,40 @@ export const revalidateProduct: CollectionAfterChangeHook<Product> = ({
 	return doc;
 };
 
+export const normalizeProductStock: CollectionAfterChangeHook<Product> = ({
+	doc,
+}) => {
+	if (!doc?.variants || !Array.isArray(doc.variants)) {
+		return doc;
+	}
+
+	const normalizedVariants = doc.variants.map((variant) => {
+		if (!variant) return variant;
+
+		const sizes = Array.isArray(variant.sizes) ? variant.sizes : [];
+		const hasSizeStock = sizes.some(
+			(sizeRow) =>
+				sizeRow &&
+				typeof sizeRow.stock === "number" &&
+				Number.isFinite(sizeRow.stock),
+		);
+
+		if (!hasSizeStock) {
+			return variant;
+		}
+
+		return {
+			...variant,
+			stock: null,
+		};
+	});
+
+	return {
+		...doc,
+		variants: normalizedVariants,
+	};
+};
+
 export const revalidateDeleteProduct: CollectionAfterDeleteHook<Product> = ({
 	doc,
 	req: { context },

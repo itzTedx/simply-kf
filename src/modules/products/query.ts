@@ -11,6 +11,8 @@ export async function getProducts(): Promise<Partial<Product>[]> {
 		},
 		select: {
 			name: true,
+			stock: true,
+			sizes: true,
 			price: true,
 			availability: true,
 			categories: true,

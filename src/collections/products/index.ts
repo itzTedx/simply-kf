@@ -22,6 +22,7 @@ import { slugify } from "@/lib/utils";
 
 import {
 	ensureUniqueSlug,
+	normalizeProductStock,
 	revalidateDeleteProduct,
 	revalidateProduct,
 } from "./hooks";
@@ -42,7 +43,7 @@ export const Products: CollectionConfig = {
 	},
 	hooks: {
 		beforeValidate: [ensureUniqueSlug],
-		afterChange: [revalidateProduct],
+		afterChange: [normalizeProductStock, revalidateProduct],
 		afterDelete: [revalidateDeleteProduct],
 	},
 	defaultPopulate: {
@@ -272,9 +273,22 @@ export const Products: CollectionConfig = {
 											type: "number",
 											min: 0,
 											admin: {
-												condition: (_data, siblingData) =>
-													!siblingData?.sizes ||
-													siblingData?.sizes?.length === 0,
+												condition: (_data, siblingData) => {
+													const sizes = siblingData?.sizes;
+
+													if (!sizes || sizes.length === 0) {
+														return true;
+													}
+
+													const hasSizeStock = sizes.some(
+														(sizeRow: { stock: number }) =>
+															sizeRow &&
+															typeof sizeRow.stock === "number" &&
+															sizeRow.stock > 0
+													);
+
+													return !hasSizeStock;
+												},
 												description:
 													"Quantity in stock (when variant has no size options)",
 											},
