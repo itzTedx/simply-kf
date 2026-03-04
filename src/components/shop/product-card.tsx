@@ -53,17 +53,6 @@ function isProductOutOfStock(product: Partial<Product>): boolean {
 
 	const result = anyTracked && !anyInStock;
 
-	console.log("isProductOutOfStock debug", {
-		name: product.name,
-		slug: product.slug,
-		stock: product.stock,
-		sizes: product.sizes,
-		variants: product.variants,
-		anyTracked,
-		anyInStock,
-		result,
-	});
-
 	return result;
 }
 
