@@ -79,18 +79,18 @@ export default buildConfig({
 			createAuth: (payload) =>
 				betterAuth({
 					...betterAuthOptions,
-					logger: {
-						level:
-							process.env.NODE_ENV === "development" ||
-							process.env.NODE_ENV === "test"
-								? "debug"
-								: "warn",
-					},
+					// logger: {
+					// 	level:
+					// 		process.env.NODE_ENV === "development" ||
+					// 		process.env.NODE_ENV === "test"
+					// 			? "debug"
+					// 			: "warn",
+					// },
 					baseURL,
 					database: payloadAdapter({
 						payloadClient: payload,
 						adapterConfig: {
-							enableDebugLogs: process.env.NODE_ENV !== "production",
+							// enableDebugLogs: process.env.NODE_ENV !== "production",
 							idType: "number",
 						},
 					}),

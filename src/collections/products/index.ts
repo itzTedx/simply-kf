@@ -272,8 +272,9 @@ export const Products: CollectionConfig = {
 											type: "number",
 											min: 0,
 											admin: {
-												condition: (data) =>
-													!data?.sizes || data?.sizes?.length === 0,
+												condition: (_data, siblingData) =>
+													!siblingData?.sizes ||
+													siblingData?.sizes?.length === 0,
 												description:
 													"Quantity in stock (when variant has no size options)",
 											},
