@@ -13,6 +13,7 @@ import { fileURLToPath } from "url";
 import { Homepage } from "./collections/global/homepage";
 import { ShippingSettings } from "./collections/global/shipping-settings";
 import { Media } from "./collections/Media";
+import { Newsletters } from "./collections/newsletters";
 import { Orders } from "./collections/orders";
 import { Products } from "./collections/products";
 import { Collections } from "./collections/products/collections";
@@ -58,7 +59,16 @@ export default buildConfig({
 			robots: "noindex, nofollow",
 		},
 	},
-	collections: [Products, Collections, Orders, Reels, Media, Videos, Users],
+	collections: [
+		Products,
+		Collections,
+		Orders,
+		Reels,
+		Media,
+		Videos,
+		Newsletters,
+		Users,
+	],
 	globals: [Homepage, ShippingSettings],
 	editor: defaultLexical,
 	secret: process.env.PAYLOAD_SECRET,

@@ -73,6 +73,7 @@ export interface Config {
     reels: Reel;
     media: Media;
     videos: Video;
+    newsletters: Newsletter;
     users: User;
     sessions: Session;
     accounts: Account;
@@ -92,6 +93,7 @@ export interface Config {
     reels: ReelsSelect<false> | ReelsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     videos: VideosSelect<false> | VideosSelect<true>;
+    newsletters: NewslettersSelect<false> | NewslettersSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     sessions: SessionsSelect<false> | SessionsSelect<true>;
     accounts: AccountsSelect<false> | AccountsSelect<true>;
@@ -415,6 +417,22 @@ export interface Video {
   focalY?: number | null;
 }
 /**
+ * Newsletter signups collected from the storefront.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "newsletters".
+ */
+export interface Newsletter {
+  id: number;
+  email: string;
+  /**
+   * Where this signup originated (e.g. homepage newsletter section).
+   */
+  source?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
@@ -639,6 +657,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'videos';
         value: number | Video;
+      } | null)
+    | ({
+        relationTo: 'newsletters';
+        value: number | Newsletter;
       } | null)
     | ({
         relationTo: 'users';
@@ -876,6 +898,16 @@ export interface VideosSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "newsletters_select".
+ */
+export interface NewslettersSelect<T extends boolean = true> {
+  email?: T;
+  source?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
