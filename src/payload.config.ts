@@ -58,7 +58,7 @@ export default buildConfig({
 			robots: "noindex, nofollow",
 		},
 	},
-	collections: [Users, Products, Collections, Orders, Reels, Media, Videos],
+	collections: [Products, Collections, Orders, Reels, Media, Videos, Users],
 	globals: [Homepage, ShippingSettings],
 	editor: defaultLexical,
 	secret: process.env.PAYLOAD_SECRET,

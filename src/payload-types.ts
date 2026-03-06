@@ -67,13 +67,13 @@ export interface Config {
   };
   blocks: {};
   collections: {
-    users: User;
     products: Product;
     collections: Collection;
     orders: Order;
     reels: Reel;
     media: Media;
     videos: Video;
+    users: User;
     sessions: Session;
     accounts: Account;
     verifications: Verification;
@@ -86,13 +86,13 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
-    users: UsersSelect<false> | UsersSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
     collections: CollectionsSelect<false> | CollectionsSelect<true>;
     orders: OrdersSelect<false> | OrdersSelect<true>;
     reels: ReelsSelect<false> | ReelsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     videos: VideosSelect<false> | VideosSelect<true>;
+    users: UsersSelect<false> | UsersSelect<true>;
     sessions: SessionsSelect<false> | SessionsSelect<true>;
     accounts: AccountsSelect<false> | AccountsSelect<true>;
     verifications: VerificationsSelect<false> | VerificationsSelect<true>;
@@ -145,21 +145,6 @@ export interface UserAuthOperations {
     email: string;
     password: string;
   };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
- */
-export interface User {
-  id: number;
-  email: string;
-  emailVerified?: boolean | null;
-  name?: string | null;
-  image?: string | null;
-  role?: ('user' | 'admin') | null;
-  updatedAt: string;
-  createdAt: string;
-  collection: 'users';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -430,6 +415,21 @@ export interface Video {
   focalY?: number | null;
 }
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users".
+ */
+export interface User {
+  id: number;
+  email: string;
+  emailVerified?: boolean | null;
+  name?: string | null;
+  image?: string | null;
+  role?: ('user' | 'admin') | null;
+  updatedAt: string;
+  createdAt: string;
+  collection: 'users';
+}
+/**
  * Auto-generated from Better Auth schema (session)
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -617,10 +617,6 @@ export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
-        relationTo: 'users';
-        value: number | User;
-      } | null)
-    | ({
         relationTo: 'products';
         value: number | Product;
       } | null)
@@ -643,6 +639,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'videos';
         value: number | Video;
+      } | null)
+    | ({
+        relationTo: 'users';
+        value: number | User;
       } | null)
     | ({
         relationTo: 'sessions';
@@ -701,19 +701,6 @@ export interface PayloadMigration {
   batch?: number | null;
   updatedAt: string;
   createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users_select".
- */
-export interface UsersSelect<T extends boolean = true> {
-  email?: T;
-  emailVerified?: T;
-  name?: T;
-  image?: T;
-  role?: T;
-  updatedAt?: T;
-  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -889,6 +876,19 @@ export interface VideosSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users_select".
+ */
+export interface UsersSelect<T extends boolean = true> {
+  email?: T;
+  emailVerified?: T;
+  name?: T;
+  image?: T;
+  role?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
