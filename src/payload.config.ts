@@ -11,6 +11,7 @@ import sharp from "sharp";
 import { fileURLToPath } from "url";
 
 import { Homepage } from "./collections/global/homepage";
+import { ShippingSettings } from "./collections/global/shipping-settings";
 import { Media } from "./collections/Media";
 import { Orders } from "./collections/orders";
 import { Products } from "./collections/products";
@@ -58,7 +59,7 @@ export default buildConfig({
 		},
 	},
 	collections: [Users, Products, Collections, Orders, Reels, Media, Videos],
-	globals: [Homepage],
+	globals: [Homepage, ShippingSettings],
 	editor: defaultLexical,
 	secret: process.env.PAYLOAD_SECRET,
 	typescript: {

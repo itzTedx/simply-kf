@@ -1,16 +1,24 @@
 export const SHIPPING_FEE_GBP =
 	Number(process.env.NEXT_PUBLIC_SHIPPING_FEE_GBP) || 4.5;
+
 export const FREE_SHIPPING_THRESHOLD_GBP =
 	Number(process.env.NEXT_PUBLIC_FREE_SHIPPING_THRESHOLD_GBP) || 30;
+
+export const FREE_SHIPPING_ENABLED =
+	(process.env.NEXT_PUBLIC_ENABLE_FREE_SHIPPING ?? "true")
+		.toLowerCase()
+		.trim() !== "false";
 
 export interface ShippingGlobalConfig {
 	baseFee: number;
 	freeShippingThreshold: number;
+	enableFreeShipping: boolean;
 }
 
 export const DEFAULT_SHIPPING_CONFIG: ShippingGlobalConfig = {
 	baseFee: SHIPPING_FEE_GBP,
 	freeShippingThreshold: FREE_SHIPPING_THRESHOLD_GBP,
+	enableFreeShipping: FREE_SHIPPING_ENABLED,
 };
 
 export interface ShippingOverrideFields {
@@ -40,6 +48,7 @@ function resolveEffectiveConfig(
 	return {
 		baseFee: effectiveFee,
 		freeShippingThreshold: globalConfig.freeShippingThreshold,
+		enableFreeShipping: globalConfig.enableFreeShipping,
 	};
 }
 
@@ -66,6 +75,7 @@ export function calculateOrderTotalsForItems(
 	const effectiveConfig = resolveEffectiveConfig(items, globalConfig);
 
 	const shipping =
+		effectiveConfig.enableFreeShipping &&
 		subtotal >= effectiveConfig.freeShippingThreshold
 			? 0
 			: effectiveConfig.baseFee;
@@ -79,7 +89,14 @@ export function calculateOrderTotalsForItems(
 export function calculateShipping(subtotal: number, hasItems: boolean): number {
 	if (!hasItems) return 0;
 
-	return subtotal >= FREE_SHIPPING_THRESHOLD_GBP ? 0 : SHIPPING_FEE_GBP;
+	if (
+		DEFAULT_SHIPPING_CONFIG.enableFreeShipping &&
+		subtotal >= DEFAULT_SHIPPING_CONFIG.freeShippingThreshold
+	) {
+		return 0;
+	}
+
+	return DEFAULT_SHIPPING_CONFIG.baseFee;
 }
 
 export function calculateOrderTotal(

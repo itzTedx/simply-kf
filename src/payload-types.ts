@@ -109,9 +109,11 @@ export interface Config {
   fallbackLocale: null;
   globals: {
     homepage: Homepage;
+    'shipping-settings': ShippingSetting;
   };
   globalsSelect: {
     homepage: HomepageSelect<false> | HomepageSelect<true>;
+    'shipping-settings': ShippingSettingsSelect<false> | ShippingSettingsSelect<true>;
   };
   locale: null;
   user: User;
@@ -1041,12 +1043,45 @@ export interface Homepage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "shipping-settings".
+ */
+export interface ShippingSetting {
+  id: number;
+  /**
+   * Base shipping fee applied to orders (can be overridden per product).
+   */
+  defaultShippingFee: number;
+  /**
+   * When enabled, orders above the threshold below will have free shipping.
+   */
+  enableFreeShipping?: boolean | null;
+  /**
+   * Order subtotal required for free shipping when enabled (in £).
+   */
+  freeShippingThreshold?: number | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "homepage_select".
  */
 export interface HomepageSelect<T extends boolean = true> {
   image?: T;
   title?: T;
   description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "shipping-settings_select".
+ */
+export interface ShippingSettingsSelect<T extends boolean = true> {
+  defaultShippingFee?: T;
+  enableFreeShipping?: T;
+  freeShippingThreshold?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

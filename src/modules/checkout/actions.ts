@@ -6,8 +6,10 @@ import { getPayload } from "payload";
 import { stripe } from "@/lib/stripe";
 
 import {
-	ShippingLineInput,
 	calculateOrderTotalsForItems,
+	DEFAULT_SHIPPING_CONFIG,
+	type ShippingGlobalConfig,
+	type ShippingLineInput,
 } from "./shipping";
 
 const MIN_AMOUNT_GBP = 0.5; // Stripe minimum ~50p for GBP
@@ -77,7 +79,48 @@ export async function createPaymentIntent(
 			shippingFeeOverride: item.shippingFeeOverride,
 		}));
 
-		const { subtotal, shipping } = calculateOrderTotalsForItems(lineItems);
+		// Load shipping settings from Payload Global (with safe fallbacks)
+		const payload = await getPayload({ config });
+
+		let shippingConfig: ShippingGlobalConfig = DEFAULT_SHIPPING_CONFIG;
+
+		try {
+			const shippingSettingsResult = await payload.findGlobal({
+				slug: "shipping-settings",
+			});
+
+			const shippingSettings =
+				shippingSettingsResult as unknown as {
+					defaultShippingFee?: number | null;
+					enableFreeShipping?: boolean | null;
+					freeShippingThreshold?: number | null;
+				};
+
+			shippingConfig = {
+				baseFee:
+					typeof shippingSettings.defaultShippingFee === "number"
+						? shippingSettings.defaultShippingFee
+						: DEFAULT_SHIPPING_CONFIG.baseFee,
+				freeShippingThreshold:
+					typeof shippingSettings.freeShippingThreshold === "number"
+						? shippingSettings.freeShippingThreshold
+						: DEFAULT_SHIPPING_CONFIG.freeShippingThreshold,
+				enableFreeShipping:
+					typeof shippingSettings.enableFreeShipping === "boolean"
+						? shippingSettings.enableFreeShipping
+						: DEFAULT_SHIPPING_CONFIG.enableFreeShipping,
+			};
+		} catch (err) {
+			console.error(
+				"[Checkout] Failed to load shipping-settings global, using defaults",
+				err
+			);
+		}
+
+		const { subtotal, shipping } = calculateOrderTotalsForItems(
+			lineItems,
+			shippingConfig
+		);
 
 		// Prepare order items for storage (including price)
 		const orderItems: PendingOrderItem[] = items.map(
@@ -93,7 +136,6 @@ export async function createPaymentIntent(
 
 		// Store pending order in Payload KV to handle large orders
 		// This avoids Stripe's 500 char metadata limit
-		const payload = await getPayload({ config });
 		const orderReference = `order_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
 
 		const pendingOrderData: PendingOrderData = {
