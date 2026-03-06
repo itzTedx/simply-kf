@@ -175,6 +175,10 @@ export interface Product {
   relatedProducts?: (number | Product)[] | null;
   availability: 'sales' | 'pre-order';
   /**
+   * Optional per-product shipping fee. Leave empty to use the global default.
+   */
+  shippingFeeOverride?: number | null;
+  /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
   generateSlug?: boolean | null;
@@ -720,6 +724,7 @@ export interface ProductsSelect<T extends boolean = true> {
   collections?: T;
   relatedProducts?: T;
   availability?: T;
+  shippingFeeOverride?: T;
   generateSlug?: T;
   slug?: T;
   overview?: T;

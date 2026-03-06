@@ -5,10 +5,13 @@ import { getPayload } from "payload";
 
 import { stripe } from "@/lib/stripe";
 
+import {
+	ShippingLineInput,
+	calculateOrderTotalsForItems,
+} from "./shipping";
+
 const MIN_AMOUNT_GBP = 0.5; // Stripe minimum ~50p for GBP
 const CENTS_PER_POUND = 100;
-const SHIPPING_FEE = 4.5;
-const FREE_SHIPPING_THRESHOLD = 30;
 
 interface CheckoutItem {
 	id: number;
@@ -18,6 +21,7 @@ interface CheckoutItem {
 	image?: string;
 	color?: string;
 	size?: string;
+	shippingFeeOverride?: number | null;
 }
 
 export interface PendingOrderItem {
@@ -66,15 +70,14 @@ export async function createPaymentIntent(
 
 		const firstItemWithImage = items.find((item) => item.image);
 
-		// Calculate subtotal and shipping
-		const subtotal = items.reduce(
-			(sum, item) => sum + item.price * item.quantity,
-			0
-		);
-		const shipping =
-			items.length > 0 && subtotal >= FREE_SHIPPING_THRESHOLD
-				? 0
-				: SHIPPING_FEE;
+		// Calculate subtotal and shipping (respecting per-product overrides)
+		const lineItems: ShippingLineInput[] = items.map((item) => ({
+			price: item.price,
+			quantity: item.quantity,
+			shippingFeeOverride: item.shippingFeeOverride,
+		}));
+
+		const { subtotal, shipping } = calculateOrderTotalsForItems(lineItems);
 
 		// Prepare order items for storage (including price)
 		const orderItems: PendingOrderItem[] = items.map(

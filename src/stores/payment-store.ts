@@ -10,6 +10,7 @@ interface CheckoutItem {
 	image?: string;
 	color?: string;
 	size?: string;
+	shippingFeeOverride?: number | null;
 }
 
 interface PaymentStore {

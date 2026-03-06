@@ -124,6 +124,17 @@ export const Products: CollectionConfig = {
 				position: "sidebar",
 			},
 		},
+		{
+			name: "shippingFeeOverride",
+			label: "Shipping fee override (£)",
+			type: "number",
+			min: 0,
+			admin: {
+				position: "sidebar",
+				description:
+					"Optional per-product shipping fee. Leave empty to use the global default.",
+			},
+		},
 		slugField({
 			useAsSlug: "name",
 			slugify: ({ valueToSlugify }) => slugify(valueToSlugify),
@@ -178,7 +189,7 @@ export const Products: CollectionConfig = {
 					],
 				},
 				{
-					label: "Media",
+					label: "Product Details",
 					fields: [
 						{
 							type: "group",

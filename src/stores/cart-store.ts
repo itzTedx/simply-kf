@@ -12,6 +12,8 @@ export interface CartItem {
 	slug?: string;
 	/** Max quantity allowed from Payload CMS stock (undefined/null = no limit) */
 	stock?: number | null;
+	/** Optional per-product shipping overrides from Payload */
+	shippingFeeOverride?: number | null;
 }
 
 interface CartStore {

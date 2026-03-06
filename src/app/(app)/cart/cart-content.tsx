@@ -10,12 +10,10 @@ import { checkoutStepParser } from "@/modules/checkout/checkout-step";
 import { CartItem } from "@/modules/checkout/components/cart-item";
 import { CartSummary } from "@/modules/checkout/components/cart-summary";
 import { EmptyCart } from "@/modules/checkout/components/empty-cart";
+import { calculateOrderTotalsForItems } from "@/modules/checkout/shipping";
 import { useCartStore } from "@/stores/cart-store";
 
 export function CartContent() {
-	const SHIPPING_FEE = 4.5;
-	const FREE_SHIPPING_THRESHOLD = 30;
-
 	const router = useRouter();
 
 	const items = useCartStore((state) => state.items);
@@ -36,14 +34,13 @@ export function CartContent() {
 		setStep("cart");
 	};
 
+	const {
+		subtotal,
+		shipping,
+		total: orderTotal,
+	} = calculateOrderTotalsForItems(items);
+
 	const hasItems = items.length > 0;
-	const subtotal = items.reduce(
-		(sum, item) => sum + item.price * item.quantity,
-		0
-	);
-	const shipping =
-		hasItems && subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_FEE;
-	const orderTotal = hasItems ? subtotal + shipping : 0;
 
 	if (showCheckout) {
 		return (

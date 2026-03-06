@@ -191,6 +191,16 @@ export function ProductView({ product }: ProductViewProps) {
 			size: resolvedSize,
 			slug: product.slug,
 			stock: maxStock,
+			// Optional per-product shipping fee override (configured in Payload)
+			shippingFeeOverride:
+				typeof (product as Product & { shippingFeeOverride?: number }) // narrow product shape for this field
+					.shippingFeeOverride === "number"
+					? (
+							product as Product & {
+								shippingFeeOverride?: number;
+							}
+						).shippingFeeOverride
+					: null,
 		});
 
 		toast.success(`${product.name} has been added to your bag.`);
