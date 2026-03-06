@@ -2,7 +2,11 @@ import { Suspense } from "react";
 
 import type { Metadata } from "next";
 
+import config from "@payload-config";
+import { getPayload } from "payload";
+
 import { CartDescription } from "@/modules/checkout/components/cart-description";
+import type { ShippingGlobalConfig } from "@/modules/checkout/shipping";
 
 import { CartContent } from "./cart-content";
 
@@ -27,7 +31,30 @@ function CartFallback() {
 	);
 }
 
-export default function CartPage() {
+export default async function CartPage() {
+	const payload = await getPayload({ config });
+
+	let shippingConfig: ShippingGlobalConfig | undefined;
+
+	try {
+		const shippingSettings = await payload.findGlobal({
+			slug: "shipping-settings",
+		});
+
+		shippingConfig = {
+			baseFee: shippingSettings.defaultShippingFee,
+			freeShippingThreshold:
+				shippingSettings.freeShippingThreshold ??
+				shippingSettings.defaultShippingFee,
+			enableFreeShipping: Boolean(shippingSettings.enableFreeShipping),
+		};
+	} catch (err) {
+		console.error(
+			"[CartPage] Failed to load shipping-settings global, falling back to defaults",
+			err
+		);
+	}
+
 	return (
 		<main className="container mx-auto max-w-7xl py-20 md:py-28">
 			<div className="mb-10 md:mb-12">
@@ -37,7 +64,7 @@ export default function CartPage() {
 				<CartDescription />
 			</div>
 			<Suspense fallback={<CartFallback />}>
-				<CartContent />
+				<CartContent shippingConfig={shippingConfig} />
 			</Suspense>
 		</main>
 	);

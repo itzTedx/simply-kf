@@ -69,8 +69,8 @@ export default function LoginPage() {
 					Customer login
 				</h1>
 				<p className="mx-auto max-w-md font-body text-foreground/65 text-sm leading-relaxed">
-					Sign in with your email and password to access your Simply KF
-					customer account.
+					Sign in with your email and password to access your Simply KF customer
+					account.
 				</p>
 			</div>
 

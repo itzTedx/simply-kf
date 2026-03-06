@@ -113,7 +113,7 @@ export const normalizeProductStock: CollectionAfterChangeHook<Product> = ({
 			(sizeRow) =>
 				sizeRow &&
 				typeof sizeRow.stock === "number" &&
-				Number.isFinite(sizeRow.stock),
+				Number.isFinite(sizeRow.stock)
 		);
 
 		if (!hasSizeStock) {

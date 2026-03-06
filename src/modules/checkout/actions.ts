@@ -89,12 +89,11 @@ export async function createPaymentIntent(
 				slug: "shipping-settings",
 			});
 
-			const shippingSettings =
-				shippingSettingsResult as unknown as {
-					defaultShippingFee?: number | null;
-					enableFreeShipping?: boolean | null;
-					freeShippingThreshold?: number | null;
-				};
+			const shippingSettings = shippingSettingsResult as unknown as {
+				defaultShippingFee?: number | null;
+				enableFreeShipping?: boolean | null;
+				freeShippingThreshold?: number | null;
+			};
 
 			shippingConfig = {
 				baseFee:

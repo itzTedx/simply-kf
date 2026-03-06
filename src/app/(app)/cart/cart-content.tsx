@@ -10,10 +10,17 @@ import { checkoutStepParser } from "@/modules/checkout/checkout-step";
 import { CartItem } from "@/modules/checkout/components/cart-item";
 import { CartSummary } from "@/modules/checkout/components/cart-summary";
 import { EmptyCart } from "@/modules/checkout/components/empty-cart";
-import { calculateOrderTotalsForItems } from "@/modules/checkout/shipping";
+import {
+	calculateOrderTotalsForItems,
+	type ShippingGlobalConfig,
+} from "@/modules/checkout/shipping";
 import { useCartStore } from "@/stores/cart-store";
 
-export function CartContent() {
+interface CartContentProps {
+	shippingConfig?: ShippingGlobalConfig;
+}
+
+export function CartContent({ shippingConfig }: CartContentProps) {
 	const router = useRouter();
 
 	const items = useCartStore((state) => state.items);
@@ -38,7 +45,7 @@ export function CartContent() {
 		subtotal,
 		shipping,
 		total: orderTotal,
-	} = calculateOrderTotalsForItems(items);
+	} = calculateOrderTotalsForItems(items, shippingConfig);
 
 	const hasItems = items.length > 0;
 
@@ -48,6 +55,7 @@ export function CartContent() {
 				items={items}
 				onBack={handleBackToCart}
 				onPaymentSuccess={handlePaymentSuccess}
+				shippingConfig={shippingConfig}
 			/>
 		);
 	}

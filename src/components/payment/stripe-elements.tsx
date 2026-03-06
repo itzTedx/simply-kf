@@ -177,9 +177,7 @@ function CheckoutForm({ onSuccess, onError }: CheckoutFormProps) {
 					name="phone"
 					render={({ field, fieldState }) => (
 						<>
-							<FieldLabel htmlFor="checkout-phone">
-								Phone number
-							</FieldLabel>
+							<FieldLabel htmlFor="checkout-phone">Phone number</FieldLabel>
 							<FieldContent>
 								<Input
 									{...field}

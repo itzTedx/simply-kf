@@ -10,7 +10,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
 import { checkoutStepParser } from "@/modules/checkout/checkout-step";
-import { calculateOrderTotalsForItems } from "@/modules/checkout/shipping";
+import {
+	calculateOrderTotalsForItems,
+	type ShippingGlobalConfig,
+} from "@/modules/checkout/shipping";
 import { usePaymentStore } from "@/stores/payment-store";
 
 import StripeElements from "./stripe-elements";
@@ -30,12 +33,14 @@ interface CheckoutProps {
 	items: CartItem[];
 	onPaymentSuccess: () => void;
 	onBack: () => void;
+	shippingConfig?: ShippingGlobalConfig;
 }
 
 export default function Checkout({
 	items,
 	onPaymentSuccess,
 	onBack,
+	shippingConfig,
 }: CheckoutProps) {
 	const createPaymentIntent = usePaymentStore(
 		(state) => state.createPaymentIntent
@@ -50,7 +55,10 @@ export default function Checkout({
 	// Only show payment form when URL says payment and we have a secret (e.g. clear step if user refreshed)
 	const showPaymentForm = step === "payment" && !!clientSecret;
 
-	const { subtotal, shipping, total } = calculateOrderTotalsForItems(items);
+	const { subtotal, shipping, total } = calculateOrderTotalsForItems(
+		items,
+		shippingConfig
+	);
 
 	// Clear URL step to checkout if we're on payment but have no secret (e.g. after refresh)
 	useEffect(() => {

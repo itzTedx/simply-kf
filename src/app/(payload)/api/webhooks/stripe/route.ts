@@ -208,7 +208,9 @@ async function handlePaymentSuccess(paymentIntent: Stripe.PaymentIntent) {
 			// Payment method for receipt (e.g. "Visa ending in 4242")
 			const card = charge.payment_method_details?.card;
 			if (card?.last4) {
-				const brand = card.brand ? card.brand.charAt(0).toUpperCase() + card.brand.slice(1) : "Card";
+				const brand = card.brand
+					? card.brand.charAt(0).toUpperCase() + card.brand.slice(1)
+					: "Card";
 				paymentMethodDescription = `${brand} ending in ${card.last4}`;
 			}
 
@@ -339,9 +341,7 @@ async function handlePaymentSuccess(paymentIntent: Stripe.PaymentIntent) {
 					orderDate,
 					paymentMethod: paymentMethodDescription,
 					orderItems: orderData.items.map((item) => {
-						const variant = [item.color, item.size]
-							.filter(Boolean)
-							.join(", ");
+						const variant = [item.color, item.size].filter(Boolean).join(", ");
 						const lineTotal = (item.price * item.quantity).toFixed(2);
 						return {
 							name: item.name,
