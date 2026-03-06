@@ -228,6 +228,7 @@ export function ProductView({ product }: ProductViewProps) {
 									<Media
 										alt={`${product.name} view ${idx + 1}`}
 										fill
+										imgClassName="object-cover"
 										onLoad={() => idx === 0 && setIsImageLoading(false)}
 										priority={idx === 0}
 										src={img}
@@ -272,8 +273,8 @@ export function ProductView({ product }: ProductViewProps) {
 								>
 									<Media
 										alt={`${product.name} thumbnail ${idx + 1}`}
-										className="object-cover"
 										fill
+										imgClassName="object-cover"
 										src={img}
 									/>
 								</button>

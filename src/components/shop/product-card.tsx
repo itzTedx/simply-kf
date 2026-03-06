@@ -77,7 +77,7 @@ export function ProductCard({ product }: ProductCardProps) {
 						</Badge>
 					)}
 					{product.availability === "pre-order" && (
-						<div className="absolute top-2 right-2 z-10 rounded-md bg-amber-500/60 px-2 py-1 text-amber-950 text-xs backdrop-blur-lg">
+						<div className="absolute top-2 right-2 z-10 rounded-md bg-linear-to-br from-amber-600/80 to-amber-400/80 px-2 py-1 font-medium text-amber-950 text-xs backdrop-blur-lg">
 							Pre-order
 						</div>
 					)}
