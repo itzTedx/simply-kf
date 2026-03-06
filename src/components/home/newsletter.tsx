@@ -15,12 +15,12 @@ import {
 export function Newsletter() {
 	const [isPending, startTransition] = useTransition();
 
-	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
+	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
 
 		if (isPending) return;
 
-		const formData = new FormData(event.currentTarget);
+		const formData = new FormData(e.currentTarget);
 		const email = formData.get("email");
 
 		if (typeof email !== "string" || !email.trim()) {
@@ -39,7 +39,7 @@ export function Newsletter() {
 			toast.success(
 				result.success ?? "You’ve been subscribed to the newsletter."
 			);
-			event.currentTarget.reset();
+			e.currentTarget.reset();
 		});
 	};
 
