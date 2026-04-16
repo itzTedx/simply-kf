@@ -5,6 +5,11 @@ import { RiInstagramLine, RiTiktokLine } from "@remixicon/react";
 
 import { Logo } from "@/assets/logo";
 
+const agencyCredit = {
+	name: "Ziron Pro",
+	href: "https://www.zironpro.ae?utm_source=simplykf&utm_medium=website&utm_campaign=footer_credit&utm_content=designed_by",
+} as const;
+
 export function Footer() {
 	const footerLinks = [
 		{ name: "Shop", href: "/shop" },
@@ -46,9 +51,19 @@ export function Footer() {
 					<div className="h-px w-full max-w-4xl bg-border/30" />
 
 					<div className="flex w-full flex-col items-center gap-6 md:flex-row md:justify-between">
-						<p className="font-body text-foreground/40 text-xs">
-							© {new Date().getFullYear()} SIMPLY KF. All rights reserved.
-						</p>
+						<div className="flex flex-col items-center gap-2 md:items-start">
+							<p className="font-body text-foreground/40 text-xs">
+								© {new Date().getFullYear()} SIMPLY KF. All rights reserved.
+							</p>
+							<Link
+								className="font-light text-muted-foreground text-xs"
+								href={agencyCredit.href}
+								rel="noopener noreferrer"
+								target="_blank"
+							>
+								Designed by {agencyCredit.name}
+							</Link>
+						</div>
 						<ul className="flex items-center gap-6">
 							<li>
 								<Link
