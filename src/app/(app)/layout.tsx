@@ -1,11 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import "@/styles/globals.css";
 
-import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "sonner";
 
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
+import Providers from "@/components/providers";
 import { CartStoreHydration } from "@/components/stores/cart-store-hydration";
 
 import { blinka, inter, malibu } from "@/assets/fonts";
@@ -78,12 +78,12 @@ export default function RootLayout({
 					inter.className
 				)}
 			>
-				<NuqsAdapter>
+				<Providers>
 					<CartStoreHydration />
 					<Header />
 					{children}
 					<Footer />
-				</NuqsAdapter>
+				</Providers>
 				<Toaster />
 			</body>
 		</html>
